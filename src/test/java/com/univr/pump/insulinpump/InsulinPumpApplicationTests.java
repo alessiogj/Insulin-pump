@@ -7,10 +7,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-class InsulinPumpApplicationTests {
+public class InsulinPumpApplicationTests {
 
     @Test
-    void contextLoads() {
+    public void contextLoads() {
         System.out.println("Hello World!");
     }
 
