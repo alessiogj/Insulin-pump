@@ -262,13 +262,30 @@ public class InsulinPumpApplicationTests {
         PatientDto updatedPatient = new PatientDto();
         updatedPatient.setName("Mario");
         updatedPatient.setSurname("Verdi");
-        newPatient.setFiscalCode("RSSMRA00A00A000A");
-        newPatient.setDiabetesType("TYPE_1");
-        newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        updatedPatient.setFiscalCode("RSSMRA00A00A000A");
+        updatedPatient.setDiabetesType("TYPE_1");
+        updatedPatient.setBirthDate("1988-05-05");
+        updatedPatient.setHeight(1.80);
+        updatedPatient.setWeight(80.0);
 
-        //TODO: gestire la modifica
+        int createdPatientId = given()
+                .contentType(ContentType.JSON)
+                .body(newPatient)
+        .when()
+                .post("/patient/")
+        .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getInt("id");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(updatedPatient)
+        .when()
+                .put("/patient/" + createdPatientId)
+                .then()
+                .statusCode(200);
 
     }
 
@@ -287,7 +304,23 @@ public class InsulinPumpApplicationTests {
         newPatient.setHeight(1.80);
         newPatient.setWeight(80.0);
 
-        //TODO: gestire la cancellazione
+        int createdPatientId = given()
+                .contentType(ContentType.JSON)
+                .body(newPatient)
+        .when()
+                .post("/patient/")
+        .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .getInt("id");
+
+        given()
+                .when()
+                .delete("/patient/" + createdPatientId)
+        .then()
+                .statusCode(200);
+
     }
 
 }
