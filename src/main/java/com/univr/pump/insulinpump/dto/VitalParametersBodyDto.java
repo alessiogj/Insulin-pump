@@ -1,10 +1,6 @@
 package com.univr.pump.insulinpump.dto;
 
-/**
- * This class includes the data transfer object for the vital parameters
- * and the patient id associated with them.
- */
-public class VitalParametersDto {
+public class VitalParametersBodyDto {
     private String timestamp;
     private String bloodPressure;
     private String heartRate;
@@ -12,22 +8,21 @@ public class VitalParametersDto {
     private String temperature;
     private String patientId;
 
-    public VitalParametersDto() {
+    public VitalParametersBodyDto() {
     }
 
-    public VitalParametersDto(String id
-            , String timestamp
+    public VitalParametersBodyDto(String timestamp
             , String bloodPressure
             , String heartRate
             , String bloodSugarLevel
             , String temperature
-            , String patientId) {
+            , String patient) {
         this.timestamp = timestamp;
         this.bloodPressure = bloodPressure;
         this.heartRate = heartRate;
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
-        this.patientId = patientId;
+        this.patientId = patient;
     }
 
     public String getTimestamp() {
@@ -74,8 +69,7 @@ public class VitalParametersDto {
         this.temperature = temperature;
     }
 
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
+    public void setPatient(String patient) {
+        this.patientId = patient;
     }
-
 }

@@ -1,10 +1,9 @@
 package com.univr.pump.insulinpump.repository;
 
-import com.univr.pump.insulinpump.model.Patient;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public interface VitalParametersRepository extends CrudRepository<VitalParameters, Long> {
 
@@ -22,7 +21,7 @@ public interface VitalParametersRepository extends CrudRepository<VitalParameter
          * @param to
          * @return
          */
-        Iterable<VitalParameters> findByPatientIdAndTimestampBetween(Long id, Date from, Date to);
+        Iterable<VitalParameters> findByPatientIdAndTimestampBetween(Long id, LocalDate from, LocalDate to);
 
 
         //TODO: altri metodi per eseguire operazioni statistiche sui parametri vitali

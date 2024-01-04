@@ -1,43 +1,40 @@
 package com.univr.pump.insulinpump.dto;
 
-
-import java.util.Date;
-
 public class PatientVitalParametersWithDateIntervalDto {
-    private Long patientId;
-    private Date startDate;
-    private Date endDate;
+    private String patientId;
+    private String startDate;
+    private String endDate;
 
     public PatientVitalParametersWithDateIntervalDto() {
     }
 
-    public PatientVitalParametersWithDateIntervalDto(Long patientId, Date startDate, Date endDate) {
+    public PatientVitalParametersWithDateIntervalDto(String patientId, String startDate, String endDate) {
         this.patientId = patientId;
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public Long getPatientId() {
+    public String getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(Long patientId) {
+    public void setPatientId(String patientId) {
         this.patientId = patientId;
     }
 
-    public Date getFrom() {
+    public String getFrom() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getTo() {
+    public String getTo() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

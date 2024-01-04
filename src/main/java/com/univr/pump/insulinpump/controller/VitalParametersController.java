@@ -1,6 +1,7 @@
 package com.univr.pump.insulinpump.controller;
 
 import com.univr.pump.insulinpump.dto.PatientVitalParametersWithDateIntervalDto;
+import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.service.VitalParametersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,11 @@ public class VitalParametersController {
 
     @Autowired
     private VitalParametersService vitalParametersService;
+
+    @PostMapping("/")
+    public VitalParametersDto addVitalParameters(@RequestBody VitalParametersBodyDto vitalParametersDto) {
+        return vitalParametersService.addVitalParameters(vitalParametersDto);
+    }
 
     @GetMapping("/")
     public Iterable<VitalParametersDto> getVitalParameters() {

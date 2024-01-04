@@ -104,7 +104,7 @@ public class PatientService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Weight cannot be null or empty");
         }
-        if (patient.getHeight() <= 0) {
+        if (patient.getHeight() <= 0 || patient.getHeight() > 2.5) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Height cannot be null or empty");
         }
@@ -158,7 +158,7 @@ public class PatientService {
     private PatientDto convertToDto(Patient patient) {
         PatientDto dto = new PatientDto();
 
-        dto.setId(patient.getId() != null ? patient.getId().toString() : "");
+        dto.setId(patient.getId().toString());
         dto.setName(patient.getName());
         dto.setSurname(patient.getSurname());
         dto.setBirthDate(patient.getBirthDate().toString());
@@ -172,19 +172,16 @@ public class PatientService {
 
     private Patient convertFromDto(PatientDto patientDto) {
         Patient patient = new Patient();
-        try {
-            patient.setId(!patientDto.getId().isEmpty() ? Long.valueOf(patientDto.getId()) : null);
-            patient.setName(patientDto.getName());
-            patient.setSurname(patientDto.getSurname());
-            patient.setBirthDate(LocalDate.parse(patientDto.getBirthDate()));
-            patient.setFiscalCode(patientDto.getFiscalCode());
-            patient.setWeight(patientDto.getWeight());
-            patient.setHeight(patientDto.getHeight());
-            patient.setDiabetesType(DIABETES_TYPE.valueOf(patientDto.getDiabetesType()));
 
-        } catch (Exception e) {
-                log.error("PatientService.convertFromDto: {}", e.getMessage());
-        }
+        patient.setId(Long.valueOf(patientDto.getId()));
+        patient.setName(patientDto.getName());
+        patient.setSurname(patientDto.getSurname());
+        patient.setBirthDate(LocalDate.parse(patientDto.getBirthDate()));
+        patient.setFiscalCode(patientDto.getFiscalCode());
+        patient.setWeight(patientDto.getWeight());
+        patient.setHeight(patientDto.getHeight());
+        patient.setDiabetesType(DIABETES_TYPE.valueOf(patientDto.getDiabetesType()));
+
         return patient;
     }
 }
