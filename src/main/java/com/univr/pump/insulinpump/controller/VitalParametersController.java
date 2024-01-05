@@ -1,6 +1,6 @@
 package com.univr.pump.insulinpump.controller;
 
-import com.univr.pump.insulinpump.dto.VitalParametersWithDateIntervalDto;
+import com.univr.pump.insulinpump.dto.DateInterval;
 import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.service.VitalParametersService;
@@ -44,7 +44,7 @@ public class VitalParametersController {
 
     @GetMapping("/searchbytimeinterval")
     public Iterable<VitalParametersDto> searchByTimeInterval(
-            @RequestBody VitalParametersWithDateIntervalDto patientVitalParametersWithDateIntervalDto) {
-        return vitalParametersService.getVitalParametersByTimeInterval(patientVitalParametersWithDateIntervalDto);
+            @RequestBody DateInterval dateInterval) {
+        return vitalParametersService.getVitalParametersByTimeInterval(dateInterval);
     }
 }

@@ -1,6 +1,7 @@
 package com.univr.pump.insulinpump;
 
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
+import com.univr.pump.insulinpump.dto.DateInterval;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
@@ -154,5 +155,115 @@ public class InsulinPumpApplicationTests {
                 .post("/vitalparameters/")
                 .then()
                 .statusCode(400);
+    }
+
+    /**
+     * Test get last vital parameter
+     */
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    public void getLastVitalParameterTest() {
+
+        VitalParametersDto firstVitalParameters = new VitalParametersDto();
+        firstVitalParameters.setBloodPressure("80");
+        firstVitalParameters.setHeartRate("80");
+        firstVitalParameters.setBloodSugarLevel("80");
+        firstVitalParameters.setTemperature("36.6");
+
+        VitalParametersDto secondVitalParameters = new VitalParametersDto();
+        secondVitalParameters.setBloodPressure("90");
+        secondVitalParameters.setHeartRate("90");
+        secondVitalParameters.setBloodSugarLevel("90");
+        secondVitalParameters.setTemperature("37.0");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(firstVitalParameters)
+                .when()
+                .post("/vitalparameters/")
+                .then()
+                .statusCode(200);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(secondVitalParameters)
+                .when()
+                .post("/vitalparameters/")
+                .then()
+                .statusCode(200);
+
+        given()
+                .when()
+                .get("/vitalparameters/last")
+                .then()
+                .statusCode(200)
+                .body("bloodPressure", Matchers.equalTo(secondVitalParameters.getBloodPressure()))
+                .body("heartRate", Matchers.equalTo(secondVitalParameters.getHeartRate()))
+                .body("bloodSugarLevel", Matchers.equalTo(secondVitalParameters.getBloodSugarLevel()))
+                .body("temperature", Matchers.equalTo(secondVitalParameters.getTemperature()));
+    }
+
+    /**
+     * Test get vital parameters with date interval
+     */
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    public void getVitalParametersWithDateIntervalTest() {
+
+        VitalParametersDto firstVitalParameters = new VitalParametersDto();
+        firstVitalParameters.setBloodPressure("80");
+        firstVitalParameters.setHeartRate("80");
+        firstVitalParameters.setBloodSugarLevel("80");
+        firstVitalParameters.setTemperature("36.6");
+
+        VitalParametersDto secondVitalParameters = new VitalParametersDto();
+        secondVitalParameters.setBloodPressure("90");
+        secondVitalParameters.setHeartRate("90");
+        secondVitalParameters.setBloodSugarLevel("90");
+        secondVitalParameters.setTemperature("37.0");
+
+        DateInterval notIncludedDate = new DateInterval(
+                "2000-01-01T00:00:00",
+                "2000-01-03T00:00:00"
+        );
+
+        DateInterval includedDate = new DateInterval(
+                "2020-01-01T00:00:00",
+                "2030-01-03T00:00:00"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(firstVitalParameters)
+                .when()
+                .post("/vitalparameters/")
+                .then()
+                .statusCode(200);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(secondVitalParameters)
+                .when()
+                .post("/vitalparameters/")
+                .then()
+                .statusCode(200);
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(notIncludedDate)
+                .when()
+                .get("/vitalparameters/searchbytimeinterval")
+                .then()
+                .statusCode(200)
+                .body(Matchers.empty());
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(includedDate)
+                .when()
+                .get("/vitalparameters/searchbytimeinterval")
+                .then()
+                .statusCode(200)
+                .body(Matchers.not(Matchers.empty()));
     }
 }

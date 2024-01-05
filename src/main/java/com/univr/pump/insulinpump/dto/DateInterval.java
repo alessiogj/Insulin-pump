@@ -1,13 +1,13 @@
 package com.univr.pump.insulinpump.dto;
 
-public class VitalParametersWithDateIntervalDto {
+public class DateInterval {
     private String startDate;
     private String endDate;
 
-    public VitalParametersWithDateIntervalDto() {
+    public DateInterval() {
     }
 
-    public VitalParametersWithDateIntervalDto(String startDate, String endDate) {
+    public DateInterval(String startDate, String endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }

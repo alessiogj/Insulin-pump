@@ -1,6 +1,6 @@
 package com.univr.pump.insulinpump.service;
 
-import com.univr.pump.insulinpump.dto.VitalParametersWithDateIntervalDto;
+import com.univr.pump.insulinpump.dto.DateInterval;
 import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
@@ -42,15 +42,15 @@ public class VitalParametersService {
 
     /**
      * Find all vital parameters of a patient in a given time interval
-     * @param vitalParametersWithDateIntervalDto
+     * @param dateInterval
      * @return vital parameters of a patient in a given time interval
      */
     public Iterable<VitalParametersDto> getVitalParametersByTimeInterval(
-            VitalParametersWithDateIntervalDto vitalParametersWithDateIntervalDto) {
-        validateDateIntervalAndPatient(vitalParametersWithDateIntervalDto);
+            DateInterval dateInterval) {
+        validateDateInterval(dateInterval);
         Iterable<VitalParameters> result = vitalParametersRepository.findAllByTimestampBetween(
-                LocalDate.parse(vitalParametersWithDateIntervalDto.getFrom())
-                , LocalDate.parse(vitalParametersWithDateIntervalDto.getTo()));
+                LocalDate.parse(dateInterval.getFrom())
+                , LocalDate.parse(dateInterval.getTo()));
         log.info("VitalParametersService.getVitalParametersByTimeInterval: {}", result);
         return convertToDtoList(result);
     }
@@ -64,9 +64,9 @@ public class VitalParametersService {
         validateVitalParameters(vitalParametersDto);
         VitalParameters vitalParameter = vitalParametersRepository.save(
                 new VitalParameters(LocalDateTime.now()
-                        , Double.valueOf(vitalParametersDto.getBloodPressure())
-                        , Double.valueOf(vitalParametersDto.getHeartRate())
-                        , Double.valueOf(vitalParametersDto.getBloodSugarLevel())
+                        , Integer.valueOf(vitalParametersDto.getBloodPressure())
+                        , Integer.valueOf(vitalParametersDto.getHeartRate())
+                        , Integer.valueOf(vitalParametersDto.getBloodSugarLevel())
                         , Double.valueOf(vitalParametersDto.getTemperature())));
         log.info("VitalParametersService.addVitalParameters: {}", vitalParameter);
         return convertToDto(vitalParameter);
@@ -125,7 +125,7 @@ public class VitalParametersService {
         validateTemperature(vitalParametersDto.getTemperature());
     }
 
-    private void validateDateIntervalAndPatient(VitalParametersWithDateIntervalDto dto) {
+    private void validateDateInterval(DateInterval dto) {
         if (dto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DTO cannot be null");
         }
