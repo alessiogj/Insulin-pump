@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vital Parameters</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="card">
+    <div class="card-item">
+        <label for="timestamp">Last measure:</label>
+        <input type="text" id="timestamp" name="timestamp" readonly>
+    </div>
+    <div class="card-item">
+        <label for="bloodPressure">Blood Pressure:</label>
+        <input type="text" id="bloodPressure" name="bloodPressure" readonly>
+    </div>
+    <div class="card-item">
+        <label for="heartRate">Heart Rate:</label>
+        <input type="text" id="heartRate" name="heartRate" readonly>
+    </div>
+    <div class="card-item">
+        <label for="bloodSugarLevel">Blood Sugar Level:</label>
+        <input type="text" id="bloodSugarLevel" name="bloodSugarLevel" readonly>
+    </div>
+    <div class="card-item">
+        <label for="temperature">Temperature:</label>
+        <input type="text" id="temperature" name="temperature" readonly>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchVitalParameters();
+    });
+
+    function fetchVitalParameters() {
+        fetch('/vitalparameters/last')
+            .then(response => {
+                if (!response.ok && response.status === 404) {
+                    throw new Error('Data not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('timestamp').value = data.timestamp || '';
+                document.getElementById('bloodPressure').value = data.bloodPressure || '';
+                document.getElementById('heartRate').value = data.heartRate || '';
+                document.getElementById('bloodSugarLevel').value = data.bloodSugarLevel || '';
+                document.getElementById('temperature').value = data.temperature || '';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                clearFormData();
+            });
+    }
+
+    function clearFormData() {
+        document.getElementById('timestamp').value = '';
+        document.getElementById('bloodPressure').value = '';
+        document.getElementById('heartRate').value = '';
+        document.getElementById('bloodSugarLevel').value = '';
+        document.getElementById('temperature').value = '';
+    }
+</script>
+</body>
+</html>

@@ -10,24 +10,20 @@ public class VitalParametersDto {
     private String heartRate;
     private String bloodSugarLevel;
     private String temperature;
-    private String patientId;
 
     public VitalParametersDto() {
     }
 
-    public VitalParametersDto(String id
-            , String timestamp
+    public VitalParametersDto(String timestamp
             , String bloodPressure
             , String heartRate
             , String bloodSugarLevel
-            , String temperature
-            , String patientId) {
+            , String temperature) {
         this.timestamp = timestamp;
         this.bloodPressure = bloodPressure;
         this.heartRate = heartRate;
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
-        this.patientId = patientId;
     }
 
     public String getTimestamp() {
@@ -50,10 +46,6 @@ public class VitalParametersDto {
         return temperature;
     }
 
-    public String getPatientId() {
-        return patientId;
-    }
-
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
@@ -72,10 +64,6 @@ public class VitalParametersDto {
 
     public void setTemperature(String temperature) {
         this.temperature = temperature;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
     }
 
 }

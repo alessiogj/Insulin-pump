@@ -1,7 +1,7 @@
 package com.univr.pump.insulinpump.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class VitalParameters {
@@ -9,37 +9,31 @@ public class VitalParameters {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private LocalDate timestamp;
+    private LocalDateTime timestamp;
     private Double bloodPressure;
     private Double heartRate;
     private Double bloodSugarLevel;
     private Double temperature;
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-
     public VitalParameters() {}
 
-    public VitalParameters(LocalDate timestamp
+    public VitalParameters(LocalDateTime timestamp
             , Double bloodPressure
             , Double heartRate
             , Double bloodSugarLevel
-            , Double temperature
-            , Patient patient) {
+            , Double temperature) {
         this.timestamp = timestamp;
         this.bloodPressure = bloodPressure;
         this.heartRate = heartRate;
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
-        this.patient = patient;
     }
 
     public Long getId() {
         return id;
     }
 
-    public LocalDate getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
@@ -59,15 +53,11 @@ public class VitalParameters {
         return temperature;
     }
 
-    public Patient getPatient() {
-        return patient;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -87,7 +77,4 @@ public class VitalParameters {
         this.temperature = temperature;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
-    }
 }

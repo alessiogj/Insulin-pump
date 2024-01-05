@@ -8,21 +8,18 @@ import java.time.LocalDate;
 public interface VitalParametersRepository extends CrudRepository<VitalParameters, Long> {
 
         /**
-         * Find all vital parameters of a patient by patient id
-         * @param id
-         * @return
-         */
-        Iterable<VitalParameters> findByPatientId(Long id);
-
-        /**
-         * Find all vital parameters of a patient in a given time interval
-         * @param id
+         * Find all vital parameters in a given time interval
          * @param from
          * @param to
          * @return
          */
-        Iterable<VitalParameters> findByPatientIdAndTimestampBetween(Long id, LocalDate from, LocalDate to);
+        Iterable<VitalParameters> findAllByTimestampBetween(LocalDate from, LocalDate to);
 
+
+        /**
+         * Find last vital parameters of a patient
+         */
+        VitalParameters findFirstByOrderByTimestampDesc();
 
         //TODO: altri metodi per eseguire operazioni statistiche sui parametri vitali
 }

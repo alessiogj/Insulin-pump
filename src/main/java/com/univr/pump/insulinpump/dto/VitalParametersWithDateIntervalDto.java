@@ -1,25 +1,15 @@
 package com.univr.pump.insulinpump.dto;
 
-public class PatientVitalParametersWithDateIntervalDto {
-    private String patientId;
+public class VitalParametersWithDateIntervalDto {
     private String startDate;
     private String endDate;
 
-    public PatientVitalParametersWithDateIntervalDto() {
+    public VitalParametersWithDateIntervalDto() {
     }
 
-    public PatientVitalParametersWithDateIntervalDto(String patientId, String startDate, String endDate) {
-        this.patientId = patientId;
+    public VitalParametersWithDateIntervalDto(String startDate, String endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
-    }
-
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
     }
 
     public String getFrom() {

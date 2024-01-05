@@ -1,6 +1,6 @@
 package com.univr.pump.insulinpump.service;
 
-import com.univr.pump.insulinpump.dto.PatientVitalParametersWithDateIntervalDto;
+import com.univr.pump.insulinpump.dto.VitalParametersWithDateIntervalDto;
 import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +20,13 @@ import java.util.List;
 @Service
 public class VitalParametersService {
 
-    private static final Logger log = LoggerFactory.getLogger(PatientService.class);
+    private static final Logger log = LoggerFactory.getLogger(VitalParametersService.class);
 
     private final VitalParametersRepository vitalParametersRepository;
 
-    private final PatientService patientService;
 
-    public VitalParametersService(VitalParametersRepository vitalParametersRepository
-            , PatientService patientService) {
+    public VitalParametersService(VitalParametersRepository vitalParametersRepository) {
         this.vitalParametersRepository = vitalParametersRepository;
-        this.patientService = patientService;
         log.info("VitalParametersService created");
     }
 
@@ -43,28 +41,16 @@ public class VitalParametersService {
     }
 
     /**
-     * Find all vital parameters of a patient
-     * @param id
-     * @return vital parameters of a patient
-     */
-    public Iterable<VitalParametersDto> getVitalParametersByPatientId(Long id) {
-        Iterable<VitalParameters> result = vitalParametersRepository.findByPatientId(id);
-        log.info("VitalParametersService.getVitalParametersByPatientId: {}", result);
-        return convertToDtoList(result);
-    }
-
-    /**
      * Find all vital parameters of a patient in a given time interval
-     * @param patientVitalParametersWithDateIntervalDto
+     * @param vitalParametersWithDateIntervalDto
      * @return vital parameters of a patient in a given time interval
      */
     public Iterable<VitalParametersDto> getVitalParametersByTimeInterval(
-            PatientVitalParametersWithDateIntervalDto patientVitalParametersWithDateIntervalDto) {
-        validateDateIntervalAndPatient(patientVitalParametersWithDateIntervalDto);
-        Iterable<VitalParameters> result = vitalParametersRepository.findByPatientIdAndTimestampBetween(
-                Long.valueOf(patientVitalParametersWithDateIntervalDto.getPatientId())
-                , LocalDate.parse(patientVitalParametersWithDateIntervalDto.getFrom())
-                , LocalDate.parse(patientVitalParametersWithDateIntervalDto.getTo()));
+            VitalParametersWithDateIntervalDto vitalParametersWithDateIntervalDto) {
+        validateDateIntervalAndPatient(vitalParametersWithDateIntervalDto);
+        Iterable<VitalParameters> result = vitalParametersRepository.findAllByTimestampBetween(
+                LocalDate.parse(vitalParametersWithDateIntervalDto.getFrom())
+                , LocalDate.parse(vitalParametersWithDateIntervalDto.getTo()));
         log.info("VitalParametersService.getVitalParametersByTimeInterval: {}", result);
         return convertToDtoList(result);
     }
@@ -77,13 +63,25 @@ public class VitalParametersService {
     public VitalParametersDto addVitalParameters(VitalParametersBodyDto vitalParametersDto) {
         validateVitalParameters(vitalParametersDto);
         VitalParameters vitalParameter = vitalParametersRepository.save(
-                new VitalParameters(LocalDate.parse(vitalParametersDto.getTimestamp())
+                new VitalParameters(LocalDateTime.now()
                         , Double.valueOf(vitalParametersDto.getBloodPressure())
                         , Double.valueOf(vitalParametersDto.getHeartRate())
                         , Double.valueOf(vitalParametersDto.getBloodSugarLevel())
-                        , Double.valueOf(vitalParametersDto.getTemperature())
-                        , patientService.getPatientById(Long.valueOf(vitalParametersDto.getPatientId()))));
+                        , Double.valueOf(vitalParametersDto.getTemperature())));
         log.info("VitalParametersService.addVitalParameters: {}", vitalParameter);
+        return convertToDto(vitalParameter);
+    }
+
+    /**
+     * Get last vital parameters
+     * @return last vital parameters
+     */
+    public VitalParametersDto getLastVitalParameters() {
+        VitalParameters vitalParameter = vitalParametersRepository.findFirstByOrderByTimestampDesc();
+        log.info("VitalParametersService.getLastVitalParameters: {}", vitalParameter);
+        if (vitalParameter == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No vital parameters found");
+        }
         return convertToDto(vitalParameter);
     }
 
@@ -96,7 +94,6 @@ public class VitalParametersService {
     private VitalParametersDto convertToDto(VitalParameters vitalParameter) {
         VitalParametersDto dto = new VitalParametersDto();
 
-        dto.setPatientId(String.valueOf(vitalParameter.getPatient().getId()));
         dto.setTimestamp(String.valueOf(vitalParameter.getTimestamp()));
         dto.setBloodPressure(String.valueOf(vitalParameter.getBloodPressure()));
         dto.setHeartRate(String.valueOf(vitalParameter.getHeartRate()));
@@ -122,21 +119,18 @@ public class VitalParametersService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DTO cannot be null");
         }
 
-        validateDate(vitalParametersDto.getTimestamp());
         validateHeartRate(vitalParametersDto.getHeartRate());
         validateBloodPressure(vitalParametersDto.getBloodPressure());
         validateBloodSugarLevel(vitalParametersDto.getBloodSugarLevel());
         validateTemperature(vitalParametersDto.getTemperature());
-        validatePatient(vitalParametersDto.getPatientId());
     }
 
-    private void validateDateIntervalAndPatient(PatientVitalParametersWithDateIntervalDto dto) {
+    private void validateDateIntervalAndPatient(VitalParametersWithDateIntervalDto dto) {
         if (dto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DTO cannot be null");
         }
 
         validateDateInterval(dto.getFrom(), dto.getTo());
-        validatePatient(dto.getPatientId());
     }
 
     private void validateTemperature(String temperature) {
@@ -167,12 +161,6 @@ public class VitalParametersService {
         }
     }
 
-    private void validateDate(String timestamp) {
-        if (!isValidDate(timestamp)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format");
-        }
-    }
-
     private void validateDateInterval(String fromDate, String toDate) {
         if (!isValidDate(fromDate) || !isValidDate(toDate)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format");
@@ -189,16 +177,6 @@ public class VitalParametersService {
             return true;
         } catch (DateTimeParseException e) {
             return false;
-        }
-    }
-
-    private void validatePatient(String patientId) {
-        if (patientId == null || patientId.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patient id cannot be null or empty");
-        }
-
-        if (patientService.getPatientById(Long.valueOf(patientId)) == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Patient does not exist");
         }
     }
 
