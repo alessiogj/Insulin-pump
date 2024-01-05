@@ -8,8 +8,8 @@ public class PatientDto {
     private String surname;
     private String birthDate;
     private String fiscalCode;
-    private double weight;
-    private double height;
+    private String weight;
+    private String height;
     private String diabetesType;
 
 
@@ -22,8 +22,8 @@ public class PatientDto {
             , String surname
             , String birthDate
             , String fiscalCode
-            , double weight
-            , double height
+            , String weight
+            , String height
             , String diabetesType) {
         this.id = id;
         this.name = name;
@@ -59,11 +59,11 @@ public class PatientDto {
         return diabetesType;
     }
 
-    public double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public double getHeight() {
+    public String getHeight() {
         return height;
     }
 
@@ -91,11 +91,11 @@ public class PatientDto {
         this.birthDate = birthDate;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 
-    public void setHeight(double height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 }

@@ -51,8 +51,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         given()
                 .contentType(ContentType.JSON)
@@ -82,8 +82,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         //bad request
         given()
@@ -107,8 +107,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_?");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         //bad request
         given()
@@ -132,8 +132,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(-80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("-80.0");
 
         //bad request
         given()
@@ -157,8 +157,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(-1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("-1.80");
+        newPatient.setWeight("80.0");
 
         //bad request
         given()
@@ -182,8 +182,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("ddd");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         //bad request
         given()
@@ -207,8 +207,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         //bad request
         given()
@@ -232,8 +232,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         //bad request
         given()
@@ -257,8 +257,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         PatientDto updatedPatient = new PatientDto();
         updatedPatient.setName("Mario");
@@ -266,8 +266,8 @@ public class InsulinPumpApplicationTests {
         updatedPatient.setFiscalCode("RSSMRA00A00A000A");
         updatedPatient.setDiabetesType("TYPE_1");
         updatedPatient.setBirthDate("1988-05-05");
-        updatedPatient.setHeight(1.80);
-        updatedPatient.setWeight(80.0);
+        updatedPatient.setHeight("1.80");
+        updatedPatient.setWeight("80.0");
 
         int createdPatientId = given()
                 .contentType(ContentType.JSON)
@@ -302,8 +302,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA00A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.80);
-        newPatient.setWeight(80.0);
+        newPatient.setHeight("1.80");
+        newPatient.setWeight("80.0");
 
         int createdPatientId = given()
                 .contentType(ContentType.JSON)
@@ -350,8 +350,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA01A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.70);
-        newPatient.setWeight(70.0);
+        newPatient.setHeight("1.70");
+        newPatient.setWeight("70.0");
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
         newVitalParameters.setTimestamp("2020-05-05");
@@ -426,8 +426,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA01A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.70);
-        newPatient.setWeight(70.0);
+        newPatient.setHeight("1.70");
+        newPatient.setWeight("70.0");
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
         newVitalParameters.setTimestamp("2020-05-05");
@@ -470,8 +470,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA01A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.70);
-        newPatient.setWeight(70.0);
+        newPatient.setHeight("1.70");
+        newPatient.setWeight("70.0");
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
         newVitalParameters.setTimestamp("2020-05-05");
@@ -514,8 +514,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA01A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.70);
-        newPatient.setWeight(70.0);
+        newPatient.setHeight("1.70");
+        newPatient.setWeight("70.0");
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
         newVitalParameters.setTimestamp("2020-05-05");
@@ -558,8 +558,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA01A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.70);
-        newPatient.setWeight(70.0);
+        newPatient.setHeight("1.70");
+        newPatient.setWeight("70.0");
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
         newVitalParameters.setTimestamp("2020-05-05");
@@ -602,8 +602,8 @@ public class InsulinPumpApplicationTests {
         newPatient.setFiscalCode("RSSMRA01A00A000A");
         newPatient.setDiabetesType("TYPE_1");
         newPatient.setBirthDate("1988-05-05");
-        newPatient.setHeight(1.70);
-        newPatient.setWeight(70.0);
+        newPatient.setHeight("1.70");
+        newPatient.setWeight("70.0");
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
         newVitalParameters.setTimestamp("ddd");

@@ -54,8 +54,8 @@ public class PatientService {
         return convertToDtoList(result);
     }
 
-    public Iterable<PatientDto> getPatientsByDiabetesType(DIABETES_TYPE diabetesType) {
-        Iterable<Patient> result = patientRepository.findByDiabetesTypeContaining(String.valueOf(diabetesType));
+    public Iterable<PatientDto> getPatientsByDiabetesType(String diabetesType) {
+        Iterable<Patient> result = patientRepository.findByDiabetesTypeContaining(diabetesType);
         log.info("PatientService.getPatientsByDiabetesType: {}", result);
         return convertToDtoList(result);
     }
@@ -67,8 +67,8 @@ public class PatientService {
                         , patient.getSurname()
                         , LocalDate.parse(patient.getBirthDate())
                         , patient.getFiscalCode()
-                        , patient.getWeight()
-                        , patient.getHeight()
+                        , Double.parseDouble(patient.getWeight())
+                        , Double.parseDouble(patient.getHeight())
                         , DIABETES_TYPE.valueOf(patient.getDiabetesType())));
         log.info("PatientService.createPatient: {}", result);
         return convertToDto(result);
@@ -100,14 +100,37 @@ public class PatientService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Fiscal code cannot be null or empty");
         }
-        if (patient.getWeight() <= 0) {
+
+        if (patient.getWeight() == null || patient.getWeight().isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Weight cannot be null or empty");
+        } else {
+            try {
+                if(Double.parseDouble(patient.getWeight()) < 0 || Double.parseDouble(patient.getWeight()) > 500) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST, "Weight must be a positive number");
+                }
+            } catch (NumberFormatException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Weight must be a number");
+            }
         }
-        if (patient.getHeight() <= 0 || patient.getHeight() > 2.5) {
+
+        if (patient.getHeight() == null || patient.getHeight().isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Height cannot be null or empty");
+        } else {
+            try {
+                if(Double.parseDouble(patient.getHeight()) < 0 || Double.parseDouble(patient.getHeight()) > 2.5) {
+                    throw new ResponseStatusException(
+                            HttpStatus.BAD_REQUEST, "Height must be a positive number");
+                }
+            } catch (NumberFormatException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Height must be a number");
+            }
         }
+
         if (patient.getDiabetesType() == null || patient.getDiabetesType().isEmpty()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Diabetes type cannot be null or empty");
@@ -127,8 +150,8 @@ public class PatientService {
         existingPatient.setSurname(patientUpdateDto.getSurname());
         existingPatient.setBirthDate(LocalDate.parse(patientUpdateDto.getBirthDate()));
         existingPatient.setFiscalCode(patientUpdateDto.getFiscalCode());
-        existingPatient.setWeight(patientUpdateDto.getWeight());
-        existingPatient.setHeight(patientUpdateDto.getHeight());
+        existingPatient.setWeight(Double.parseDouble(patientUpdateDto.getWeight()));
+        existingPatient.setHeight(Double.parseDouble(patientUpdateDto.getHeight()));
         existingPatient.setDiabetesType(DIABETES_TYPE.valueOf(patientUpdateDto.getDiabetesType()));
 
         Patient updatedPatient = patientRepository.save(existingPatient);
@@ -163,8 +186,8 @@ public class PatientService {
         dto.setSurname(patient.getSurname());
         dto.setBirthDate(patient.getBirthDate().toString());
         dto.setFiscalCode(patient.getFiscalCode());
-        dto.setWeight(patient.getWeight());
-        dto.setHeight(patient.getHeight());
+        dto.setWeight(Double.toString(patient.getWeight()));
+        dto.setHeight(Double.toString(patient.getHeight()));
         dto.setDiabetesType(patient.getDiabetesType().toString());
 
         return dto;
@@ -178,8 +201,8 @@ public class PatientService {
         patient.setSurname(patientDto.getSurname());
         patient.setBirthDate(LocalDate.parse(patientDto.getBirthDate()));
         patient.setFiscalCode(patientDto.getFiscalCode());
-        patient.setWeight(patientDto.getWeight());
-        patient.setHeight(patientDto.getHeight());
+        patient.setWeight(Double.parseDouble(patientDto.getWeight()));
+        patient.setHeight(Double.parseDouble(patientDto.getHeight()));
         patient.setDiabetesType(DIABETES_TYPE.valueOf(patientDto.getDiabetesType()));
 
         return patient;

@@ -35,7 +35,7 @@ public class PatientController {
     }
 
     @GetMapping("/searchbydiabetestype/{diabetesType}")
-    public Iterable<PatientDto> searchByDiabetesType(@PathVariable DIABETES_TYPE diabetesType) {
+    public Iterable<PatientDto> searchByDiabetesType(@PathVariable String diabetesType) {
         return patientService.getPatientsByDiabetesType(diabetesType);
     }
 

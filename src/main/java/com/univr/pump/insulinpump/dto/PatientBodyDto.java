@@ -5,8 +5,8 @@ public class PatientBodyDto {
     private String surname;
     private String birthDate;
     private String fiscalCode;
-    private double weight;
-    private double height;
+    private String weight;
+    private String height;
     private String diabetesType;
 
     public PatientBodyDto() {
@@ -16,8 +16,8 @@ public class PatientBodyDto {
             , String surname
             , String birthDate
             , String fiscalCode
-            , double weight
-            , double height
+            , String weight
+            , String height
             , String diabetesType) {
         this.name = name;
         this.surname = surname;
@@ -48,11 +48,11 @@ public class PatientBodyDto {
         return diabetesType;
     }
 
-    public double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public double getHeight() {
+    public String getHeight() {
         return height;
     }
 }
