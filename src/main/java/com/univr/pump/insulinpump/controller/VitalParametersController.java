@@ -28,16 +28,6 @@ public class VitalParametersController {
     }
 
     /**
-     * The system uses this API to add a vital parameter
-     * @param vitalParametersDto
-     * @return added vital parameter
-     */
-    @PostMapping("/")
-    public VitalParametersDto addVitalParameters(@RequestBody VitalParametersBodyDto vitalParametersDto) {
-        return vitalParametersService.addVitalParameters(vitalParametersDto);
-    }
-
-    /**
      * The system uses this API to get all vital parameters
      * @return all vital parameters
      */

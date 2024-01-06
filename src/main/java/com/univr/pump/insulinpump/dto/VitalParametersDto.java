@@ -29,7 +29,7 @@ public class VitalParametersDto {
         this.heartRate = heartRate;
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
-        this.id = id.toString();
+        this.id = id;
     }
 
     public String getId() {

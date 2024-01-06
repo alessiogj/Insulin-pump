@@ -27,11 +27,6 @@ public class SensorsController {
         return battery.getCurrentCapacity();
     }
 
-    @GetMapping("/ntc")
-    public double getNtc() {
-        return ntc.getTemperature();
-    }
-
     @GetMapping("/ntc/status")
     public boolean getNtcStatus() {
         return ntc.isBroken();
@@ -51,8 +46,7 @@ public class SensorsController {
     public SensorStatusDto getStatus() {
         return new SensorStatusDto(
                 battery.getCurrentCapacity(),
-                0, //TODO: add capacity
-                ntc.getTemperature(),
+                0, //TODO: add capacity of pump
                 ntc.isBroken());
     }
 }
