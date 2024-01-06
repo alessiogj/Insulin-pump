@@ -1,6 +1,6 @@
 package com.univr.pump.insulinpump.service;
 
-import com.univr.pump.insulinpump.dto.DateInterval;
+import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
@@ -40,15 +40,15 @@ public class VitalParametersService {
 
     /**
      * Find all vital parameters of a patient in a given time interval
-     * @param dateInterval
+     * @param dateIntervalDto
      * @return vital parameters of a patient in a given time interval
      */
     public Iterable<VitalParametersDto> getVitalParametersByTimeInterval(
-            DateInterval dateInterval) {
-        validateDateInterval(dateInterval);
+            DateIntervalDto dateIntervalDto) {
+        validateDateInterval(dateIntervalDto);
         Iterable<VitalParameters> result = vitalParametersRepository.findAllByTimestampBetween(
-                LocalDateTime.parse(dateInterval.getFrom())
-                , LocalDateTime.parse(dateInterval.getTo()));
+                LocalDateTime.parse(dateIntervalDto.getStartDate())
+                , LocalDateTime.parse(dateIntervalDto.getEndDate()));
         log.info("VitalParametersService.getVitalParametersByTimeInterval: {}", result);
         return convertToDtoList(result);
     }
@@ -124,12 +124,12 @@ public class VitalParametersService {
         validateTemperature(vitalParametersDto.getTemperature());
     }
 
-    private void validateDateInterval(DateInterval dto) {
+    private void validateDateInterval(DateIntervalDto dto) {
         if (dto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DTO cannot be null");
         }
 
-        validateDateInterval(dto.getFrom(), dto.getTo());
+        validateDateInterval(dto.getStartDate(), dto.getEndDate());
     }
 
     private void validateTemperature(String temperature) {

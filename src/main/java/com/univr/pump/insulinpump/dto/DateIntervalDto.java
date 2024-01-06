@@ -1,18 +1,18 @@
 package com.univr.pump.insulinpump.dto;
 
-public class DateInterval {
+public class DateIntervalDto {
     private String startDate;
     private String endDate;
 
-    public DateInterval() {
+    public DateIntervalDto() {
     }
 
-    public DateInterval(String startDate, String endDate) {
+    public DateIntervalDto(String startDate, String endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
     }
 
-    public String getFrom() {
+    public String getStartDate() {
         return startDate;
     }
 
@@ -20,7 +20,7 @@ public class DateInterval {
         this.startDate = startDate;
     }
 
-    public String getTo() {
+    public String getEndDate() {
         return endDate;
     }
 

@@ -1,7 +1,7 @@
 package com.univr.pump.insulinpump;
 
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
-import com.univr.pump.insulinpump.dto.DateInterval;
+import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
@@ -222,12 +222,12 @@ public class InsulinPumpApplicationTests {
         secondVitalParameters.setBloodSugarLevel("90");
         secondVitalParameters.setTemperature("37.0");
 
-        DateInterval notIncludedDate = new DateInterval(
+        DateIntervalDto notIncludedDate = new DateIntervalDto(
                 "2000-01-01T00:00:00",
-                "2000-01-03T00:00:00"
+                "2000-01-03T00:10:00"
         );
 
-        DateInterval includedDate = new DateInterval(
+        DateIntervalDto includedDate = new DateIntervalDto(
                 "2020-01-01T00:00:00",
                 "2030-01-03T00:00:00"
         );
@@ -235,35 +235,36 @@ public class InsulinPumpApplicationTests {
         given()
                 .contentType(ContentType.JSON)
                 .body(firstVitalParameters)
-                .when()
+        .when()
                 .post("/vitalparameters/")
-                .then()
+        .then()
                 .statusCode(200);
 
         given()
                 .contentType(ContentType.JSON)
                 .body(secondVitalParameters)
-                .when()
+        .when()
                 .post("/vitalparameters/")
-                .then()
+        .then()
                 .statusCode(200);
 
+        //il valore di ritorno è un array vuoto
         given()
                 .contentType(ContentType.JSON)
                 .body(notIncludedDate)
-                .when()
-                .post("/vitalparameters/searchdateinterval")
-                .then()
+        .when()
+                .post("/vitalparameters/date")
+        .then()
                 .statusCode(200)
-                .body(Matchers.empty());
+                .body("isEmpty()", Matchers.is(true));
 
         given()
                 .contentType(ContentType.JSON)
                 .body(includedDate)
-                .when()
-                .post("/vitalparameters/searchdateinterval")
-                .then()
+        .when()
+                .post("/vitalparameters/date")
+        .then()
                 .statusCode(200)
-                .body(Matchers.not(Matchers.empty()));
+                .body("isEmpty()", Matchers.is(false));
     }
 }
