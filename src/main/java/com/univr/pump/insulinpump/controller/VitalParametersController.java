@@ -15,7 +15,7 @@ public class VitalParametersController {
     private VitalParametersService vitalParametersService;
 
     /**
-     * Il sistema utilizza tale API per aggiungere un nuovo parametro vitale
+     * The system uses this API to add a vital parameter
      * @param vitalParametersDto
      * @return added vital parameter
      */
@@ -25,7 +25,7 @@ public class VitalParametersController {
     }
 
     /**
-     * Il sistema utilizza tale API per ottenere tutti i parametri vitali
+     * The system uses this API to get all vital parameters
      * @return all vital parameters
      */
     @GetMapping("/")
@@ -34,17 +34,21 @@ public class VitalParametersController {
     }
 
     /**
-     * Ritorna l'ultimo parametro vitale inserito
-     * @return
+     * The system uses this API to get the last vital parameter
+     * @return last vital parameter
      */
     @GetMapping("/last")
     public VitalParametersDto getLastVitalParameters() {
         return vitalParametersService.getLastVitalParameters();
     }
 
-    @GetMapping("/searchbytimeinterval")
-    public Iterable<VitalParametersDto> searchByTimeInterval(
-            @RequestBody DateInterval dateInterval) {
+    /**
+     * The system uses this API to get vital parameters of a patient in a given time interval
+     * @param dateInterval
+     * @return vital parameters of a patient in a given time interval
+     */
+    @PostMapping("/searchdateinterval")
+    public Iterable<VitalParametersDto> searchByTimeInterval(@RequestBody DateInterval dateInterval) {
         return vitalParametersService.getVitalParametersByTimeInterval(dateInterval);
     }
 }

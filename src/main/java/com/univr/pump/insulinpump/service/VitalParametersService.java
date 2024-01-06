@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ public class VitalParametersService {
 
     public VitalParametersService(VitalParametersRepository vitalParametersRepository) {
         this.vitalParametersRepository = vitalParametersRepository;
-        log.info("VitalParametersService created");
     }
 
     /**
@@ -49,25 +47,25 @@ public class VitalParametersService {
             DateInterval dateInterval) {
         validateDateInterval(dateInterval);
         Iterable<VitalParameters> result = vitalParametersRepository.findAllByTimestampBetween(
-                LocalDate.parse(dateInterval.getFrom())
-                , LocalDate.parse(dateInterval.getTo()));
+                LocalDateTime.parse(dateInterval.getFrom())
+                , LocalDateTime.parse(dateInterval.getTo()));
         log.info("VitalParametersService.getVitalParametersByTimeInterval: {}", result);
         return convertToDtoList(result);
     }
 
     /**
      * Add a vital parameter
-     * @param vitalParametersDto
+     * @param parameters
      * @return added vital parameter
      */
-    public VitalParametersDto addVitalParameters(VitalParametersBodyDto vitalParametersDto) {
-        validateVitalParameters(vitalParametersDto);
+    public VitalParametersDto addVitalParameters(VitalParametersBodyDto parameters) {
+        validateVitalParameters(parameters);
         VitalParameters vitalParameter = vitalParametersRepository.save(
                 new VitalParameters(LocalDateTime.now()
-                        , Integer.valueOf(vitalParametersDto.getBloodPressure())
-                        , Integer.valueOf(vitalParametersDto.getHeartRate())
-                        , Integer.valueOf(vitalParametersDto.getBloodSugarLevel())
-                        , Double.valueOf(vitalParametersDto.getTemperature())));
+                        , Integer.valueOf(parameters.getBloodPressure())
+                        , Integer.valueOf(parameters.getHeartRate())
+                        , Integer.valueOf(parameters.getBloodSugarLevel())
+                        , Double.valueOf(parameters.getTemperature())));
         log.info("VitalParametersService.addVitalParameters: {}", vitalParameter);
         return convertToDto(vitalParameter);
     }
@@ -94,6 +92,7 @@ public class VitalParametersService {
     private VitalParametersDto convertToDto(VitalParameters vitalParameter) {
         VitalParametersDto dto = new VitalParametersDto();
 
+        dto.setId(String.valueOf(vitalParameter.getId()));
         dto.setTimestamp(String.valueOf(vitalParameter.getTimestamp()));
         dto.setBloodPressure(String.valueOf(vitalParameter.getBloodPressure()));
         dto.setHeartRate(String.valueOf(vitalParameter.getHeartRate()));
@@ -166,14 +165,14 @@ public class VitalParametersService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format");
         }
 
-        if (LocalDate.parse(fromDate).isAfter(LocalDate.parse(toDate))) {
+        if (LocalDateTime.parse(fromDate).isAfter(LocalDateTime.parse(toDate))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "From date is after To date");
         }
     }
 
     private boolean isValidDate(String date) {
         try {
-            LocalDate.parse(date);
+            LocalDateTime.parse(date);
             return true;
         } catch (DateTimeParseException e) {
             return false;

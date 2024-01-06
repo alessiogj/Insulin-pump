@@ -1,9 +1,10 @@
 package com.univr.pump.insulinpump.controller;
 
 import com.univr.pump.insulinpump.dto.SensorStatusDto;
-import com.univr.pump.insulinpump.model.Battery;
-import com.univr.pump.insulinpump.model.NTC;
-import com.univr.pump.insulinpump.model.Tank;
+
+import com.univr.pump.insulinpump.sensors.Battery;
+import com.univr.pump.insulinpump.sensors.NTC;
+import com.univr.pump.insulinpump.sensors.Tank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

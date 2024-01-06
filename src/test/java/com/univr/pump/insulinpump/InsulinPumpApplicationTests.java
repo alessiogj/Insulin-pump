@@ -252,7 +252,7 @@ public class InsulinPumpApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(notIncludedDate)
                 .when()
-                .get("/vitalparameters/searchbytimeinterval")
+                .post("/vitalparameters/searchdateinterval")
                 .then()
                 .statusCode(200)
                 .body(Matchers.empty());
@@ -261,7 +261,7 @@ public class InsulinPumpApplicationTests {
                 .contentType(ContentType.JSON)
                 .body(includedDate)
                 .when()
-                .get("/vitalparameters/searchbytimeinterval")
+                .post("/vitalparameters/searchdateinterval")
                 .then()
                 .statusCode(200)
                 .body(Matchers.not(Matchers.empty()));

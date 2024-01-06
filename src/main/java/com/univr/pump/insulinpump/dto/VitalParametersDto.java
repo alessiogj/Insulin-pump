@@ -5,6 +5,7 @@ package com.univr.pump.insulinpump.dto;
  * and the patient id associated with them.
  */
 public class VitalParametersDto {
+    private String id;
     private String timestamp;
     private String bloodPressure;
     private String heartRate;
@@ -14,7 +15,8 @@ public class VitalParametersDto {
     public VitalParametersDto() {
     }
 
-    public VitalParametersDto(String timestamp
+    public VitalParametersDto(String id
+            , String timestamp
             , String bloodPressure
             , String heartRate
             , String bloodSugarLevel
@@ -24,6 +26,11 @@ public class VitalParametersDto {
         this.heartRate = heartRate;
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
+        this.id = id.toString();
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getTimestamp() {
@@ -44,6 +51,10 @@ public class VitalParametersDto {
 
     public String getTemperature() {
         return temperature;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setTimestamp(String timestamp) {
