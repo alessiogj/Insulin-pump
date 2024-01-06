@@ -3,8 +3,6 @@ package com.univr.pump.insulinpump.service;
 import com.univr.pump.insulinpump.sensors.Battery;
 import com.univr.pump.insulinpump.sensors.BloodPressure;
 import com.univr.pump.insulinpump.sensors.NTC;
-import com.univr.pump.insulinpump.sensors.Tank;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
