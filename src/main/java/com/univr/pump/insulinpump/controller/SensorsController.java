@@ -6,10 +6,7 @@ import com.univr.pump.insulinpump.sensors.Battery;
 import com.univr.pump.insulinpump.sensors.Heart;
 import com.univr.pump.insulinpump.sensors.InsulinPump;
 import com.univr.pump.insulinpump.sensors.NTC;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sensors")
@@ -25,32 +22,20 @@ public class SensorsController {
         this.insulinPump = insulinPump;
     }
 
-    @GetMapping("/insulinpump")
-    public int getInsulinPump() {
-        return insulinPump.getCurrentTankLevel();
-    }
-
-    @GetMapping("/battery")
-    public int getBattery() {
-        return battery.getCurrentCapacity();
-    }
-
-    @GetMapping("/ntc/status")
-    public boolean getNtcStatus() {
-        return ntc.isBroken();
-    }
-
-    @PostMapping("/battery/replace")
+    @PutMapping("/battery/replace")
+    @ResponseStatus(org.springframework.http.HttpStatus.OK)
     public void chargeBattery() {
         battery.charge();
     }
 
-    @PostMapping("/ntc/repair")
+    @PutMapping("/ntc/repair")
+    @ResponseStatus(org.springframework.http.HttpStatus.OK)
     public void repairNtc() {
         ntc.repair();
     }
 
-    @PostMapping("/insulinpump/refill")
+    @PutMapping("/tank/refill")
+    @ResponseStatus(org.springframework.http.HttpStatus.OK)
     public void refillInsulinPump() {
         insulinPump.refill();
     }
