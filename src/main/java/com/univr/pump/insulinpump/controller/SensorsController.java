@@ -4,6 +4,7 @@ import com.univr.pump.insulinpump.dto.SensorStatusDto;
 
 import com.univr.pump.insulinpump.sensors.Battery;
 import com.univr.pump.insulinpump.sensors.Heart;
+import com.univr.pump.insulinpump.sensors.InsulinPump;
 import com.univr.pump.insulinpump.sensors.NTC;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,10 +17,17 @@ public class SensorsController {
 
     private final Battery battery;
     private final NTC ntc;
+    private final InsulinPump insulinPump;
 
-    public SensorsController(Battery battery, NTC ntc) {
+    public SensorsController(Battery battery, NTC ntc, InsulinPump insulinPump) {
         this.battery = battery;
         this.ntc = ntc;
+        this.insulinPump = insulinPump;
+    }
+
+    @GetMapping("/insulinpump")
+    public int getInsulinPump() {
+        return insulinPump.getCurrentTankLevel();
     }
 
     @GetMapping("/battery")
@@ -42,11 +50,16 @@ public class SensorsController {
         ntc.repair();
     }
 
+    @PostMapping("/insulinpump/refill")
+    public void refillInsulinPump() {
+        insulinPump.refill();
+    }
+
     @GetMapping("/status")
     public SensorStatusDto getStatus() {
         return new SensorStatusDto(
                 battery.getCurrentCapacity(),
-                0, //TODO: add capacity of pump
+                insulinPump.getCurrentTankLevel(),
                 ntc.isBroken());
     }
 }

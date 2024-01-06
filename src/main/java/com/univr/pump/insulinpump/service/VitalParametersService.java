@@ -7,6 +7,7 @@ import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
 import com.univr.pump.insulinpump.sensors.Battery;
 import com.univr.pump.insulinpump.sensors.Heart;
+import com.univr.pump.insulinpump.sensors.InsulinPump;
 import com.univr.pump.insulinpump.sensors.NTC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +31,23 @@ public class VitalParametersService {
     private final Battery battery;
     private final NTC ntc;
     private final Heart heart;
+    private final InsulinPump insulinPump;
 
-    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc, Heart heart) {
+    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc, Heart heart, InsulinPump insulinPump) {
         this.vitalParametersRepository = vitalParametersRepository;
         this.battery = battery;
         this.ntc = ntc;
         this.heart = heart;
+        this.insulinPump = insulinPump;
+    }
+
+    /**
+     * Simulations of the glucose level in the blood of a diabetic patient.
+     */
+    @Scheduled(fixedRate = 5000)
+    public void newBloodGlucose() {
+        insulinPump.modifyBloodGlucose();
+        System.out.println("Blood glucose: " + insulinPump.getCurrentGlucoseLevel());
     }
 
     /**
@@ -43,7 +55,7 @@ public class VitalParametersService {
      * Se la batteria è scarica o il sensore di temperatura è rotto, la misurazione
      * non viene effettuata.
      */
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedRate = 1000)
     public void newVitalSigns() {
         if(battery.getCurrentCapacity() == 0 || ntc.isBroken()) {
             ntc.reset();
@@ -55,7 +67,7 @@ public class VitalParametersService {
                         , heart.getPressureSystolic()
                         , heart.getPressureDiastolic()
                         , heart.getHeartRate()
-                        , 1
+                        , insulinPump.getCurrentGlucoseLevel()
                         , ntc.getTemperature()));
         log.info("VitalParametersService.addVitalParameters: {}", vitalParameter);
     }
