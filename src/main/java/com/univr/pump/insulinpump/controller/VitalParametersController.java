@@ -4,15 +4,18 @@ import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.service.VitalParametersService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/vitalparameters")
 public class VitalParametersController {
 
-    @Autowired
-    private VitalParametersService vitalParametersService;
+
+    private final VitalParametersService vitalParametersService;
+
+    public VitalParametersController(VitalParametersService vitalParametersService) {
+        this.vitalParametersService = vitalParametersService;
+    }
 
     /**
      * The system uses this API to get vital parameters of a patient in a given time interval

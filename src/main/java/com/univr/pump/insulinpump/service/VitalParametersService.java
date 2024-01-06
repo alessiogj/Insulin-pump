@@ -6,6 +6,7 @@ import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
 import com.univr.pump.insulinpump.sensors.Battery;
+import com.univr.pump.insulinpump.sensors.BloodPressure;
 import com.univr.pump.insulinpump.sensors.NTC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,20 +29,34 @@ public class VitalParametersService {
 
     private final Battery battery;
     private final NTC ntc;
+    private final BloodPressure bloodPressure;
 
-    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc) {
+    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc, BloodPressure bloodPressure) {
         this.vitalParametersRepository = vitalParametersRepository;
         this.battery = battery;
         this.ntc = ntc;
+        this.bloodPressure = bloodPressure;
     }
 
     /**
-     * Ogni 10 minuti effettua una misurazione dei parametri vitali del paziente
-     * e aggiorna il valore di glucosio nel sangue.
+     * Ogni 10 minuti effettua una misurazione dei parametri vitali del paziente.
+     * Se la batteria è scarica o il sensore di temperatura è rotto, la misurazione
+     * non viene effettuata.
      */
     @Scheduled(fixedRate = 600000)
     public void newVitalSigns() {
-        //TODO: implementare
+        if(battery.getCurrentCapacity() == 0 || ntc.isBroken()) {
+            ntc.reset();
+            return;
+        }
+
+        VitalParameters vitalParameter = vitalParametersRepository.save(
+                new VitalParameters(LocalDateTime.now()
+                        , 1
+                        , 1
+                        , 1
+                        , ntc.getTemperature()));
+        log.info("VitalParametersService.addVitalParameters: {}", vitalParameter);
     }
 
     /**
@@ -74,6 +89,7 @@ public class VitalParametersService {
      * @param parameters
      * @return added vital parameter
      */
+    //XXX: da rimuovere
     public VitalParametersDto addVitalParameters(VitalParametersBodyDto parameters) {
         validateVitalParameters(parameters);
         VitalParameters vitalParameter = vitalParametersRepository.save(
