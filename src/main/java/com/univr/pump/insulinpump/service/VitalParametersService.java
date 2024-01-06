@@ -5,9 +5,12 @@ import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
+import com.univr.pump.insulinpump.sensors.Battery;
+import com.univr.pump.insulinpump.sensors.NTC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,9 +26,22 @@ public class VitalParametersService {
 
     private final VitalParametersRepository vitalParametersRepository;
 
+    private final Battery battery;
+    private final NTC ntc;
 
-    public VitalParametersService(VitalParametersRepository vitalParametersRepository) {
+    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc) {
         this.vitalParametersRepository = vitalParametersRepository;
+        this.battery = battery;
+        this.ntc = ntc;
+    }
+
+    /**
+     * Ogni 10 minuti effettua una misurazione dei parametri vitali del paziente
+     * e aggiorna il valore di glucosio nel sangue.
+     */
+    @Scheduled(fixedRate = 600000)
+    public void newVitalSigns() {
+        //TODO: implementare
     }
 
     /**
