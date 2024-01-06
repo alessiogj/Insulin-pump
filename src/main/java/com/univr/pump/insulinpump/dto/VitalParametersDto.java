@@ -7,7 +7,8 @@ package com.univr.pump.insulinpump.dto;
 public class VitalParametersDto {
     private String id;
     private String timestamp;
-    private String bloodPressure;
+    private String bloodPressureSystolic;
+    private String bloodPressureDiastolic;
     private String heartRate;
     private String bloodSugarLevel;
     private String temperature;
@@ -17,12 +18,14 @@ public class VitalParametersDto {
 
     public VitalParametersDto(String id
             , String timestamp
-            , String bloodPressure
+            , String bloodPressureSystolic
+            , String bloodPressureDiastolic
             , String heartRate
             , String bloodSugarLevel
             , String temperature) {
         this.timestamp = timestamp;
-        this.bloodPressure = bloodPressure;
+        this.bloodPressureSystolic = bloodPressureSystolic;
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
         this.heartRate = heartRate;
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
@@ -37,8 +40,12 @@ public class VitalParametersDto {
         return timestamp;
     }
 
-    public String getBloodPressure() {
-        return bloodPressure;
+    public String getBloodPressureSystolic() {
+        return bloodPressureSystolic;
+    }
+
+    public String getBloodPressureDiastolic() {
+        return bloodPressureDiastolic;
     }
 
     public String getHeartRate() {
@@ -61,8 +68,12 @@ public class VitalParametersDto {
         this.timestamp = timestamp;
     }
 
-    public void setBloodPressure(String bloodPressure) {
-        this.bloodPressure = bloodPressure;
+    public void setBloodPressureSystolic(String bloodPressureSystolic) {
+        this.bloodPressureSystolic = bloodPressureSystolic;
+    }
+
+    public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
     }
 
     public void setHeartRate(String heartRate) {

@@ -47,7 +47,8 @@ public class InsulinPumpApplicationTests {
     public void createVitalParameterTest() {
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
-        newVitalParameters.setBloodPressure("80");
+        newVitalParameters.setBloodPressureSystolic("80");
+        newVitalParameters.setBloodPressureDiastolic("80");
         newVitalParameters.setHeartRate("80");
         newVitalParameters.setBloodSugarLevel("80");
         newVitalParameters.setTemperature("36.6");
@@ -76,7 +77,8 @@ public class InsulinPumpApplicationTests {
     public void createVitalParameterInvalidBloodPressureTest() {
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
-        newVitalParameters.setBloodPressure("-80");
+        newVitalParameters.setBloodPressureSystolic("80");
+        newVitalParameters.setBloodPressureDiastolic("-80");
         newVitalParameters.setHeartRate("80");
         newVitalParameters.setBloodSugarLevel("80");
         newVitalParameters.setTemperature("36.6");
@@ -98,7 +100,8 @@ public class InsulinPumpApplicationTests {
     public void createVitalParameterInvalidHeartRateTest() {
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
-        newVitalParameters.setBloodPressure("80");
+        newVitalParameters.setBloodPressureSystolic("80");
+        newVitalParameters.setBloodPressureDiastolic("80");
         newVitalParameters.setHeartRate("-80");
         newVitalParameters.setBloodSugarLevel("80");
         newVitalParameters.setTemperature("36.6");
@@ -120,7 +123,8 @@ public class InsulinPumpApplicationTests {
     public void createVitalParameterInvalidBloodSugarLevelTest() {
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
-        newVitalParameters.setBloodPressure("80");
+        newVitalParameters.setBloodPressureSystolic("80");
+        newVitalParameters.setBloodPressureDiastolic("80");
         newVitalParameters.setHeartRate("80");
         newVitalParameters.setBloodSugarLevel("-80");
         newVitalParameters.setTemperature("36.6");
@@ -143,7 +147,8 @@ public class InsulinPumpApplicationTests {
     public void createVitalParameterInvalidTemperatureTest() {
 
         VitalParametersDto newVitalParameters = new VitalParametersDto();
-        newVitalParameters.setBloodPressure("80");
+        newVitalParameters.setBloodPressureSystolic("80");
+        newVitalParameters.setBloodPressureDiastolic("80");
         newVitalParameters.setHeartRate("80");
         newVitalParameters.setBloodSugarLevel("80");
         newVitalParameters.setTemperature("-36.6");
@@ -165,13 +170,15 @@ public class InsulinPumpApplicationTests {
     public void getLastVitalParameterTest() {
 
         VitalParametersDto firstVitalParameters = new VitalParametersDto();
-        firstVitalParameters.setBloodPressure("80");
+        firstVitalParameters.setBloodPressureSystolic("80");
+        firstVitalParameters.setBloodPressureDiastolic("80");
         firstVitalParameters.setHeartRate("80");
         firstVitalParameters.setBloodSugarLevel("80");
         firstVitalParameters.setTemperature("36.6");
 
         VitalParametersDto secondVitalParameters = new VitalParametersDto();
-        secondVitalParameters.setBloodPressure("90");
+        secondVitalParameters.setBloodPressureSystolic("90");
+        secondVitalParameters.setBloodPressureDiastolic("90");
         secondVitalParameters.setHeartRate("90");
         secondVitalParameters.setBloodSugarLevel("90");
         secondVitalParameters.setTemperature("37.0");
@@ -197,10 +204,11 @@ public class InsulinPumpApplicationTests {
                 .get("/vitalparameters/last")
                 .then()
                 .statusCode(200)
-                .body("bloodPressure", Matchers.equalTo(secondVitalParameters.getBloodPressure()))
-                .body("heartRate", Matchers.equalTo(secondVitalParameters.getHeartRate()))
-                .body("bloodSugarLevel", Matchers.equalTo(secondVitalParameters.getBloodSugarLevel()))
-                .body("temperature", Matchers.equalTo(secondVitalParameters.getTemperature()));
+                .body("bloodPressureSystolic", Matchers.equalTo("90"))
+                .body("bloodPressureDiastolic", Matchers.equalTo("90"))
+                .body("heartRate", Matchers.equalTo("90"))
+                .body("bloodSugarLevel", Matchers.equalTo("90"))
+                .body("temperature", Matchers.equalTo("37.0"));
     }
 
     /**
@@ -211,13 +219,15 @@ public class InsulinPumpApplicationTests {
     public void getVitalParametersWithDateIntervalTest() {
 
         VitalParametersDto firstVitalParameters = new VitalParametersDto();
-        firstVitalParameters.setBloodPressure("80");
+        firstVitalParameters.setBloodPressureSystolic("80");
+        firstVitalParameters.setBloodPressureDiastolic("80");
         firstVitalParameters.setHeartRate("80");
         firstVitalParameters.setBloodSugarLevel("80");
         firstVitalParameters.setTemperature("36.6");
 
         VitalParametersDto secondVitalParameters = new VitalParametersDto();
-        secondVitalParameters.setBloodPressure("90");
+        secondVitalParameters.setBloodPressureSystolic("90");
+        secondVitalParameters.setBloodPressureDiastolic("90");
         secondVitalParameters.setHeartRate("90");
         secondVitalParameters.setBloodSugarLevel("90");
         secondVitalParameters.setTemperature("37.0");

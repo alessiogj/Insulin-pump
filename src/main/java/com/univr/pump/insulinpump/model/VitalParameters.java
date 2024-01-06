@@ -10,7 +10,8 @@ public class VitalParameters {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private LocalDateTime timestamp;
-    private Integer bloodPressure;
+    private Integer bloodPressureSystolic;
+    private Integer bloodPressureDiastolic;
     private Integer heartRate;
     private Integer bloodSugarLevel;
     private Double temperature;
@@ -18,12 +19,14 @@ public class VitalParameters {
     public VitalParameters() {}
 
     public VitalParameters(LocalDateTime timestamp
-            , Integer bloodPressure
+            , Integer bloodPressureSystolic
+            , Integer bloodPressureDiastolic
             , Integer heartRate
             , Integer bloodSugarLevel
             , Double temperature) {
         this.timestamp = timestamp;
-        this.bloodPressure = bloodPressure;
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
+        this.bloodPressureSystolic = bloodPressureSystolic;
         this.heartRate = heartRate;
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
@@ -37,8 +40,12 @@ public class VitalParameters {
         return timestamp;
     }
 
-    public Integer getBloodPressure() {
-        return bloodPressure;
+    public Integer getBloodPressureSystolic() {
+        return bloodPressureSystolic;
+    }
+
+    public Integer getBloodPressureDiastolic() {
+        return bloodPressureDiastolic;
     }
 
     public Integer getHeartRate() {
@@ -61,8 +68,12 @@ public class VitalParameters {
         this.timestamp = timestamp;
     }
 
-    public void setBloodPressure(Integer bloodPressure) {
-        this.bloodPressure = bloodPressure;
+    public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
+        this.bloodPressureSystolic = bloodPressureSystolic;
+    }
+
+    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
     }
 
     public void setHeartRate(Integer heartRate) {

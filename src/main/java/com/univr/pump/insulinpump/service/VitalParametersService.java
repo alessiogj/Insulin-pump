@@ -6,7 +6,7 @@ import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
 import com.univr.pump.insulinpump.sensors.Battery;
-import com.univr.pump.insulinpump.sensors.BloodPressure;
+import com.univr.pump.insulinpump.sensors.Heart;
 import com.univr.pump.insulinpump.sensors.NTC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +29,13 @@ public class VitalParametersService {
 
     private final Battery battery;
     private final NTC ntc;
-    private final BloodPressure bloodPressure;
+    private final Heart heart;
 
-    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc, BloodPressure bloodPressure) {
+    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc, Heart heart) {
         this.vitalParametersRepository = vitalParametersRepository;
         this.battery = battery;
         this.ntc = ntc;
-        this.bloodPressure = bloodPressure;
+        this.heart = heart;
     }
 
     /**
@@ -52,8 +52,9 @@ public class VitalParametersService {
 
         VitalParameters vitalParameter = vitalParametersRepository.save(
                 new VitalParameters(LocalDateTime.now()
-                        , 1
-                        , 1
+                        , heart.getPressureSystolic()
+                        , heart.getPressureDiastolic()
+                        , heart.getHeartRate()
                         , 1
                         , ntc.getTemperature()));
         log.info("VitalParametersService.addVitalParameters: {}", vitalParameter);
@@ -94,7 +95,8 @@ public class VitalParametersService {
         validateVitalParameters(parameters);
         VitalParameters vitalParameter = vitalParametersRepository.save(
                 new VitalParameters(LocalDateTime.now()
-                        , Integer.valueOf(parameters.getBloodPressure())
+                        , Integer.valueOf(parameters.getBloodPressureDiastolic())
+                        , Integer.valueOf(parameters.getBloodPressureSystolic())
                         , Integer.valueOf(parameters.getHeartRate())
                         , Integer.valueOf(parameters.getBloodSugarLevel())
                         , Double.valueOf(parameters.getTemperature())));
@@ -126,7 +128,8 @@ public class VitalParametersService {
 
         dto.setId(String.valueOf(vitalParameter.getId()));
         dto.setTimestamp(String.valueOf(vitalParameter.getTimestamp()));
-        dto.setBloodPressure(String.valueOf(vitalParameter.getBloodPressure()));
+        dto.setBloodPressureSystolic(String.valueOf(vitalParameter.getBloodPressureSystolic()));
+        dto.setBloodPressureDiastolic(String.valueOf(vitalParameter.getBloodPressureDiastolic()));
         dto.setHeartRate(String.valueOf(vitalParameter.getHeartRate()));
         dto.setBloodSugarLevel(String.valueOf(vitalParameter.getBloodSugarLevel()));
         dto.setTemperature(String.valueOf(vitalParameter.getTemperature()));
@@ -151,7 +154,7 @@ public class VitalParametersService {
         }
 
         validateHeartRate(vitalParametersDto.getHeartRate());
-        validateBloodPressure(vitalParametersDto.getBloodPressure());
+        validateBloodPressure(vitalParametersDto.getBloodPressureSystolic(), vitalParametersDto.getBloodPressureDiastolic());
         validateBloodSugarLevel(vitalParametersDto.getBloodSugarLevel());
         validateTemperature(vitalParametersDto.getTemperature());
     }
@@ -178,10 +181,14 @@ public class VitalParametersService {
         }
     }
 
-    private void validateBloodPressure(String bloodPressure) {
-        double bloodPressureDouble = Double.parseDouble(bloodPressure);
-        if (bloodPressureDouble < 0 || bloodPressureDouble > 300) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid blood pressure value");
+    private void validateBloodPressure(String bloodPressureSystolic, String bloodPressureDiastolic) {
+        int bloodPressureSystolicDouble = Integer.parseInt(bloodPressureSystolic);
+        int bloodPressureDiastolicDouble = Integer.parseInt(bloodPressureDiastolic);
+        if (bloodPressureSystolicDouble < 0 || bloodPressureSystolicDouble > 300) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid blood pressure systolic value");
+        }
+        if (bloodPressureDiastolicDouble < 0 || bloodPressureDiastolicDouble > 300) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid blood pressure diastolic value");
         }
     }
 

@@ -3,7 +3,7 @@ package com.univr.pump.insulinpump.controller;
 import com.univr.pump.insulinpump.dto.SensorStatusDto;
 
 import com.univr.pump.insulinpump.sensors.Battery;
-import com.univr.pump.insulinpump.sensors.BloodPressure;
+import com.univr.pump.insulinpump.sensors.Heart;
 import com.univr.pump.insulinpump.sensors.NTC;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,12 +16,10 @@ public class SensorsController {
 
     private final Battery battery;
     private final NTC ntc;
-    private final BloodPressure bloodPressure;
 
-    public SensorsController(Battery battery, NTC ntc, BloodPressure bloodPressure) {
+    public SensorsController(Battery battery, NTC ntc) {
         this.battery = battery;
         this.ntc = ntc;
-        this.bloodPressure = bloodPressure;
     }
 
     @GetMapping("/battery")
@@ -32,16 +30,6 @@ public class SensorsController {
     @GetMapping("/ntc")
     public double getNtc() {
         return ntc.getTemperature();
-    }
-
-    @GetMapping("/blood/systolic")
-    public int getBloodPreassure() {
-        return bloodPressure.getPressureSystolic();
-    }
-
-    @GetMapping("/blood/diastolic")
-    public int getBloodPreassureDiastolic() {
-        return bloodPressure.getPressureDiastolic();
     }
 
     @GetMapping("/ntc/status")
@@ -65,8 +53,6 @@ public class SensorsController {
                 battery.getCurrentCapacity(),
                 0, //TODO: add capacity
                 ntc.getTemperature(),
-                ntc.isBroken(),
-                bloodPressure.getPressureSystolic(),
-                bloodPressure.getPressureDiastolic());
+                ntc.isBroken());
     }
 }
