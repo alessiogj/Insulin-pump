@@ -34,9 +34,11 @@ public class VitalParametersMonitoringTask {
     public void modifyVitalParameters() {
         heart.modifyPressure();
         insulinPump.modifyBloodGlucose();
+        ntc.modifyTemperature();
         System.out.println("Diastolic pressure: " + heart.getPressureDiastolic());
         System.out.println("Systolic pressure: " + heart.getPressureSystolic());
         System.out.println("Blood glucose: " + insulinPump.getCurrentGlucoseLevel());
+        System.out.println("Temperature: " + ntc.getTemperature());
     }
 
     /**

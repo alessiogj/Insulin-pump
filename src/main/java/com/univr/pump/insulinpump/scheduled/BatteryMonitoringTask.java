@@ -18,7 +18,9 @@ public class BatteryMonitoringTask {
      */
     @Scheduled(fixedRate = 5000)
     public void decrBattery() {
-        battery.discharge();
+        if (battery.getCurrentCapacity() > 0) {
+            battery.discharge();
+        }
         System.out.println("Battery: " + battery.getCurrentCapacity());
     }
 

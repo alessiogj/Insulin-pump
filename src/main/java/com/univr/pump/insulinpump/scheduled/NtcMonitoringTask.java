@@ -17,19 +17,15 @@ public class NtcMonitoringTask {
 
     /**
      * This method is called every 5 seconds.
-     * It simulates the NTC sensor by modifying the temperature.
-     * If the battery is empty, the NTC is reset.
+     * It simulates the NTC sensor reading.
+     * If the battery is empty or broken, the NTC is reset.
      */
     @Scheduled(fixedRate = 5000)
     public void newTemp() {
-        if(battery.getCurrentCapacity() == 0) {
+        if(battery.getCurrentCapacity() == 0 || ntc.isBroken()) {
             ntc.reset();
             return;
         }
-        ntc.modifyTemperature();
-        if(ntc.isBroken())
-            System.out.println("NTC is broken");
-        else
-            System.out.println("NTC: " + ntc.getTemperature());
+        System.out.println("NTC: " + ntc.getTemperature());
     }
 }
