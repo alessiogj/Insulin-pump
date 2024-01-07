@@ -198,5 +198,4 @@ public class VitalParametersTest {
         .then()
                 .statusCode(400);
     }
-
 }

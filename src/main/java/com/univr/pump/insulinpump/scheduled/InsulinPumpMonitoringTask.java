@@ -30,7 +30,7 @@ public class InsulinPumpMonitoringTask {
             return;
         }
         int currentGlucoseLevel = insulinPump.getCurrentGlucoseLevel();
-        if(currentGlucoseLevel > 140) {
+        if(currentGlucoseLevel > 130) {
             insulinPump.injectInsulin();
             System.out.println("Insulin injected");
         }

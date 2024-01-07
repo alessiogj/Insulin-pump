@@ -53,7 +53,7 @@ public class VitalParametersMonitoringTask {
             return;
         }
 
-        vitalParametersService.saveHeartParameters(
+        vitalParametersService.saveVitalParameters(
                 heart.getPressureSystolic(),
                 heart.getPressureDiastolic(),
                 heart.getHeartRate(),
