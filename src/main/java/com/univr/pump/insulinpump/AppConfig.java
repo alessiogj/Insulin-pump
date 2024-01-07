@@ -12,7 +12,7 @@ public class AppConfig {
 
     @Bean
     public Battery battery() {
-        return new Battery(1000, 10);
+        return new Battery(10000, 10000);
     }
 
     @Bean
