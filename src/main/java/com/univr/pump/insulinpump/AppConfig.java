@@ -1,7 +1,8 @@
 package com.univr.pump.insulinpump;
 
 import com.univr.pump.insulinpump.sensors.Battery;
-import com.univr.pump.insulinpump.sensors.BloodPressure;
+import com.univr.pump.insulinpump.sensors.Heart;
+import com.univr.pump.insulinpump.sensors.InsulinPump;
 import com.univr.pump.insulinpump.sensors.NTC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,12 @@ public class AppConfig {
     }
 
     @Bean
-    public BloodPressure bloodPressure() {
-        return new BloodPressure();
+    public Heart bloodPressure() {
+        return new Heart();
+    }
+
+    @Bean
+    public InsulinPump insulinPump() {
+        return new InsulinPump();
     }
 }

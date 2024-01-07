@@ -1,47 +1,170 @@
-## Insulin Pump Requirements
+## Pompa di Insulina 💉
 
-### Functional Requirements
-1. **Blood Sugar Measurement and Insulin Administration**
-    - Il sistema deve misurare la glicemia e somministrare insulina, se necessario, ogni 10 minuti.
-    - Note: Le variazioni della glicemia sono relativamente lente, quindi una misurazione più frequente è inutile; una misurazione meno frequente potrebbe portare a livelli di zucchero inutilmente alti.
+Il progetto è stato sviluppato per il corso di Ingegneria
+e scienze informatiche dell'Università di Verona. 
+Il progetto consiste nella realizzazione di un sistema
+software per la gestione di una pompa di insulina.
 
-2. **Self-Test Routine**
-    - Il sistema deve eseguire una routine di auto-test ogni minuto con le condizioni da testare e le azioni associate definite nella Tabella 1.
-    - Note: Una routine di auto-test può scoprire problemi hardware e software e avvisare l'utente del fatto che il funzionamento normale potrebbe essere impossibile.
+# Documentazione API Parametri Vitali
 
-3. **User Registration by Medical Professionals**
-    - Medico può registrare un nuovo utente da monitorare mediante la pompa di insulina inserendo i dati: Nome, Cognome, Data di nascita, Codice fiscale, Peso, Altezza, Tipologia di diabete.
+Questa documentazione fornisce dettagli sulle API per la gestione e il recupero dei parametri vitali dei pazienti
+e dei sensori.
 
-4. **Parameters to Monitor**
-    - Parametri da rilevare: Glicemia, pressione arteriosa, pressione venosa, BPM.
+## Endpoint
 
-5. **Doctor's Dashboard**
-    - Il medico ha a disposizione una board su cui visualizzare gli utenti, selezionare il singolo utente, aggiungere nuovi utenti, rimuovere utenti, modificare utenti.
+### 1. Ricerca Parametri Vitali per Intervallo Temporale
 
-6. **User Management and Health Monitoring**
-    - La gestione dell'utente permette di monitorare il suo stato di salute, vedendo i parametri relativi alle ultime misurazioni, lo stato di salute dell'utente (in base ai log precedenti attribuisce diversi stati di salute dell'utente), possibilità di gestione manuale (il medico può decidere se far erogare al sistema l'insulina oppure gestire manualmente lo stato degli utenti, in ogni caso il medico può erogare in autonomia insulina).
+- **Descrizione**: Recupera i parametri vitali di un paziente per un intervallo temporale specificato.
+- **URL**: `vitalparameters/date`
+- **Metodo**: `POST`
+- **Corpo della Richiesta**:
+    - Oggetto `DateIntervalDto` contenente le date di inizio e fine dell'intervallo.
+- **Risposta**:
+    - `Iterable` di oggetti `VitalParametersDto` che rappresentano i parametri vitali nell'intervallo specificato.
 
-7. **Alarm handling in main dashboard**
-    - Il sistema deve gestire gli allarmi in modo da notificare 
-      al medico, mediante la dashboard, eventuali problemi relativi ai pazienti
-      (minurazioni anomale).
+#### Schema JSON per la richiesta di ricerca per intervallo temporale
 
-8. **Feedback dei medici**
-   - Essendoci turni diversi, i medici possono lasciare il proprio feedback su 
-     problematiche riscontrate durante il proprio turno, in modo da poter essere 
-     visualizzate dai colleghi prima di procedere con la somministrazione di insulina 
-     o altre operazioni.
+```json
+{
+  "startDate": "2023-01-06T14:07:11.530341",
+    "endDate": "2024-01-06T14:07:11.530341"
+}
+```
 
-9. **Gestione della corretta visualizzazione dei feedback**
-   - I feedback dei medici devono essere visualizzati in modo da poter essere 
-     gestiti in modo corretto, in modo da poter essere visualizzati in
-     ordine cronologico, una volta spuntati non devono essere più visualizzati.
+#### Schema JSON per la risposta di ricerca per intervallo temporale
 
-### Decision Table for Insulin Administration
+```json
+[
+  {
+    "id": 1,
+    "patientId": 1,
+    "date": "2023-01-06T14:07:11.530341",
+    "bloodPressure": 120,
+    "heartRate": 80,
+    "temperature": 36.5,
+    "bloodOxygenLevel": 98
+  },
+  {
+    "id": 2,
+    "patientId": 1,
+    "date": "2023-01-06T14:07:11.530341",
+    "bloodPressure": 120,
+    "heartRate": 80,
+    "temperature": 36.5,
+    "bloodOxygenLevel": 98
+  }
+]
+```
 
-| Condizione | Azione |
-|------------|--------|
-| Sugar level falling (`r2 < r1`) | `CompDose = 0` |
-| Sugar level stable (`r2 = r1`) | `CompDose = 0` |
-| Sugar level increasing and rate of increase decreasing `((r2 –r1) < (r1 –r0))` | `CompDose = 0` |
-| Sugar level increasing and rate of increase stable or increasing `((r2 –r1) ≥ (r1 –r0))` | `CompDose = round ((r2 –r1)/4)`<br>If rounded `result = 0` then `CompDose = MinimumDose` |
+### 2. Recupero di tutti i Parametri Vitali
+
+- **Descrizione**: Recupera tutti i parametri vitali di un paziente.
+- **URL**: `vitalparameters/`
+- **Metodo**: `GET`
+- **Corpo della Richiesta**:
+  - Il corpo della richiesta è vuoto.
+- **Risposta**:
+    - `Iterable` di oggetti `VitalParametersDto` che rappresentano i parametri vitali del paziente.
+
+#### Schema JSON per la risposta di recupero di tutti i parametri vitali
+
+```json
+[
+  {
+    "id": 1,
+    "patientId": 1,
+    "date": "2023-01-06T14:07:11.530341",
+    "bloodPressure": 120,
+    "heartRate": 80,
+    "temperature": 36.5,
+    "bloodOxygenLevel": 98
+  },
+  {
+    "id": 2,
+    "patientId": 1,
+    "date": "2023-01-06T14:07:11.530341",
+    "bloodPressure": 120,
+    "heartRate": 80,
+    "temperature": 36.5,
+    "bloodOxygenLevel": 98
+  }
+]
+```
+
+### 3. Recupero dell'ultimo Parametro Vitale misurato per un paziente
+
+- **Descrizione**: Recupera l'ultimo parametro vitale misurato per un paziente.
+- **URL**: `vitalparameters/last`
+- **Metodo**: `GET`
+- **Corpo della Richiesta**:
+    - Il corpo della richiesta è vuoto.
+- **Risposta**:
+    - Oggetto `VitalParametersDto` che rappresenta l'ultimo parametro vitale misurato per il paziente.
+    - `404 Not Found` se il paziente non ha ancora misurato alcun parametro vitale.
+
+#### Schema JSON per la risposta di recupero dell'ultimo parametro vitale
+
+```json
+{
+  "id": 1,
+  "patientId": 1,
+  "date": "2023-01-06T14:07:11.530341",
+  "bloodPressure": 120,
+  "heartRate": 80,
+  "temperature": 36.5,
+  "bloodOxygenLevel": 98
+}
+```
+
+### 4. Recupero delle informazioni sui sensori
+
+- **Descrizione**: Recupera le informazioni sui sensori.
+- **URL**: `sensors/status`
+- **Metodo**: `GET`
+- **Corpo della Richiesta**:
+    - Il corpo della richiesta è vuoto.
+- **Risposta**:
+    - Oggetto `SensorStatusDto` che rappresenta lo stato dei sensori.
+
+#### Schema JSON per la risposta di recupero delle informazioni sui sensori
+    
+```json
+{
+  "battery": 100,
+  "tank": true,
+  "ntcStatus": false
+
+}
+```
+
+## Endpoint per la gestione dei MOC 
+
+### 1. Rimpiazzo della batteria
+
+- **Descrizione**: Rimpiazzo della batteria.
+- **URL**: `sensors/battery/replace`
+- **Metodo**: `PUT`
+- **Corpo della Richiesta**:
+    - Il corpo della richiesta è vuoto.
+- **Risposta**:
+  - `200 OK` se il rimpiazzo della batteria è andato a buon fine.
+
+### 2. Ricarica del serbatoio
+
+- **Descrizione**: Ricarica del serbatoio.
+- **URL**: `sensors/tank/refill`
+- **Metodo**: `PUT`
+- **Corpo della Richiesta**:
+    - Il corpo della richiesta è vuoto.
+- **Risposta**:
+  - `200 OK` se la ricarica del serbatoio è andata a buon fine.
+
+### 3. Riparazione del sensore
+
+- **Descrizione**: Sostituzione del sensore.
+- **URL**: `sensors/ntc/repair`
+- **Metodo**: `PUT`
+- **Corpo della Richiesta**:
+    - Il corpo della richiesta è vuoto.
+- **Risposta**:
+  - `200 OK` se la riparazione del sensore è andata a buon fine.
