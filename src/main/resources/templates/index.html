@@ -51,16 +51,16 @@
                     <div class="p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">Last measurements</div>
                 </div>
                 <div class="d-flex flex-column bg-primary-subtle border border-primary-subtle">
-                    <div class="p-2" id="timelabel">Time: ssss</div>
-                    <div class="p-2" id="pressurelabel">Pressure: ssss</div>
-                    <div class="p-2" id="heartlabel">Heart Rate: ssss</div>
-                    <div class="p-2" id="bloodlabel">Blood Sugar: ssss</div>
-                    <div class="p-2" id="temperaturelabel">Temperature: ssss</div>
+                    <div class="p-2" id="timelabel">Time:</div>
+                    <div class="p-2" id="pressurelabel">Pressure:</div>
+                    <div class="p-2" id="heartlabel">Heart Rate:</div>
+                    <div class="p-2" id="bloodlabel">Blood Sugar:</div>
+                    <div class="p-2" id="temperaturelabel">Temperature:</div>
                 </div>
             </div>
             <div class="col mb-3">
                 <div class="d-flex flex-row">
-                    <div class="p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">Allarms</div>
+                    <div class="p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">Alarms</div>
                 </div>
                 <div class="d-flex flex-column bg-primary-subtle border border-primary-subtle">
                     <div class="p-2" id="batterylabel">Battery</div>
@@ -75,117 +75,229 @@
                     <div class="p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">Grafici</div>
                 </div>
                 <div class="d-flex flex-row bg-primary-subtle border border-primary-subtle">
-                    <div id="chart"></div>
                     <div id="chart1"></div>
                     <div id="chart2"></div>
                     <div id="chart3"></div>
+                    <div id="chart4"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- CHARTS -->
+    <!-- Vital parameters and charts script-->
     <script>
-        var options = {
-  chart: {
-    type: 'line'
-  },
-  series: [{
-    name: 'sales',
-    data: [30,40,35,50,49,60,70,91,125]
-  }],
-  xaxis: {
-    categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
-  }
-}
+        var heartrate_timeseries = [];
+        var sistpressure_timeseries = [];
+        var diastpressure_timeseries = [];
+        var bloodsugar_timeseries = [];
+        var temperature_timeseries = [];
 
-var chart = new ApexCharts(document.querySelector("#chart"), options);
+        var options1 = {
+            chart: {
+                type: 'line'
+            },
+            series: [{
+                name: 'heartrate',
+                data: heartrate_timeseries
+            }],
+            xaxis: {
+              labels: {
+                show: false,
+              }
+            },
+            title: {
+                text: 'HeartRate Timeseries',
+                align: 'left'
+            },
+            animations: {
+            enabled: true,
+            easing: 'linear',
+            dynamicAnimation: {
+              speed: 1000
+            }
+          },
+          stroke: {
+          curve: 'smooth'
+        },
+        }
+        var options2={
+            chart: {
+                type: 'line'
+            },
+            series: [{
+                name: 'sistolicpressure',
+                data: sistpressure_timeseries
+            },
+            {
+                name: 'diastolicpressure',
+                data: diastpressure_timeseries
+            }
+            ],
+            xaxis: {
+              labels: {
+                show: false,
+              }
+            },
+            title: {
+                text: 'Pressure Timeseries',
+                align: 'left'
+            },
+            animations: {
+            enabled: true,
+            easing: 'linear',
+            dynamicAnimation: {
+              speed: 1000
+            }
+          },
+          stroke: {
+          curve: 'smooth'
+        },
+        }
+        var options3=
+        {
+            chart: {
+                type: 'line'
+            },
+            series: [{
+                name: 'bloodsugar',
+                data: bloodsugar_timeseries
+            }],
+            xaxis: {
+              labels: {
+                show: false,
+              }
+            },
+            title: {
+                text: 'Blood Sugar Timeseries',
+                align: 'left'
+            },
+            animations: {
+            enabled: true,
+            easing: 'linear',
+            dynamicAnimation: {
+              speed: 1000
+            }
+          },
+          stroke: {
+          curve: 'smooth'
+        },
+        }
+        var options4={
+            chart: {
+                type: 'line'
+            },
+            series: [{
+                name: 'temperature',
+                data: temperature_timeseries
+            }],
+            xaxis: {
+              labels: {
+                show: false,
+              }
+            },
+            title: {
+                text: 'Temperature Timeseries',
+                align: 'left'
+            },
+            animations: {
+            enabled: true,
+            easing: 'linear',
+            dynamicAnimation: {
+              speed: 1000
+            }
+          },
+          stroke: {
+          curve: 'smooth'
+        },
+        }
 
-chart.render();
+        var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+        var chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+        var chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
+        var chart4 = new ApexCharts(document.querySelector("#chart4"), options4);
+
+        chart1.render();
+        chart2.render();
+        chart3.render();
+        chart4.render();
+
+        const buffer = 50;
+        var tempcount = 0;
+
+        setInterval(() => {
+            const Http = new XMLHttpRequest();
+            const url = 'http://localhost:8080/vitalparameters/last';
+            Http.open("GET", url);
+            Http.send();
+            Http.onreadystatechange = (e) => {
+                if (Http.readyState === 4 && Http.status === 200) {
+                    const obj = JSON.parse(Http.responseText)
+                    var trunc_temp = obj.temperature.substring(0, 4);
+                    var trunc_time = obj.timestamp.slice(11, 19);
+                    document.getElementById("timelabel").innerHTML = "Time: " + trunc_time;
+                    document.getElementById("pressurelabel").innerHTML = "Pressure: " + obj.bloodPressureSystolic + "/" + obj.bloodPressureDiastolic + " mmHg";
+                    document.getElementById("heartlabel").innerHTML = "HeartRate: " + obj.heartRate + " bpm";
+                    document.getElementById("bloodlabel").innerHTML = "Blood Sugar: " + obj.bloodSugarLevel + " mg/dL";
+                    document.getElementById("temperaturelabel").innerHTML = "Temperature: " + trunc_temp + " C°";
+
+
+                    if (heartrate_timeseries.length > buffer){
+                        heartrate_timeseries.shift();
+                        sistpressure_timeseries.shift();
+                        diastpressure_timeseries.shift();
+                        bloodsugar_timeseries.shift();
+                        temperature_timeseries.shift();
+                    }
+
+                    //Aggiunge i nuovi dati in arrivo ai grafici e alle serie temporali
+                    heartrate_timeseries.push({ x: tempcount, y: obj.heartRate});
+                    sistpressure_timeseries.push({ x: tempcount, y: obj.bloodPressureSystolic});
+                    diastpressure_timeseries.push({ x: tempcount, y: obj.bloodPressureDiastolic });
+                    bloodsugar_timeseries.push({ x: tempcount, y: obj.bloodSugarLevel});
+                    temperature_timeseries.push({ x: tempcount, y: trunc_temp});
+
+                    tempcount++;
+
+                    // Aggiorna il grafico con i nuovi dati
+                    chart1.updateSeries([{
+                        data: heartrate_timeseries
+                    }]);
+                    // Aggiorna il grafico con i nuovi dati
+                    chart2.updateSeries([{
+                        data: sistpressure_timeseries
+                    },{
+                        data: diastpressure_timeseries
+                    }
+                    ]);
+                    // Aggiorna il grafico con i nuovi dati
+                    chart3.updateSeries([{
+                        data: bloodsugar_timeseries
+                    }]);
+                    // Aggiorna il grafico con i nuovi dati
+                    chart4.updateSeries([{
+                        data: temperature_timeseries
+                    }]);
+                }
+            }
+        }, 1000);
+
     </script>
+
+    <!-- Sensor status script -->
     <script>
-        var options = {
-  chart: {
-    type: 'line'
-  },
-  series: [{
-    name: 'sales',
-    data: [30,40,35,50,49,60,70,91,125]
-  }],
-  xaxis: {
-    categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
-  }
-}
-
-var chart = new ApexCharts(document.querySelector("#chart1"), options);
-
-chart.render();
-    </script>
-    <script>
-        var options = {
-  chart: {
-    type: 'line'
-  },
-  series: [{
-    name: 'sales',
-    data: [30,40,35,50,49,60,70,91,125]
-  }],
-  xaxis: {
-    categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
-  }
-}
-
-var chart = new ApexCharts(document.querySelector("#chart2"), options);
-
-chart.render();
-    </script>
-    <script>
-        var options = {
-  chart: {
-    type: 'line'
-  },
-  series: [{
-    name: 'sales',
-    data: [30,40,35,50,49,60,70,91,125]
-  }],
-  xaxis: {
-    categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
-  }
-}
-
-var chart = new ApexCharts(document.querySelector("#chart3"), options);
-
-chart.render();
-    </script>
-
-    <!-- update scripts -->
-    <script>setInterval(function () {
+    setInterval(function () {
             const Http = new XMLHttpRequest();
             const url='http://localhost:8080/sensors/status';
             Http.open("GET", url);
             Http.send();
             Http.onreadystatechange = (e) => {
               const obj = JSON.parse(Http.responseText)
-              document.getElementById("batterylabel").innerHTML = "Battery: " + obj.battery;
-              document.getElementById("refilllabel").innerHTML = "Tank: " + obj.tank;
-              document.getElementById("ntclabel").innerHTML = "Ntc value: " + obj.ntc;
+              document.getElementById("batterylabel").innerHTML = "Battery level: " + obj.battery + "%";
+              document.getElementById("refilllabel").innerHTML = "Insulin dose available: " + obj.tank;
+              document.getElementById("ntclabel").innerHTML = obj.ntcStatus ? 'Ntc status: Broken' : 'Ntc status: Active';
             }
         }, 1000);
     </script>
-    <script>setInterval(function () {
-            const Http = new XMLHttpRequest();
-            const url='http://localhost:8080/vitalparameters/last';
-            Http.open("GET", url);
-            Http.send();
-            Http.onreadystatechange = (e) => {
-              const obj = JSON.parse(Http.responseText)
-              document.getElementById("timelabel").innerHTML = "Time: " + obj.timestamp;
-              document.getElementById("pressurelabel").innerHTML = "Pressure: " + obj.bloodPressure;
-              document.getElementById("heartlabel").innerHTML = "HeartRate: " + obj.heartRate;
-              document.getElementById("bloodlabel").innerHTML = "Blood Sugar: " + obj.bloodSugarLevel;
-              document.getElementById("temperaturelabel").innerHTML = "Temperature: " + obj.temperature;
-            }
-        }, 1000);</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

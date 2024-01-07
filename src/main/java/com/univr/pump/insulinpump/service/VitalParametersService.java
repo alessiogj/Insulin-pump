@@ -55,7 +55,7 @@ public class VitalParametersService {
      * Se la batteria è scarica o il sensore di temperatura è rotto, la misurazione
      * non viene effettuata.
      */
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 60000)
     public void newVitalSigns() {
         if(battery.getCurrentCapacity() == 0 || ntc.isBroken()) {
             ntc.reset();
