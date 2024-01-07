@@ -62,7 +62,7 @@
                 <div class="d-flex flex-row">
                     <div class="p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">Alarms</div>
                 </div>
-                <div class="d-flex flex-column bg-primary-subtle border border-primary-subtle">
+                <div class="d-flex flex-column justify-content-evenly bg-primary-subtle border border-primary-subtle">
                     <div class="p-2" id="batterylabel">Battery</div>
                     <div class="p-2" id="refilllabel">Refill</div>
                     <div class="p-2" id="ntclabel">Ntc Error</div>
@@ -74,7 +74,7 @@
                 <div class="d-flex flex-row">
                     <div class="p-2 text-primary-emphasis bg-primary-subtle border border-primary-subtle">Grafici</div>
                 </div>
-                <div class="d-flex flex-row bg-primary-subtle border border-primary-subtle">
+                <div class="d-flex flex-row justify-content-evenly bg-primary-subtle border border-primary-subtle">
                     <div id="chart1"></div>
                     <div id="chart2"></div>
                     <div id="chart3"></div>
@@ -94,121 +94,185 @@
 
         var options1 = {
             chart: {
-                type: 'line'
+                type: 'line',
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                },
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
             },
             series: [{
                 name: 'heartrate',
                 data: heartrate_timeseries
             }],
             xaxis: {
-              labels: {
-                show: false,
-              }
+                labels: {
+                    show: false,
+                }
+            },
+            yaxis:{
+                title: {
+                    text: "bpm"
+                }
             },
             title: {
                 text: 'HeartRate Timeseries',
-                align: 'left'
+                align: 'center'
             },
-            animations: {
-            enabled: true,
-            easing: 'linear',
-            dynamicAnimation: {
-              speed: 1000
-            }
-          },
-          stroke: {
-          curve: 'smooth'
-        },
+            stroke: {
+                curve: 'smooth'
+            },
         }
-        var options2={
+        var options2 = {
             chart: {
-                type: 'line'
+                type: 'line',
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                },
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
             },
             series: [{
-                name: 'sistolicpressure',
-                data: sistpressure_timeseries
-            },
-            {
-                name: 'diastolicpressure',
-                data: diastpressure_timeseries
-            }
+                    name: 'sistolicpressure',
+                    data: sistpressure_timeseries
+                },
+                {
+                    name: 'diastolicpressure',
+                    data: diastpressure_timeseries
+                }
             ],
             xaxis: {
-              labels: {
-                show: false,
-              }
+                labels: {
+                    show: false,
+                }
+            },
+            yaxis:{
+                title: {
+                    text: "mmHg"
+                }
             },
             title: {
                 text: 'Pressure Timeseries',
-                align: 'left'
+                align: 'center'
             },
             animations: {
-            enabled: true,
-            easing: 'linear',
-            dynamicAnimation: {
-              speed: 1000
-            }
-          },
-          stroke: {
-          curve: 'smooth'
-        },
+                enabled: true,
+                easing: 'linear',
+                dynamicAnimation: {
+                    speed: 1000
+                }
+            },
+            stroke: {
+                curve: 'smooth'
+            },
         }
-        var options3=
-        {
+        var options3 = {
             chart: {
-                type: 'line'
+                type: 'line',
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                },
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
             },
             series: [{
                 name: 'bloodsugar',
                 data: bloodsugar_timeseries
             }],
             xaxis: {
-              labels: {
-                show: false,
-              }
+                labels: {
+                    show: false,
+                }
+            },
+            yaxis:{
+                title: {
+                    text: "mg/dL"
+                }
             },
             title: {
                 text: 'Blood Sugar Timeseries',
-                align: 'left'
+                align: 'center'
             },
             animations: {
-            enabled: true,
-            easing: 'linear',
-            dynamicAnimation: {
-              speed: 1000
-            }
-          },
-          stroke: {
-          curve: 'smooth'
-        },
+                enabled: true,
+                easing: 'linear',
+                dynamicAnimation: {
+                    speed: 1000
+                }
+            },
+            stroke: {
+                curve: 'smooth'
+            },
         }
-        var options4={
+        var options4 = {
             chart: {
-                type: 'line'
+                type: 'line',
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                },
+                zoom: {
+                    enabled: false
+                },
+                toolbar: {
+                    show: false
+                }
             },
             series: [{
                 name: 'temperature',
                 data: temperature_timeseries
             }],
             xaxis: {
-              labels: {
-                show: false,
-              }
+                labels: {
+                    show: false,
+                },
+            },
+            yaxis:{
+                title: {
+                    text: "C°"
+                }
             },
             title: {
                 text: 'Temperature Timeseries',
-                align: 'left'
+                align: 'center'
             },
             animations: {
-            enabled: true,
-            easing: 'linear',
-            dynamicAnimation: {
-              speed: 1000
-            }
-          },
-          stroke: {
-          curve: 'smooth'
-        },
+                enabled: true,
+                easing: 'linear',
+                dynamicAnimation: {
+                    speed: 1000
+                }
+            },
+            stroke: {
+                curve: 'smooth'
+            },
         }
 
         var chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
@@ -221,7 +285,7 @@
         chart3.render();
         chart4.render();
 
-        const buffer = 50;
+        const buffer = 20;
         var tempcount = 0;
 
         setInterval(() => {
@@ -241,7 +305,7 @@
                     document.getElementById("temperaturelabel").innerHTML = "Temperature: " + trunc_temp + " C°";
 
 
-                    if (heartrate_timeseries.length > buffer){
+                    if (heartrate_timeseries.length > buffer) {
                         heartrate_timeseries.shift();
                         sistpressure_timeseries.shift();
                         diastpressure_timeseries.shift();
@@ -250,11 +314,26 @@
                     }
 
                     //Aggiunge i nuovi dati in arrivo ai grafici e alle serie temporali
-                    heartrate_timeseries.push({ x: tempcount, y: obj.heartRate});
-                    sistpressure_timeseries.push({ x: tempcount, y: obj.bloodPressureSystolic});
-                    diastpressure_timeseries.push({ x: tempcount, y: obj.bloodPressureDiastolic });
-                    bloodsugar_timeseries.push({ x: tempcount, y: obj.bloodSugarLevel});
-                    temperature_timeseries.push({ x: tempcount, y: trunc_temp});
+                    heartrate_timeseries.push({
+                        x: tempcount,
+                        y: obj.heartRate
+                    });
+                    sistpressure_timeseries.push({
+                        x: tempcount,
+                        y: obj.bloodPressureSystolic
+                    });
+                    diastpressure_timeseries.push({
+                        x: tempcount,
+                        y: obj.bloodPressureDiastolic
+                    });
+                    bloodsugar_timeseries.push({
+                        x: tempcount,
+                        y: obj.bloodSugarLevel
+                    });
+                    temperature_timeseries.push({
+                        x: tempcount,
+                        y: trunc_temp
+                    });
 
                     tempcount++;
 
@@ -265,10 +344,9 @@
                     // Aggiorna il grafico con i nuovi dati
                     chart2.updateSeries([{
                         data: sistpressure_timeseries
-                    },{
+                    }, {
                         data: diastpressure_timeseries
-                    }
-                    ]);
+                    }]);
                     // Aggiorna il grafico con i nuovi dati
                     chart3.updateSeries([{
                         data: bloodsugar_timeseries
@@ -280,21 +358,20 @@
                 }
             }
         }, 1000);
-
     </script>
 
     <!-- Sensor status script -->
     <script>
-    setInterval(function () {
+        setInterval(function () {
             const Http = new XMLHttpRequest();
             const url='http://localhost:8080/sensors/status';
             Http.open("GET", url);
             Http.send();
             Http.onreadystatechange = (e) => {
-              const obj = JSON.parse(Http.responseText)
-              document.getElementById("batterylabel").innerHTML = "Battery level: " + obj.battery + "%";
-              document.getElementById("refilllabel").innerHTML = "Insulin dose available: " + obj.tank;
-              document.getElementById("ntclabel").innerHTML = obj.ntcStatus ? 'Ntc status: Broken' : 'Ntc status: Active';
+                const obj = JSON.parse(Http.responseText)
+                document.getElementById("batterylabel").innerHTML = "Battery level: " + obj.battery + "%";
+                document.getElementById("refilllabel").innerHTML = "Insulin dose available: " + obj.tank;
+                document.getElementById("ntclabel").innerHTML = obj.ntcStatus ? 'Ntc status: Broken' : 'Ntc status: Active';
             }
         }, 1000);
     </script>
