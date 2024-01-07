@@ -1,16 +1,11 @@
-## Pompa di Insulina 💉
+# Pompa di Insulina 💉
 
 Il progetto è stato sviluppato per il corso di Ingegneria
 e scienze informatiche dell'Università di Verona. 
 Il progetto consiste nella realizzazione di un sistema
 software per la gestione di una pompa di insulina.
 
-# Documentazione API Parametri Vitali
-
-Questa documentazione fornisce dettagli sulle API per la gestione e il recupero dei parametri vitali dei pazienti
-e dei sensori.
-
-## Endpoint
+## Documentazione API Parametri Vitali
 
 ### 1. Ricerca Parametri Vitali per Intervallo Temporale
 
@@ -131,13 +126,11 @@ e dei sensori.
 ```json
 {
   "battery": 100,
-  "tank": true,
-  "ntcStatus": false
-
+  "tank": true
 }
 ```
 
-## Endpoint per la gestione dei MOCK 
+## Documentazione API relative ai Sensori 
 
 ### 1. Rimpiazzo della batteria
 
@@ -158,13 +151,3 @@ e dei sensori.
     - Il corpo della richiesta è vuoto.
 - **Risposta**:
   - `200 OK` se la ricarica del serbatoio è andata a buon fine.
-
-### 3. Riparazione del sensore
-
-- **Descrizione**: Sostituzione del sensore.
-- **URL**: `sensors/ntc/repair`
-- **Metodo**: `PUT`
-- **Corpo della Richiesta**:
-    - Il corpo della richiesta è vuoto.
-- **Risposta**:
-  - `200 OK` se la riparazione del sensore è andata a buon fine.
