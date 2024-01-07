@@ -20,7 +20,7 @@ public class SensorTest {
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void replaceBatteryTest() {
+    public void testReplaceBattery() {
         RestAssured
                 .given()
                 .when()
@@ -31,7 +31,7 @@ public class SensorTest {
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void repairNtcTest() {
+    public void testRepairNtc() {
         RestAssured
                 .given()
                 .when()
@@ -42,7 +42,7 @@ public class SensorTest {
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void refillInsulinPumpTest() {
+    public void testRefillInsulinPump() {
         RestAssured
                 .given()
                 .when()
@@ -53,7 +53,7 @@ public class SensorTest {
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getStatusTest() {
+    public void testGetStatus() {
         RestAssured
                 .given()
                 .when()

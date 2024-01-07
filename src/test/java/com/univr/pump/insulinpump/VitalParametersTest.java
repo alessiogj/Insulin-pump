@@ -36,7 +36,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersTest() {
+    public void testGetVitalParameters() {
         given()
                 .when()
                 .get("/vitalparameters/")
@@ -50,7 +50,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersNotEmptyTest() {
+    public void testGetVitalParametersNotEmpty() {
 
         VitalParameters firstVitalParameters = new VitalParameters(
                 LocalDateTime.now(),
@@ -86,7 +86,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getLastVitalParameterTest() {
+    public void testGetLastVitalParameter() {
 
         VitalParameters firstVitalParameters = new VitalParameters(
                 LocalDateTime.now(),
@@ -126,7 +126,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersWithDateIntervalTest() {
+    public void testGetVitalParametersWithDateInterval() {
 
         VitalParameters firstVitalParameters = new VitalParameters(
                 LocalDateTime.now(),
@@ -183,7 +183,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersWithInvalidDateIntervalTest() {
+    public void testGetVitalParametersWithInvalidDateInterval() {
 
         DateIntervalDto invalidDateInterval = new DateIntervalDto(
                 "2020-01-01T00:00:00",
