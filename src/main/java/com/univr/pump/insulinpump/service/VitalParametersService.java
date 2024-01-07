@@ -28,48 +28,8 @@ public class VitalParametersService {
 
     private final VitalParametersRepository vitalParametersRepository;
 
-    private final Battery battery;
-    private final NTC ntc;
-    private final Heart heart;
-    private final InsulinPump insulinPump;
-
-    public VitalParametersService(VitalParametersRepository vitalParametersRepository, Battery battery, NTC ntc, Heart heart, InsulinPump insulinPump) {
+    public VitalParametersService(VitalParametersRepository vitalParametersRepository) {
         this.vitalParametersRepository = vitalParametersRepository;
-        this.battery = battery;
-        this.ntc = ntc;
-        this.heart = heart;
-        this.insulinPump = insulinPump;
-    }
-
-    /**
-     * Simulations of the glucose level in the blood of a diabetic patient.
-     */
-    @Scheduled(fixedRate = 5000)
-    public void newBloodGlucose() {
-        insulinPump.modifyBloodGlucose();
-        System.out.println("Blood glucose: " + insulinPump.getCurrentGlucoseLevel());
-    }
-
-    /**
-     * Ogni 10 minuti effettua una misurazione dei parametri vitali del paziente.
-     * Se la batteria è scarica o il sensore di temperatura è rotto, la misurazione
-     * non viene effettuata.
-     */
-    @Scheduled(fixedRate = 1000)
-    public void newVitalSigns() {
-        if(battery.getCurrentCapacity() == 0 || ntc.isBroken()) {
-            ntc.reset();
-            return;
-        }
-
-        VitalParameters vitalParameter = vitalParametersRepository.save(
-                new VitalParameters(LocalDateTime.now()
-                        , heart.getPressureSystolic()
-                        , heart.getPressureDiastolic()
-                        , heart.getHeartRate()
-                        , insulinPump.getCurrentGlucoseLevel()
-                        , ntc.getTemperature()));
-        log.info("VitalParametersService.addVitalParameters: {}", vitalParameter);
     }
 
     /**
@@ -130,6 +90,12 @@ public class VitalParametersService {
         return dto;
     }
 
+
+    /**
+     * Create a vital parameter list from a vital parameterDto list
+     * @param vitalParameters
+     * @return vital parameter list
+     */
     private Iterable<VitalParametersDto> convertToDtoList(Iterable<VitalParameters> vitalParameters) {
         List<VitalParametersDto> dtos = new ArrayList<>();
         for (VitalParameters vitalParameter : vitalParameters) {
@@ -142,7 +108,10 @@ public class VitalParametersService {
      *************************** VALIDATION *********************************
      ************************************************************************/
 
-
+    /**
+     * Validate the date interval dto
+     * @param dto
+     */
     private void validateDateInterval(DateIntervalDto dto) {
         if (dto == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "DTO cannot be null");
@@ -151,6 +120,11 @@ public class VitalParametersService {
         validateDateInterval(dto.getStartDate(), dto.getEndDate());
     }
 
+    /**
+     * Validate the date interval
+     * @param fromDate
+     * @param toDate
+     */
     private void validateDateInterval(String fromDate, String toDate) {
         if (!isValidDate(fromDate) || !isValidDate(toDate)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format");
@@ -161,6 +135,11 @@ public class VitalParametersService {
         }
     }
 
+    /**
+     * Check if the date is valid
+     * @param date
+     * @return true if the date is valid, false otherwise
+     */
     private boolean isValidDate(String date) {
         try {
             LocalDateTime.parse(date);
@@ -168,6 +147,27 @@ public class VitalParametersService {
         } catch (DateTimeParseException e) {
             return false;
         }
+    }
+
+    /**
+     * Save the vital parameters
+     * @param pressureSystolic
+     * @param pressureDiastolic
+     * @param heartRate
+     * @param bloodSugarLevel
+     * @param temperature
+     */
+    public void saveHeartParameters(int pressureSystolic, int pressureDiastolic, int heartRate, int bloodSugarLevel, Double temperature) {
+        VitalParameters vitalParameters = new VitalParameters(
+                LocalDateTime.now(),
+                pressureSystolic,
+                pressureDiastolic,
+                heartRate,
+                bloodSugarLevel,
+                temperature
+        );
+        vitalParametersRepository.save(vitalParameters);
+        log.info("VitalParametersService.saveHeartParameters: {}", vitalParameters);
     }
 
 }

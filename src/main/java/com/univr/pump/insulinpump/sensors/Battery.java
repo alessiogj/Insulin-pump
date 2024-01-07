@@ -4,6 +4,9 @@ public class Battery {
     private int maxCapacity;
     private int currentCapacity;
 
+    public Battery() {
+    }
+
     public Battery(int maxCapacity, int currentCapacity) {
         this.maxCapacity = maxCapacity;
         this.currentCapacity = currentCapacity;
@@ -29,6 +32,10 @@ public class Battery {
         this.currentCapacity = this.maxCapacity;
     }
 
+    /**
+     * Simulates the discharge of the battery.
+     * The current capacity is decreased by 1.
+     */
     public void discharge() {
         if (this.currentCapacity > 0) {
             this.currentCapacity--;
