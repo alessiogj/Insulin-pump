@@ -1,7 +1,8 @@
 package com.univr.pump.insulinpump.scheduled;
 
-import com.univr.pump.insulinpump.sensors.Battery;
-import com.univr.pump.insulinpump.sensors.InsulinPump;
+import com.univr.pump.insulinpump.mock.Patient;
+import com.univr.pump.insulinpump.mock.sensors.Battery;
+import com.univr.pump.insulinpump.mock.sensors.InsulinPump;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -10,14 +11,16 @@ public class InsulinPumpMonitoringTask {
 
     private final InsulinPump insulinPump;
     private final Battery battery;
+    private final Patient patient;
 
     /**
      * Simulates the insulin pump monitoring.
      * If the current glucose level is higher than 140, the insulin pump injects insulin.
      */
-    public InsulinPumpMonitoringTask(InsulinPump insulinPump, Battery battery) {
+    public InsulinPumpMonitoringTask(InsulinPump insulinPump, Battery battery, Patient patient) {
         this.insulinPump = insulinPump;
         this.battery = battery;
+        this.patient = patient;
     }
 
     /**
@@ -29,10 +32,8 @@ public class InsulinPumpMonitoringTask {
         if(battery.getCurrentCapacity() == 0) {
             return;
         }
-        int currentGlucoseLevel = insulinPump.getCurrentGlucoseLevel();
-        if(currentGlucoseLevel > 130) {
+        if(patient.getGlucoseLevel() > 130) {
             insulinPump.injectInsulin();
-            System.out.println("Insulin injected");
         }
     }
 }

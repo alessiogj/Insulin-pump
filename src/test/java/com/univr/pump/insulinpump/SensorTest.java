@@ -31,17 +31,6 @@ public class SensorTest {
 
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void testRepairNtc() {
-        RestAssured
-                .given()
-                .when()
-                .put("/sensors/ntc/repair")
-                .then()
-                .statusCode(200);
-    }
-
-    @Test
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void testRefillInsulinPump() {
         RestAssured
                 .given()

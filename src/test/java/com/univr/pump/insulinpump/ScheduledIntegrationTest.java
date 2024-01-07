@@ -1,12 +1,11 @@
 package com.univr.pump.insulinpump;
 
+import com.univr.pump.insulinpump.mock.Patient;
 import com.univr.pump.insulinpump.scheduled.BatteryMonitoringTask;
-import com.univr.pump.insulinpump.scheduled.NtcMonitoringTask;
+import com.univr.pump.insulinpump.scheduled.InsulinPumpMonitoringTask;
 import com.univr.pump.insulinpump.scheduled.VitalParametersMonitoringTask;
-import com.univr.pump.insulinpump.sensors.Battery;
-import com.univr.pump.insulinpump.sensors.Heart;
-import com.univr.pump.insulinpump.sensors.InsulinPump;
-import com.univr.pump.insulinpump.sensors.NTC;
+import com.univr.pump.insulinpump.mock.sensors.Battery;
+import com.univr.pump.insulinpump.mock.sensors.InsulinPump;
 import com.univr.pump.insulinpump.service.VitalParametersService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,13 +23,10 @@ public class ScheduledIntegrationTest {
     private Battery battery;
 
     @Mock
-    private Heart heart;
+    private Patient patient;
 
     @Mock
     private InsulinPump insulinPump;
-
-    @Mock
-    private NTC ntc;
 
     @Mock
     private VitalParametersService vitalParametersService;
@@ -42,7 +38,7 @@ public class ScheduledIntegrationTest {
     private VitalParametersMonitoringTask vitalParametersMonitoringTask;
 
     @InjectMocks
-    private NtcMonitoringTask ntcMonitoringTask;
+    private InsulinPumpMonitoringTask insulinPumpMonitoringTask;
 
     /**
      * Test the battery monitoring task.
@@ -75,9 +71,9 @@ public class ScheduledIntegrationTest {
     @Test
     public void testModifyVitalParameters() {
         vitalParametersMonitoringTask.modifyVitalParameters();
-        verify(heart, times(1)).modifyPressure();
-        verify(insulinPump, times(1)).modifyBloodGlucose();
-        verify(ntc, times(1)).modifyTemperature();
+        verify(patient, times(1)).modifyPressure();
+        verify(patient, times(1)).modifyBloodGlucose();
+        verify(patient, times(1)).modifyTemperature();
     }
 
     /**
@@ -90,26 +86,6 @@ public class ScheduledIntegrationTest {
 
         vitalParametersMonitoringTask.newVitalSigns();
 
-        verify(ntc, times(1)).reset();
-        verify(vitalParametersService, never()).saveVitalParameters(
-                anyInt(),
-                anyInt(),
-                anyInt(),
-                anyInt(),
-                anyDouble());
-    }
-
-    /**
-     * Test the new vital signs method.
-     * The method should not save the vital signs if the NTC is broken
-     */
-    public void testNewVitalSignsNtcBroken() {
-        when(battery.getCurrentCapacity()).thenReturn(100);
-        when(ntc.isBroken()).thenReturn(true);
-
-        vitalParametersMonitoringTask.newVitalSigns();
-
-        verify(ntc, times(1)).reset();
         verify(vitalParametersService, never()).saveVitalParameters(
                 anyInt(),
                 anyInt(),
@@ -121,66 +97,31 @@ public class ScheduledIntegrationTest {
     /**
      * Test the new vital signs method.
      * The method should save the vital signs if the battery is not low
-     * and the NTC is not broken
      */
     @Test
     public void testNewVitalSignsNormalConditions() {
         when(battery.getCurrentCapacity()).thenReturn(100);
-        when(ntc.isBroken()).thenReturn(false);
 
         vitalParametersMonitoringTask.newVitalSigns();
 
-        verify(heart, times(1)).getHeartRate();
-        verify(heart, times(1)).getPressureDiastolic();
-        verify(heart, times(1)).getPressureSystolic();
-        verify(insulinPump, times(1)).getCurrentGlucoseLevel();
-        verify(ntc, times(1)).getTemperature();
+        verify(patient, times(1)).getHeartRate();
+        verify(patient, times(1)).getPressureDiastolic();
+        verify(patient, times(1)).getPressureSystolic();
+        verify(patient, times(1)).getGlucoseLevel();
+        verify(patient, times(1)).getTemperature();
     }
 
     /**
-     * Test the new temperature method.
-     * The method should not modify the temperature if the battery is low
+     * Test inject insulin method when the glucose level is high,
+     * the insulin pump has enough insulin in the tank and
+     * the battery is not low
+     * The method should inject insulin
      */
     @Test
-    public void testNewTemperatureBatteryLow() {
-        when(battery.getCurrentCapacity()).thenReturn(0);
-        when(ntc.isBroken()).thenReturn(false);
+    public void testInsulinInjectionWhenGlucoseLevelHigh() {
 
-        ntcMonitoringTask.newTemp();
-
-        verify(ntc, times(1)).reset();
-        verify(ntc, never()).modifyTemperature();
     }
 
-    /**
-     * Test the new temperature method.
-     * The method should not modify the temperature if the NTC is broken
-     */
-    @Test
-    public void testNewTemperatureNtcBroken() {
-        when(battery.getCurrentCapacity()).thenReturn(100);
-        when(ntc.isBroken()).thenReturn(true);
-
-        ntcMonitoringTask.newTemp();
-
-        verify(ntc, times(1)).reset();
-        verify(ntc, never()).modifyTemperature();
-    }
-
-    /**
-     * Test the new temperature method.
-     * The method should modify the temperature if the battery is not low
-     * and the NTC is not broken
-     */
-    @Test
-    public void testNewTemperatureNormalConditions() {
-        when(battery.getCurrentCapacity()).thenReturn(100);
-        when(ntc.isBroken()).thenReturn(false);
-
-        ntcMonitoringTask.newTemp();
-
-        verify(ntc, times(1)).getTemperature();
-    }
 
 
 }

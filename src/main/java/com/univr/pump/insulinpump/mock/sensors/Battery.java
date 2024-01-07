@@ -1,4 +1,4 @@
-package com.univr.pump.insulinpump.sensors;
+package com.univr.pump.insulinpump.mock.sensors;
 
 public class Battery {
     private int maxCapacity;

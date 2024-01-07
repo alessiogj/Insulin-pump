@@ -1,6 +1,6 @@
 package com.univr.pump.insulinpump.scheduled;
 
-import com.univr.pump.insulinpump.sensors.Battery;
+import com.univr.pump.insulinpump.mock.sensors.Battery;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
