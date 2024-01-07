@@ -25,14 +25,15 @@ public class InsulinPumpMonitoringTask {
 
     /**
      * Simulates the insulin pump monitoring.
-     * If the current glucose level is higher than 140, the insulin pump injects insulin.
+     * If the current glucose level is higher than 130 and the insulin pump has enough insulin
+     * the insulin pump injects insulin.
      */
     @Scheduled(fixedRate = 5000)
     public void insulinPump() {
         if(battery.getCurrentCapacity() == 0) {
             return;
         }
-        if(patient.getGlucoseLevel() > 130) {
+        if(patient.getGlucoseLevel() > 130 && insulinPump.getCurrentTankLevel() > 0) {
             insulinPump.injectInsulin();
         }
     }

@@ -119,9 +119,64 @@ public class ScheduledIntegrationTest {
      */
     @Test
     public void testInsulinInjectionWhenGlucoseLevelHigh() {
+        when(patient.getGlucoseLevel()).thenReturn(200);
+        when(battery.getCurrentCapacity()).thenReturn(100);
+        when(insulinPump.getCurrentTankLevel()).thenReturn(100);
 
+        insulinPumpMonitoringTask.insulinPump();
+
+        verify(insulinPump, times(1)).injectInsulin();
     }
 
+    /**
+     * Test inject insulin method when the glucose level is low,
+     * the insulin pump has enough insulin in the tank and
+     * the battery is not low
+     * The method should not inject insulin
+     */
+    @Test
+    public void testInsulinInjectionWhenGlucoseLevelLow() {
+        when(patient.getGlucoseLevel()).thenReturn(80);
+        when(battery.getCurrentCapacity()).thenReturn(100);
+        when(insulinPump.getCurrentTankLevel()).thenReturn(100);
 
+        insulinPumpMonitoringTask.insulinPump();
+
+        verify(insulinPump, never()).injectInsulin();
+    }
+
+    /**
+     * Test inject insulin method when the glucose level is high,
+     * the insulin pump has not enough insulin in the tank and
+     * the battery is not low
+     * The method should not inject insulin
+     */
+    @Test
+    public void testInsulinInjectionWhenInsulinTankEmpty() {
+        when(patient.getGlucoseLevel()).thenReturn(200);
+        when(battery.getCurrentCapacity()).thenReturn(100);
+        when(insulinPump.getCurrentTankLevel()).thenReturn(0);
+
+        insulinPumpMonitoringTask.insulinPump();
+
+        verify(insulinPump, never()).injectInsulin();
+    }
+
+    /**
+     * Test inject insulin method when the glucose level is high,
+     * the insulin pump has enough insulin in the tank and
+     * the battery is low
+     * The method should not inject insulin
+     */
+    @Test
+    public void testInsulinInjectionWhenBatteryLow() {
+        when(patient.getGlucoseLevel()).thenReturn(200);
+        when(battery.getCurrentCapacity()).thenReturn(0);
+        when(insulinPump.getCurrentTankLevel()).thenReturn(100);
+
+        insulinPumpMonitoringTask.insulinPump();
+
+        verify(insulinPump, never()).injectInsulin();
+    }
 
 }

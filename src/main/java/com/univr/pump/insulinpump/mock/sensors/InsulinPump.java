@@ -40,9 +40,6 @@ public class InsulinPump {
      * Injects insulin.
      */
     public void injectInsulin() {
-        if (this.currentTankLevel > 3) {
-            this.currentTankLevel -= 4;
             patient.setGlucoseLevel(NORMAL_GLUCOSE_LEVEL);
-        }
     }
 }
