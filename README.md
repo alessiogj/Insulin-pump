@@ -137,7 +137,7 @@ e dei sensori.
 }
 ```
 
-## Endpoint per la gestione dei MOC 
+## Endpoint per la gestione dei MOCK 
 
 ### 1. Rimpiazzo della batteria
 
