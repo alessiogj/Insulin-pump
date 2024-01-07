@@ -1,6 +1,5 @@
 package com.univr.pump.insulinpump;
 
-import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
@@ -22,7 +21,7 @@ import static io.restassured.RestAssured.given;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InsulinPumpApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class InsulinPumpApplicationTests {
+public class VitalParametersTest {
 
     @Autowired
     private VitalParametersRepository vitalParametersRepository;
@@ -160,7 +159,6 @@ public class InsulinPumpApplicationTests {
                 "2030-01-03T00:00:00"
         );
 
-        //il valore di ritorno è un array vuoto
         given()
                 .contentType(ContentType.JSON)
                 .body(notIncludedDate)
@@ -200,4 +198,5 @@ public class InsulinPumpApplicationTests {
         .then()
                 .statusCode(400);
     }
+
 }
