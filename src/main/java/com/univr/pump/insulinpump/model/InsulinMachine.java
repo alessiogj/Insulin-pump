@@ -6,19 +6,25 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Battery {
+public class InsulinMachine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private int maxCapacity;
     private int currentCapacity;
+    private int tankCapacity;
+    private int currentTankLevel;
+
+    private static final int MAX_TANK_CAPACITY = 200;
 
     private final static int DEFAULT_MAX_CAPACITY = 100;
     private final static int DEFAULT_CURRENT_CAPACITY = 100;
 
-    public Battery() {
+    public InsulinMachine() {
         this.maxCapacity = DEFAULT_MAX_CAPACITY;
         this.currentCapacity = DEFAULT_CURRENT_CAPACITY;
+        this.tankCapacity = MAX_TANK_CAPACITY;
+        this.currentTankLevel = MAX_TANK_CAPACITY;
     }
 
     public Long getId() {
@@ -49,6 +55,26 @@ public class Battery {
         this.currentCapacity = this.maxCapacity;
     }
 
+    public int getTankCapacity() {
+        return this.tankCapacity;
+    }
+
+    public int getCurrentTankLevel() {
+        return this.currentTankLevel;
+    }
+
+    public void setCurrentTankLevel(int currentTankLevel) {
+        this.currentTankLevel = currentTankLevel;
+    }
+
+    public void setTankCapacity(int tankCapacity) {
+        this.tankCapacity = tankCapacity;
+    }
+
+    public void refill() {
+        this.currentTankLevel = this.tankCapacity;
+    }
+
     /**
      * Simulates the discharge of the battery.
      * The current capacity is decreased by 1.
@@ -58,4 +84,14 @@ public class Battery {
             this.currentCapacity--;
         }
     }
+
+    /**
+     * Injects insulin.
+     */
+    public void injectInsulin() {
+        if (this.currentTankLevel > 0) {
+            this.currentTankLevel--;
+        }
+    }
+
 }

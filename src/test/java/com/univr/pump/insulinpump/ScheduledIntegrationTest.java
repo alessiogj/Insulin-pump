@@ -1,13 +1,10 @@
 package com.univr.pump.insulinpump;
 
 import com.univr.pump.insulinpump.mock.Patient;
-import com.univr.pump.insulinpump.repository.BatteryRepository;
-import com.univr.pump.insulinpump.scheduled.BatteryMonitoringTask;
-import com.univr.pump.insulinpump.scheduled.InsulinPumpMonitoringTask;
+import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
+import com.univr.pump.insulinpump.scheduled.InsulinMachineMonitoringTask;
 import com.univr.pump.insulinpump.scheduled.VitalParametersMonitoringTask;
-import com.univr.pump.insulinpump.model.Battery;
-import com.univr.pump.insulinpump.mock.sensors.InsulinPump;
-import com.univr.pump.insulinpump.service.BatteryService;
+import com.univr.pump.insulinpump.service.InsulinMachineService;
 import com.univr.pump.insulinpump.service.VitalParametersService;
 import io.restassured.RestAssured;
 import org.junit.BeforeClass;
@@ -18,7 +15,6 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.*;
@@ -29,28 +25,23 @@ import static org.mockito.Mockito.*;
 public class ScheduledIntegrationTest {
 
     @Mock
-    private BatteryService batteryService;
+    private InsulinMachineService insulinMachineService;
 
     @Mock
     private Patient patient;
 
     @Mock
-    private InsulinPump insulinPump;
-
-    @Mock
     private VitalParametersService vitalParametersService;
 
     @InjectMocks
-    private BatteryMonitoringTask batteryMonitoringTask;
+    private InsulinMachineMonitoringTask insulinMachineMonitoringTask;
 
     @InjectMocks
     private VitalParametersMonitoringTask vitalParametersMonitoringTask;
 
-    @InjectMocks
-    private InsulinPumpMonitoringTask insulinPumpMonitoringTask;
 
     @Autowired
-    private BatteryRepository batteryRepository;
+    private InsulinMachineRepository insulinMachineRepository;
 
     @BeforeClass
     public static void setBaseUri() {
@@ -66,11 +57,11 @@ public class ScheduledIntegrationTest {
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void testDecrBattery() {
-        Long id = batteryRepository.findFirstByOrderByIdDesc().getId();
-        when(batteryService.getBatteryLevel()).thenReturn(100);
-        batteryMonitoringTask.decrBattery();
-        verify(batteryService, times(1)).decrBattery();
-        Long newId = batteryRepository.findFirstByOrderByIdDesc().getId();
+        Long id = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
+        when(insulinMachineService.getBatteryLevel()).thenReturn(100);
+        insulinMachineMonitoringTask.decrBattery();
+        verify(insulinMachineService, times(1)).decrBattery();
+        Long newId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
         assert id.equals(newId);
     }
 
@@ -82,9 +73,9 @@ public class ScheduledIntegrationTest {
      */
     @Test
     public void testDecrBatteryBatteryLow() {
-        when(batteryService.getBatteryLevel()).thenReturn(0);
-        batteryMonitoringTask.decrBattery();
-        verify(batteryService, never()).decrBattery();
+        when(insulinMachineService.getBatteryLevel()).thenReturn(0);
+        insulinMachineMonitoringTask.decrBattery();
+        verify(insulinMachineService, never()).decrBattery();
     }
 
     /**
@@ -105,7 +96,7 @@ public class ScheduledIntegrationTest {
      */
     @Test
     public void testNewVitalSignsBatteryLow() {
-        when(batteryService.getBatteryLevel()).thenReturn(0);
+        when(insulinMachineService.getBatteryLevel()).thenReturn(0);
 
         vitalParametersMonitoringTask.newVitalSigns();
 
@@ -123,7 +114,7 @@ public class ScheduledIntegrationTest {
      */
     @Test
     public void testNewVitalSignsNormalConditions() {
-        when(batteryService.getBatteryLevel()).thenReturn(100);
+        when(insulinMachineService.getBatteryLevel()).thenReturn(100);
 
         vitalParametersMonitoringTask.newVitalSigns();
 
@@ -143,12 +134,12 @@ public class ScheduledIntegrationTest {
     @Test
     public void testInsulinInjectionWhenGlucoseLevelHigh() {
         when(patient.getGlucoseLevel()).thenReturn(200);
-        when(batteryService.getBatteryLevel()).thenReturn(100);
-        when(insulinPump.getCurrentTankLevel()).thenReturn(100);
+        when(insulinMachineService.getBatteryLevel()).thenReturn(100);
+        when(insulinMachineService.getInsulinLevel()).thenReturn(100);
 
-        insulinPumpMonitoringTask.insulinPump();
+        insulinMachineMonitoringTask.insulinPump();
 
-        verify(insulinPump, times(1)).injectInsulin();
+        verify(insulinMachineService, times(1)).injectInsulin();
     }
 
     /**
@@ -160,12 +151,12 @@ public class ScheduledIntegrationTest {
     @Test
     public void testInsulinInjectionWhenGlucoseLevelLow() {
         when(patient.getGlucoseLevel()).thenReturn(80);
-        when(batteryService.getBatteryLevel()).thenReturn(100);
-        when(insulinPump.getCurrentTankLevel()).thenReturn(100);
+        when(insulinMachineService.getBatteryLevel()).thenReturn(100);
+        when(insulinMachineService.getInsulinLevel()).thenReturn(100);
 
-        insulinPumpMonitoringTask.insulinPump();
+        insulinMachineMonitoringTask.insulinPump();
 
-        verify(insulinPump, never()).injectInsulin();
+        verify(insulinMachineService, never()).injectInsulin();
     }
 
     /**
@@ -177,12 +168,12 @@ public class ScheduledIntegrationTest {
     @Test
     public void testInsulinInjectionWhenInsulinTankEmpty() {
         when(patient.getGlucoseLevel()).thenReturn(200);
-        when(batteryService.getBatteryLevel()).thenReturn(100);
-        when(insulinPump.getCurrentTankLevel()).thenReturn(0);
+        when(insulinMachineService.getBatteryLevel()).thenReturn(100);
+        when(insulinMachineService.getInsulinLevel()).thenReturn(0);
 
-        insulinPumpMonitoringTask.insulinPump();
+        insulinMachineMonitoringTask.insulinPump();
 
-        verify(insulinPump, never()).injectInsulin();
+        verify(insulinMachineService, never()).injectInsulin();
     }
 
     /**
@@ -194,12 +185,12 @@ public class ScheduledIntegrationTest {
     @Test
     public void testInsulinInjectionWhenBatteryLow() {
         when(patient.getGlucoseLevel()).thenReturn(200);
-        when(batteryService.getBatteryLevel()).thenReturn(0);
-        when(insulinPump.getCurrentTankLevel()).thenReturn(100);
+        when(insulinMachineService.getBatteryLevel()).thenReturn(0);
+        when(insulinMachineService.getInsulinLevel()).thenReturn(100);
 
-        insulinPumpMonitoringTask.insulinPump();
+        insulinMachineMonitoringTask.insulinPump();
 
-        verify(insulinPump, never()).injectInsulin();
+        verify(insulinMachineService, never()).injectInsulin();
     }
 
 }

@@ -2,21 +2,17 @@ package com.univr.pump.insulinpump.controller;
 
 import com.univr.pump.insulinpump.dto.SensorStatusDto;
 
-import com.univr.pump.insulinpump.model.Battery;
-import com.univr.pump.insulinpump.mock.sensors.InsulinPump;
-import com.univr.pump.insulinpump.service.BatteryService;
+import com.univr.pump.insulinpump.service.InsulinMachineService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sensors")
-public class SensorsController {
+public class InsulinMachineController {
 
-    private final BatteryService batteryService;
-    private final InsulinPump insulinPump;
+    private final InsulinMachineService insulinMachineService;
 
-    public SensorsController(BatteryService batteryService, InsulinPump insulinPump) {
-        this.batteryService = batteryService;
-        this.insulinPump = insulinPump;
+    public InsulinMachineController(InsulinMachineService insulinMachineService) {
+        this.insulinMachineService = insulinMachineService;
     }
 
     /**
@@ -25,7 +21,7 @@ public class SensorsController {
     @PutMapping("/battery/replace")
     @ResponseStatus(org.springframework.http.HttpStatus.OK)
     public void chargeBattery() {
-        batteryService.chargeBattery();
+        insulinMachineService.chargeBattery();
     }
 
     /**
@@ -34,7 +30,7 @@ public class SensorsController {
     @PutMapping("/tank/refill")
     @ResponseStatus(org.springframework.http.HttpStatus.OK)
     public void refillInsulinPump() {
-        insulinPump.refill();
+        insulinMachineService.refillInsulinPump();
     }
 
     /**
@@ -44,7 +40,7 @@ public class SensorsController {
     @GetMapping("/status")
     public SensorStatusDto getStatus() {
         return new SensorStatusDto(
-                batteryService.getBatteryLevel(),
-                insulinPump.getCurrentTankLevel());
+                insulinMachineService.getBatteryLevel(),
+                insulinMachineService.getInsulinLevel());
     }
 }

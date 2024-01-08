@@ -1,6 +1,6 @@
 package com.univr.pump.insulinpump;
 
-import com.univr.pump.insulinpump.repository.BatteryRepository;
+import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
 import io.restassured.RestAssured;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,10 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InsulinPumpApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class SensorTest {
+public class InsulinPumpTest {
 
     @Autowired
-    private BatteryRepository batteryRepository;
+    private InsulinMachineRepository insulinMachineRepository;
 
 
     @BeforeClass
@@ -33,20 +33,26 @@ public class SensorTest {
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void testReplaceBattery() {
-        Long id = batteryRepository.findFirstByOrderByIdDesc().getId();
+        Long id = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
         RestAssured
                 .put("/sensors/battery/replace")
         .then()
                 .statusCode(200);
-        Long newId = batteryRepository.findFirstByOrderByIdDesc().getId();
+        Long newId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
         assert !id.equals(newId);
-        assert batteryRepository.findFirstByOrderByIdDesc().getCurrentCapacity() == 100;
+        assert insulinMachineRepository.findFirstByOrderByIdDesc().getCurrentCapacity() == 100;
     }
 
+    /**
+     * The system uses this API to replace the insulin pump
+     * The method should replace the insulin pump, so the
+     * id of the insulin pump should be different from the
+     * previous one, and the insulin level should be 100
+     */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void testRefillInsulinPump() {
-        // TODO
+
     }
 
     @Test

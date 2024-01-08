@@ -1,8 +1,7 @@
 package com.univr.pump.insulinpump.scheduled;
 
 import com.univr.pump.insulinpump.mock.Patient;
-import com.univr.pump.insulinpump.model.Battery;
-import com.univr.pump.insulinpump.service.BatteryService;
+import com.univr.pump.insulinpump.service.InsulinMachineService;
 import com.univr.pump.insulinpump.service.VitalParametersService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,14 +10,14 @@ import org.springframework.stereotype.Component;
 public class VitalParametersMonitoringTask {
 
     private final VitalParametersService vitalParametersService;
-    private final BatteryService batteryService;
+    private final InsulinMachineService insulinMachineService;
 
     private final Patient patient;
 
-    public VitalParametersMonitoringTask(VitalParametersService vitalParametersService, BatteryService batteryService,
+    public VitalParametersMonitoringTask(VitalParametersService vitalParametersService, InsulinMachineService insulinMachineService,
                                          Patient patient) {
         this.vitalParametersService = vitalParametersService;
-        this.batteryService = batteryService;
+        this.insulinMachineService = insulinMachineService;
         this.patient = patient;
     }
 
@@ -44,7 +43,7 @@ public class VitalParametersMonitoringTask {
      */
     @Scheduled(fixedRate = 1000)
     public void newVitalSigns() {
-        if(batteryService.getBatteryLevel() == 0) {
+        if(insulinMachineService.getBatteryLevel() == 0) {
             return;
         }
 

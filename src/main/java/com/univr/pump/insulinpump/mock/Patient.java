@@ -153,4 +153,8 @@ public class Patient {
             this.glucoseLevel = 100;
         }
     }
+
+    public void setGlucoseToNormal() {
+        this.glucoseLevel = INITIAL_GLUCOSE_LEVEL;
+    }
 }
