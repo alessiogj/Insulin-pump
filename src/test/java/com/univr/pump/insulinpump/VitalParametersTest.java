@@ -36,7 +36,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersTest() {
+    public void testGetVitalParameters() {
         given()
                 .when()
                 .get("/vitalparameters/")
@@ -50,7 +50,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersNotEmptyTest() {
+    public void testGetVitalParametersNotEmpty() {
 
         VitalParameters firstVitalParameters = new VitalParameters(
                 LocalDateTime.now(),
@@ -82,11 +82,11 @@ public class VitalParametersTest {
     }
 
     /**
-     * Test get last vital parameter
+     * Test remove all vital parameters
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getLastVitalParameterTest() {
+    public void testRemoveAllVitalParameters() {
 
         VitalParameters firstVitalParameters = new VitalParameters(
                 LocalDateTime.now(),
@@ -111,14 +111,16 @@ public class VitalParametersTest {
 
         given()
                 .when()
-                .get("/vitalparameters/last")
+                .delete("/vitalparameters/")
+                .then()
+                .statusCode(200);
+
+        given()
+                .when()
+                .get("/vitalparameters/")
                 .then()
                 .statusCode(200)
-                .body("bloodPressureSystolic", Matchers.equalTo("90"))
-                .body("bloodPressureDiastolic", Matchers.equalTo("90"))
-                .body("heartRate", Matchers.equalTo("90"))
-                .body("bloodSugarLevel", Matchers.equalTo("90"))
-                .body("temperature", Matchers.equalTo("37.0"));
+                .body("isEmpty()", Matchers.is(true));
     }
 
     /**
@@ -126,7 +128,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersWithDateIntervalTest() {
+    public void testGetVitalParametersWithDateInterval() {
 
         VitalParameters firstVitalParameters = new VitalParameters(
                 LocalDateTime.now(),
@@ -183,7 +185,7 @@ public class VitalParametersTest {
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void getVitalParametersWithInvalidDateIntervalTest() {
+    public void testGetVitalParametersWithInvalidDateInterval() {
 
         DateIntervalDto invalidDateInterval = new DateIntervalDto(
                 "2020-01-01T00:00:00",
@@ -198,5 +200,4 @@ public class VitalParametersTest {
         .then()
                 .statusCode(400);
     }
-
 }

@@ -2,9 +2,8 @@ package com.univr.pump.insulinpump.controller;
 
 import com.univr.pump.insulinpump.dto.SensorStatusDto;
 
-import com.univr.pump.insulinpump.sensors.Battery;
-import com.univr.pump.insulinpump.sensors.InsulinPump;
-import com.univr.pump.insulinpump.sensors.NTC;
+import com.univr.pump.insulinpump.mock.sensors.Battery;
+import com.univr.pump.insulinpump.mock.sensors.InsulinPump;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,12 +11,10 @@ import org.springframework.web.bind.annotation.*;
 public class SensorsController {
 
     private final Battery battery;
-    private final NTC ntc;
     private final InsulinPump insulinPump;
 
-    public SensorsController(Battery battery, NTC ntc, InsulinPump insulinPump) {
+    public SensorsController(Battery battery, InsulinPump insulinPump) {
         this.battery = battery;
-        this.ntc = ntc;
         this.insulinPump = insulinPump;
     }
 
@@ -28,15 +25,6 @@ public class SensorsController {
     @ResponseStatus(org.springframework.http.HttpStatus.OK)
     public void chargeBattery() {
         battery.charge();
-    }
-
-    /**
-     * The system uses this API to repair the NTC
-     */
-    @PutMapping("/ntc/repair")
-    @ResponseStatus(org.springframework.http.HttpStatus.OK)
-    public void repairNtc() {
-        ntc.repair();
     }
 
     /**
@@ -56,7 +44,6 @@ public class SensorsController {
     public SensorStatusDto getStatus() {
         return new SensorStatusDto(
                 battery.getCurrentCapacity(),
-                insulinPump.getCurrentTankLevel(),
-                ntc.isBroken());
+                insulinPump.getCurrentTankLevel());
     }
 }

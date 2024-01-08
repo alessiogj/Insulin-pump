@@ -1,6 +1,6 @@
 package com.univr.pump.insulinpump.scheduled;
 
-import com.univr.pump.insulinpump.sensors.Battery;
+import com.univr.pump.insulinpump.mock.sensors.Battery;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,9 @@ public class BatteryMonitoringTask {
      */
     @Scheduled(fixedRate = 5000)
     public void decrBattery() {
-        battery.discharge();
+        if (battery.getCurrentCapacity() > 0) {
+            battery.discharge();
+        }
         System.out.println("Battery: " + battery.getCurrentCapacity());
     }
 

@@ -1,7 +1,6 @@
 package com.univr.pump.insulinpump.controller;
 
 import com.univr.pump.insulinpump.dto.DateIntervalDto;
-import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.service.VitalParametersService;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +42,16 @@ public class VitalParametersController {
     @GetMapping("/last")
     public VitalParametersDto getLastVitalParameters() {
         return vitalParametersService.getLastVitalParameters();
+    }
+
+
+    /**
+     * The system uses this API to remove all vital parameters
+     * @return void
+     */
+    @DeleteMapping("/")
+    public void deleteAllVitalParameters() {
+        vitalParametersService.deleteAllVitalParameters();
     }
 
 }

@@ -1,18 +1,12 @@
 package com.univr.pump.insulinpump.service;
 
 import com.univr.pump.insulinpump.dto.DateIntervalDto;
-import com.univr.pump.insulinpump.dto.VitalParametersBodyDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
-import com.univr.pump.insulinpump.sensors.Battery;
-import com.univr.pump.insulinpump.sensors.Heart;
-import com.univr.pump.insulinpump.sensors.InsulinPump;
-import com.univr.pump.insulinpump.sensors.NTC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -68,6 +62,14 @@ public class VitalParametersService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No vital parameters found");
         }
         return convertToDto(vitalParameter);
+    }
+
+    /**
+     * Delete all vital parameters
+     */
+    public void deleteAllVitalParameters() {
+        vitalParametersRepository.deleteAll();
+        log.info("VitalParametersService.deleteAllVitalParameters");
     }
 
 
@@ -157,7 +159,7 @@ public class VitalParametersService {
      * @param bloodSugarLevel
      * @param temperature
      */
-    public void saveHeartParameters(int pressureSystolic, int pressureDiastolic, int heartRate, int bloodSugarLevel, Double temperature) {
+    public void saveVitalParameters(int pressureSystolic, int pressureDiastolic, int heartRate, int bloodSugarLevel, Double temperature) {
         VitalParameters vitalParameters = new VitalParameters(
                 LocalDateTime.now(),
                 pressureSystolic,
@@ -169,5 +171,4 @@ public class VitalParametersService {
         vitalParametersRepository.save(vitalParameters);
         log.info("VitalParametersService.saveHeartParameters: {}", vitalParameters);
     }
-
 }

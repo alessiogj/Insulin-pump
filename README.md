@@ -1,16 +1,11 @@
-## Pompa di Insulina 💉
+# Pompa di Insulina 💉
 
 Il progetto è stato sviluppato per il corso di Ingegneria
 e scienze informatiche dell'Università di Verona. 
 Il progetto consiste nella realizzazione di un sistema
 software per la gestione di una pompa di insulina.
 
-# Documentazione API Parametri Vitali
-
-Questa documentazione fornisce dettagli sulle API per la gestione e il recupero dei parametri vitali dei pazienti
-e dei sensori.
-
-## Endpoint
+## Documentazione API Parametri Vitali
 
 ### 1. Ricerca Parametri Vitali per Intervallo Temporale
 
@@ -131,13 +126,11 @@ e dei sensori.
 ```json
 {
   "battery": 100,
-  "tank": true,
-  "ntcStatus": false
-
+  "tank": true
 }
 ```
 
-## Endpoint per la gestione dei MOCK 
+## Documentazione API relative ai Sensori 
 
 ### 1. Rimpiazzo della batteria
 
@@ -159,12 +152,100 @@ e dei sensori.
 - **Risposta**:
   - `200 OK` se la ricarica del serbatoio è andata a buon fine.
 
-### 3. Riparazione del sensore
+## Test API relative ai Parametri Vitali
+### Ambiente di Test
+- **Framework**: Spring Boot Test
+- **Test Runner**: SpringRunner
+- **Strumento di Mocking**: RestAssured per la simulazione delle richieste HTTP
 
-- **Descrizione**: Sostituzione del sensore.
-- **URL**: `sensors/ntc/repair`
-- **Metodo**: `PUT`
-- **Corpo della Richiesta**:
-    - Il corpo della richiesta è vuoto.
-- **Risposta**:
-  - `200 OK` se la riparazione del sensore è andata a buon fine.
+### Metodi di Test
+
+#### 1. `testGetVitalParameters`
+- **Descrizione**: Testa il recupero di un elenco vuoto di parametri vitali.
+- **Aspettativa**: Il sistema dovrebbe restituire un codice di stato 200 con un corpo della risposta vuoto.
+
+#### 2. `testGetVitalParametersNotEmpty`
+- **Descrizione**: Verifica la funzionalità di recupero di un elenco non vuoto di parametri vitali.
+- **Configurazione**: Aggiunge due set di parametri vitali al repository.
+- **Aspettativa**: L'API dovrebbe restituire un codice di stato 200 e un elenco non vuoto di parametri vitali.
+
+#### 3. `testGetLastVitalParameter`
+- **Descrizione**: Testa il recupero dell'ultimo parametro vitale registrato.
+- **Configurazione**: Inserisce due diversi set di parametri vitali.
+- **Aspettativa**: L'API dovrebbe restituire l'ultimo set di parametri vitali con un codice di stato 200.
+
+#### 4. `testGetVitalParametersWithDateInterval`
+- **Descrizione**: Valida il recupero dei parametri vitali entro un intervallo di date specificato.
+- **Configurazione**: Aggiunge parametri vitali e testa con due diversi intervalli di date - uno all'interno e uno al di fuori dell'intervallo dei dati inseriti.
+- **Aspettativa**: Per l'intervallo di date incluso, l'API dovrebbe restituire una risposta non vuota; per l'intervallo di date non incluso, ci si aspetta una risposta vuota.
+
+#### 5. `testGetVitalParametersWithInvalidDateInterval`
+- **Descrizione**: Testa il comportamento quando viene fornito un intervallo di date non valido.
+- **Aspettativa**: L'API dovrebbe restituire un codice di stato 400, indicando una richiesta errata a causa dell'intervallo di date non valido.
+
+## Test API relative ai Sensori
+### Ambiente di Test
+- **Framework**: Spring Boot Test con RestAssured per le richieste HTTP
+- **Test Runner**: SpringRunner
+- **Base URI**: Impostata su `http://localhost:8080` per le richieste API.
+
+### Metodi di Test
+
+#### 1. `testReplaceBattery`
+- **Descrizione**: Testa la funzionalità di sostituzione della batteria del sensore.
+- **Metodo API**: PUT `/sensors/battery/replace`
+- **Aspettativa**: L'API dovrebbe restituire un codice di stato 200, indicando che la batteria è stata sostituita con successo.
+
+#### 2. `testRefillInsulinPump`
+- **Descrizione**: Verifica la funzionalità di ricarica del serbatoio della pompa di insulina.
+- **Metodo API**: PUT `/sensors/tank/refill`
+- **Aspettativa**: L'API dovrebbe restituire un codice di stato 200, confermando il successo del riempimento del serbatoio.
+
+#### 3. `testGetStatus`
+- **Descrizione**: Testa la funzionalità di ottenimento dello stato corrente dei sensori.
+- **Metodo API**: GET `/sensors/status`
+- **Aspettativa**: L'API dovrebbe restituire un codice di stato 200, fornendo lo stato attuale dei sensori.
+
+## Test dei MOCK 
+### Ambiente di Test
+- **Framework**: Spring Boot Test con Mockito per il mocking degli oggetti
+- **Test Runner**: SpringRunner
+- **Ambiente**: Test integrati senza avviare il server web
+
+### Metodi di Test
+
+#### 1. `testDecrBattery`
+- **Descrizione**: Testa la diminuzione della capacità della batteria quando non è scarica.
+- **Aspettativa**: Verifica che la batteria venga scaricata.
+
+#### 2. `testDecrBatteryBatteryLow`
+- **Descrizione**: Testa che la batteria non venga scaricata quando è già scarica.
+- **Aspettativa**: Verifica che la batteria non venga ulteriormente scaricata.
+
+#### 3. `testModifyVitalParameters`
+- **Descrizione**: Testa la modifica dei parametri vitali del paziente.
+- **Aspettativa**: Verifica che vengano modificati la pressione, il livello di glucosio e la temperatura del paziente.
+
+#### 4. `testNewVitalSignsBatteryLow`
+- **Descrizione**: Testa che i nuovi segni vitali non vengano salvati se la batteria è scarica.
+- **Aspettativa**: Verifica che i segni vitali non vengano salvati.
+
+#### 5. `testNewVitalSignsNormalConditions`
+- **Descrizione**: Testa il salvataggio dei nuovi segni vitali in condizioni normali.
+- **Aspettativa**: Verifica che i segni vitali vengano salvati correttamente.
+
+#### 6. `testInsulinInjectionWhenGlucoseLevelHigh`
+- **Descrizione**: Testa l'iniezione di insulina quando il livello di glucosio è alto.
+- **Aspettativa**: Verifica che l'insulina venga iniettata.
+
+#### 7. `testInsulinInjectionWhenGlucoseLevelLow`
+- **Descrizione**: Testa che l'insulina non venga iniettata quando il livello di glucosio è basso.
+- **Aspettativa**: Verifica che l'insulina non venga iniettata.
+
+#### 8. `testInsulinInjectionWhenInsulinTankEmpty`
+- **Descrizione**: Testa che l'insulina non venga iniettata quando il serbatoio è vuoto.
+- **Aspettativa**: Verifica che l'insulina non venga iniettata.
+
+#### 9. `testInsulinInjectionWhenBatteryLow`
+- **Descrizione**: Testa che l'insulina non venga iniettata quando la batteria è scarica.
+- **Aspettativa**: Verifica che l'insulina non venga iniettata.
