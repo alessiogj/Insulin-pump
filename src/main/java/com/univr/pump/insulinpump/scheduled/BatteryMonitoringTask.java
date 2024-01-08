@@ -14,9 +14,9 @@ public class BatteryMonitoringTask {
 
     /**
      * Simulates the battery discharge.
-     * The battery is discharged by 1% every 5 seconds.
+     * The battery is discharged by 1% every 10 minutes.
      */
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 60000)
     public void decrBattery() {
         if (battery.getCurrentCapacity() > 0) {
             battery.discharge();

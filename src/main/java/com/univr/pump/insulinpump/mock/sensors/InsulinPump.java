@@ -4,14 +4,14 @@ import com.univr.pump.insulinpump.mock.Patient;
 
 public class InsulinPump {
     private final Patient patient;
-    private int tankCapacity; //internal data
-    private int currentTankLevel; //sensor
+    private int tankCapacity;
+    private int currentTankLevel;
 
     private static final int NORMAL_GLUCOSE_LEVEL = 90;
     private static final int MAX_TANK_CAPACITY = 200;
 
-    public InsulinPump() {
-        this.patient = new Patient();
+    public InsulinPump(Patient patient) {
+        this.patient = patient;
         this.tankCapacity = MAX_TANK_CAPACITY;
         this.currentTankLevel = MAX_TANK_CAPACITY;
     }
@@ -41,5 +41,6 @@ public class InsulinPump {
      */
     public void injectInsulin() {
             patient.setGlucoseLevel(NORMAL_GLUCOSE_LEVEL);
+            this.currentTankLevel--;
     }
 }
