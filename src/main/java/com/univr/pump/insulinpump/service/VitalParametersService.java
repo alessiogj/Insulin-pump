@@ -4,8 +4,6 @@ import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,8 +15,6 @@ import java.util.List;
 
 @Service
 public class VitalParametersService {
-
-    private static final Logger log = LoggerFactory.getLogger(VitalParametersService.class);
 
     private final VitalParametersRepository vitalParametersRepository;
 
@@ -32,7 +28,6 @@ public class VitalParametersService {
      */
     public Iterable<VitalParametersDto> getAllVitalParameters() {
         Iterable<VitalParameters> result = vitalParametersRepository.findAll();
-        log.info("VitalParametersService.getAllVitalParameters: {}", result);
         return convertToDtoList(result);
     }
 
@@ -47,7 +42,6 @@ public class VitalParametersService {
         Iterable<VitalParameters> result = vitalParametersRepository.findAllByTimestampBetween(
                 LocalDateTime.parse(dateIntervalDto.getStartDate())
                 , LocalDateTime.parse(dateIntervalDto.getEndDate()));
-        log.info("VitalParametersService.getVitalParametersByTimeInterval: {}", result);
         return convertToDtoList(result);
     }
 
@@ -57,7 +51,6 @@ public class VitalParametersService {
      */
     public VitalParametersDto getLastVitalParameters() {
         VitalParameters vitalParameter = vitalParametersRepository.findFirstByOrderByTimestampDesc();
-        log.info("VitalParametersService.getLastVitalParameters: {}", vitalParameter);
         if (vitalParameter == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No vital parameters found");
         }
@@ -69,7 +62,6 @@ public class VitalParametersService {
      */
     public void deleteAllVitalParameters() {
         vitalParametersRepository.deleteAll();
-        log.info("VitalParametersService.deleteAllVitalParameters");
     }
 
 
@@ -169,6 +161,5 @@ public class VitalParametersService {
                 temperature
         );
         vitalParametersRepository.save(vitalParameters);
-        log.info("VitalParametersService.saveHeartParameters: {}", vitalParameters);
     }
 }

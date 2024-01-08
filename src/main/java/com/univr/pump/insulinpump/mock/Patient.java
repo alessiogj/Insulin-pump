@@ -154,6 +154,9 @@ public class Patient {
         }
     }
 
+    /**
+     * Glucose level is set to 90.
+     */
     public void setGlucoseToNormal() {
         this.glucoseLevel = INITIAL_GLUCOSE_LEVEL;
     }

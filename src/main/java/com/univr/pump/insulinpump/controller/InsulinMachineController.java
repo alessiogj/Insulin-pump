@@ -29,8 +29,17 @@ public class InsulinMachineController {
      */
     @PutMapping("/tank/refill")
     @ResponseStatus(org.springframework.http.HttpStatus.OK)
-    public void refillInsulinPump() {
+    public void refillInsulinTank() {
         insulinMachineService.refillInsulinPump();
+    }
+
+    /**
+     * The system uses this API to refill the insulin pump
+     */
+    @PostMapping("/rapair")
+    @ResponseStatus(org.springframework.http.HttpStatus.OK)
+    public void replaceInsulinPump() {
+        insulinMachineService.replaceInsulinPump();
     }
 
     /**

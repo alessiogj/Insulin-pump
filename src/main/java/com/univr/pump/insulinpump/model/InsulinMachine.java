@@ -15,7 +15,7 @@ public class InsulinMachine {
     private int tankCapacity;
     private int currentTankLevel;
 
-    private static final int MAX_TANK_CAPACITY = 200;
+    private static final int MAX_TANK_CAPACITY = 100;
 
     private final static int DEFAULT_MAX_CAPACITY = 100;
     private final static int DEFAULT_CURRENT_CAPACITY = 100;
@@ -52,7 +52,8 @@ public class InsulinMachine {
     }
 
     public void charge() {
-        this.currentCapacity = this.maxCapacity;
+        if (this.currentCapacity < MAX_TANK_CAPACITY)
+            this.currentCapacity = this.maxCapacity;
     }
 
     public int getTankCapacity() {
@@ -72,26 +73,25 @@ public class InsulinMachine {
     }
 
     public void refill() {
-        this.currentTankLevel = this.tankCapacity;
+        if (this.currentTankLevel < MAX_TANK_CAPACITY)
+            this.currentTankLevel = this.tankCapacity;
     }
 
     /**
      * Simulates the discharge of the battery.
      * The current capacity is decreased by 1.
      */
-    public void discharge() {
-        if (this.currentCapacity > 0) {
+    public void decrBattery() {
+        if (this.currentCapacity > 0)
             this.currentCapacity--;
-        }
     }
 
     /**
      * Injects insulin.
      */
     public void injectInsulin() {
-        if (this.currentTankLevel > 0) {
+        if (this.currentTankLevel > 0)
             this.currentTankLevel--;
-        }
     }
 
 }

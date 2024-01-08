@@ -21,6 +21,4 @@ public interface VitalParametersRepository extends CrudRepository<VitalParameter
          * @return last vital parameters of a patient
          */
         VitalParameters findFirstByOrderByTimestampDesc();
-
-        //TODO: altri metodi per eseguire operazioni statistiche sui parametri vitali
 }
