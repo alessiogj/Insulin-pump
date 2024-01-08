@@ -44,4 +44,14 @@ public class VitalParametersController {
         return vitalParametersService.getLastVitalParameters();
     }
 
+
+    /**
+     * The system uses this API to remove all vital parameters
+     * @return void
+     */
+    @DeleteMapping("/")
+    public void deleteAllVitalParameters() {
+        vitalParametersService.deleteAllVitalParameters();
+    }
+
 }

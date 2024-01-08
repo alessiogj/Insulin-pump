@@ -64,6 +64,14 @@ public class VitalParametersService {
         return convertToDto(vitalParameter);
     }
 
+    /**
+     * Delete all vital parameters
+     */
+    public void deleteAllVitalParameters() {
+        vitalParametersRepository.deleteAll();
+        log.info("VitalParametersService.deleteAllVitalParameters");
+    }
+
 
     /**
      * Create a vital parameterDto list from a vital parameter list
@@ -163,5 +171,4 @@ public class VitalParametersService {
         vitalParametersRepository.save(vitalParameters);
         log.info("VitalParametersService.saveHeartParameters: {}", vitalParameters);
     }
-
 }

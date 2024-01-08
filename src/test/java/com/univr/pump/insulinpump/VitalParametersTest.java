@@ -82,11 +82,11 @@ public class VitalParametersTest {
     }
 
     /**
-     * Test get last vital parameter
+     * Test remove all vital parameters
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void testGetLastVitalParameter() {
+    public void testRemoveAllVitalParameters() {
 
         VitalParameters firstVitalParameters = new VitalParameters(
                 LocalDateTime.now(),
@@ -111,14 +111,16 @@ public class VitalParametersTest {
 
         given()
                 .when()
-                .get("/vitalparameters/last")
+                .delete("/vitalparameters/")
+                .then()
+                .statusCode(200);
+
+        given()
+                .when()
+                .get("/vitalparameters/")
                 .then()
                 .statusCode(200)
-                .body("bloodPressureSystolic", Matchers.equalTo("90"))
-                .body("bloodPressureDiastolic", Matchers.equalTo("90"))
-                .body("heartRate", Matchers.equalTo("90"))
-                .body("bloodSugarLevel", Matchers.equalTo("90"))
-                .body("temperature", Matchers.equalTo("37.0"));
+                .body("isEmpty()", Matchers.is(true));
     }
 
     /**
