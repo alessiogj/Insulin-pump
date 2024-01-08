@@ -76,7 +76,7 @@ public class InsulinPumpTest {
     public void testReplaceInsulinPump() {
         Long id = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
         RestAssured
-                .post("/sensors/rapair")
+                .post("/sensors/replace")
         .then()
                 .statusCode(200);
         Long newId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
