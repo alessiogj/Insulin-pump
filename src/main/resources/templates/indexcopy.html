@@ -22,13 +22,14 @@
   --tag-color-one: #e0fbf6;
   --tag-color-text-one: #58c2a9;
   --tag-color-two: #ece7fe;
-  --tag-color-update: #6ded6b;
-  --tag-color-critical: #fc1212;
+  --tag-color-update: #04bd07;
+  --tag-color-medium: #e06004;
+  --tag-color-critical: #ba0d0d;
   --tag-color-text-two: #8972f3;
   --tag-color-three: #fde7ea;
   --tag-color-text-three: #e77f89;
   --tag-color-four: #f7f8fc;
-  --tag-color-text-four: #a0a6b5;
+  --tag-color-text-four: #fcfcfc;
   --checkbox-color: #009e90;
   --button-color: #49beb7;
   --box-color: #fff1d6;
@@ -347,15 +348,23 @@ button {
   }
 }
 
-.tagprogress{
+.tagregular{
     font-size: 10px;
     padding: 4px 8px;
     border-radius: 20px;
     background-color: var(--tag-color-update);
-    color: var(--tag-color-text-two);
+    color: var(--tag-color-text-four);
 }
 
-.tagwaiting{
+.tagmedium{
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background-color: var(--tag-color-medium);
+    color: var(--tag-color-text-four);
+}
+
+.tagcritical{
     font-size: 10px;
     padding: 4px 8px;
     border-radius: 20px;
@@ -408,33 +417,32 @@ button {
         <div class="tasks-wrapper">
             <div class="task">
                 <div id="timelabel">Time:</div>
-                <span class="tag progress">In Progress</span>
             </div>
             <div class="task">
                 <div id="pressurelabel">Pressure:</div>
-                <span class="tag progress">In Progress</span>
+                <span id="pressurespan" class="tagregular">Regular level</span>
             </div>
             <div class="task">
                 <div id="heartlabel">Heart Rate:</div>
-                <span class="tag progress">Regular</span>
+                <span id="heartratespan" class="tagregular">Regular level</span>
             </div>
             <div class="task">
                 <div id="bloodlabel">Blood Sugar:</div>
-                <span id="sugarspan" class="tagprogress">Regular</span>
+                <span id="sugarspan" class="tagregular">Regular level</span>
             </div>
             <div class="task">
                 <div id="temperaturelabel">Temperature:</div>
-                <span class="tag progress">In Progress</span>
+                <span id="temperaturespan" class="tagregular">Regular level</span>
             </div>
 
             <div class="header upcoming">Sensor Status and Alarms</div>
             <div class="task">
                 <div class="p-2" id="batterylabel">Battery</div>
-                <span class="tag waiting">Waiting</span>
+                <span id="batteryspan" class="tagregular">Regular level</span>
             </div>
             <div class="task">
                 <div class="p-2" id="refilllabel">Refill</div>
-                <span class="tag waiting">Waiting</span>
+                <span id="insulinspan" class="tagregular">Regular level</span>
             </div>
         </div>
     </div>
@@ -659,7 +667,15 @@ button {
 	const buffer = 10;
 	var tempcount = 0;
     var criticalsugar = 0;
-    var tmp = document.getElementById("sugarspan");
+    var mediumtemperature = 0;
+    var criticaltemperature = 0;
+    var criticalheart = 0;
+
+    var sugar = document.getElementById("sugarspan");
+    var heartrate = document.getElementById("heartratespan");
+    var pressure = document.getElementById("pressurespan");
+    var temperature = document.getElementById("temperaturespan");
+
 
 	setInterval(() => {
 		const Http = new XMLHttpRequest();
@@ -676,19 +692,6 @@ button {
 				document.getElementById("heartlabel").innerHTML = "HeartRate: " + obj.heartRate + " bpm";
 				document.getElementById("temperaturelabel").innerHTML = "Temperature: " + trunc_temp + " C°";
 				document.getElementById("bloodlabel").innerHTML = "Blood Sugar: " + obj.bloodSugarLevel + " mg/dL";
-				if(obj.bloodSugarLevel > 130){
-                    tmp.classList.replace("tagprogress", "tagwaiting");
-                    tmp.innerHTML = "Critical";
-                    criticalsugar = 1;
-                }
-                else{
-                    if(criticalsugar == 1){
-                        tmp.classList.replace("tagwaiting", "tagprogress");
-                        tmp.innerHTML = "Regular";
-                        criticalsugar = 0;
-                    }
-                }
-
 
 				if (heartrate_timeseries.length > buffer) {
 					heartrate_timeseries.shift();
@@ -740,6 +743,57 @@ button {
 				chart4.updateSeries([{
 					data: temperature_timeseries
 				}]);
+
+				 //dynamic color changes of blood sugar label
+				if(obj.bloodSugarLevel > 130){
+                    sugar.classList.replace("tagregular", "tagcritical");
+                    sugar.innerHTML = "Critical level";
+                    criticalsugar = 1;
+                }
+                else{
+                    if(criticalsugar == 1){
+                        sugar.classList.replace("tagcritical", "tagregular");
+                        sugar.innerHTML = "Regular level";
+                        criticalsugar = 0;
+                    }
+                }
+
+                //dynamic color changes of temperature label
+                if(obj.temperature >= 37.0 && obj.temperature < 38.5){
+                    temperature.classList.replace("tagregular", "tagmedium");
+                    temperature.innerHTML = "Medium level";
+                    mediumtemperature = 1;
+                }
+                else if(obj.temperature > 38.5){
+                    temperature.classList.replace("tagregular", "tagcritical");
+                    temperature.innerHTML = "Critical level";
+                    criticaltemperature = 1;
+                }
+                else{
+                    if(mediumtemperature == 1){
+                        temperature.classList.replace("tagmedium", "tagregular");
+                    }
+                    else{
+                        temperature.classList.replace("tagcritical", "tagregular");
+                    }
+                    sugar.innerHTML = "Regular level";
+                    mediumtemperature = 0;
+                    criticaltemperature = 0;
+                }
+
+                if(obj.heartRate >= 150 || obj.heartRate <= 40){
+                    heartrate.classList.replace("tagregular", "tagcritical");
+                    heartrate.innerHTML = "Critical level";
+                    criticalheart = 1;
+                }
+                else{
+                    if(criticalheart == 1){
+                        heartrate.classList.replace("tagcritical", "tagregular");
+                        heartrate.innerHTML = "Regular level";
+                        criticalheart = 0;
+                    }
+                }
+
 			}
 		}
 	}, 1000);
@@ -751,10 +805,40 @@ button {
             const url='http://localhost:8080/sensors/status';
             Http.open("GET", url);
             Http.send();
+
+            var battery = document.getElementById("batteryspan");
+            var insulin = document.getElementById("insulinspan");
+            var mediumbattery = 0;
+            var criticalbattery = 0;
+
             Http.onreadystatechange = (e) => {
                 const obj = JSON.parse(Http.responseText)
                 document.getElementById("batterylabel").innerHTML = "Battery level: " + obj.battery + "%";
                 document.getElementById("refilllabel").innerHTML = "Insulin dose available: " + obj.tank;
+
+                //dynamic color changes of battery label
+                if(obj.battery > 10  && obj.battery < 50){
+                    battery.classList.replace("tagregular", "tagmedium");
+                    battery.innerHTML = "Medium level";
+                    mediumbattery = 1;
+                }
+                else if(obj.battery <= 10){
+                    battery.classList.replace("tagregular", "tagcritical");
+                    battery.innerHTML = "Critical level";
+                    criticalbattery = 1;
+                }
+                else{
+                    if(mediumbattery == 1){
+                        battery.classList.replace("tagmedium", "tagregular");
+                    }
+                    else{
+                        battery.classList.replace("tagcritical", "tagregular");
+                    }
+                    battery.innerHTML = "Regular level";
+                    mediumbattery = 0;
+                    criticalbattery = 0;
+                }
+
             }
         }, 1000);
     </script>
