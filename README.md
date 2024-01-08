@@ -111,24 +111,15 @@ software per la gestione di una pompa di insulina.
 }
 ```
 
-### 4. Recupero delle informazioni sui sensori
+### 4. Eliminazione di tutti i Parametri Vitali
 
-- **Descrizione**: Recupera le informazioni sui sensori.
-- **URL**: `sensors/status`
-- **Metodo**: `GET`
+- **Descrizione**: Elimina tutti i parametri vitali di un paziente.
+- **URL**: `vitalparameters/`
+- **Metodo**: `DELETE`
 - **Corpo della Richiesta**:
     - Il corpo della richiesta è vuoto.
 - **Risposta**:
-    - Oggetto `SensorStatusDto` che rappresenta lo stato dei sensori.
-
-#### Schema JSON per la risposta di recupero delle informazioni sui sensori
-    
-```json
-{
-  "battery": 100,
-  "tank": true
-}
-```
+  - `200 OK` se l'eliminazione è andata a buon fine.
 
 ## Documentazione API relative ai Sensori 
 
@@ -151,6 +142,25 @@ software per la gestione di una pompa di insulina.
     - Il corpo della richiesta è vuoto.
 - **Risposta**:
   - `200 OK` se la ricarica del serbatoio è andata a buon fine.
+
+### 3. Recupero delle informazioni sui sensori
+
+- **Descrizione**: Recupera le informazioni sui sensori.
+- **URL**: `sensors/status`
+- **Metodo**: `GET`
+- **Corpo della Richiesta**:
+  - Il corpo della richiesta è vuoto.
+- **Risposta**:
+  - Oggetto `SensorStatusDto` che rappresenta lo stato dei sensori.
+
+#### Schema JSON per la risposta di recupero delle informazioni sui sensori
+
+```json
+{
+  "battery": 100,
+  "tank": true
+}
+```
 
 ## Test API relative ai Parametri Vitali
 ### Ambiente di Test
@@ -182,6 +192,11 @@ software per la gestione di una pompa di insulina.
 #### 5. `testGetVitalParametersWithInvalidDateInterval`
 - **Descrizione**: Testa il comportamento quando viene fornito un intervallo di date non valido.
 - **Aspettativa**: L'API dovrebbe restituire un codice di stato 400, indicando una richiesta errata a causa dell'intervallo di date non valido.
+
+#### 6. `testDeleteVitalParameters`
+- **Descrizione**: Testa la funzionalità di eliminazione di tutti i parametri vitali.
+- **Configurazione**: Aggiunge due set di parametri vitali.
+- **Aspettativa**: L'API dovrebbe restituire un codice di stato 200, indicando che i parametri vitali sono stati eliminati con successo.
 
 ## Test API relative ai Sensori
 ### Ambiente di Test
