@@ -1,9 +1,14 @@
 package com.univr.pump.insulinpump.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 public class VitalParameters {
 
     @Id
@@ -31,61 +36,4 @@ public class VitalParameters {
         this.bloodSugarLevel = bloodSugarLevel;
         this.temperature = temperature;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public Integer getBloodPressureSystolic() {
-        return bloodPressureSystolic;
-    }
-
-    public Integer getBloodPressureDiastolic() {
-        return bloodPressureDiastolic;
-    }
-
-    public Integer getHeartRate() {
-        return heartRate;
-    }
-
-    public Integer getBloodSugarLevel() {
-        return bloodSugarLevel;
-    }
-
-    public Double getTemperature() {
-        return temperature;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public void setBloodPressureSystolic(Integer bloodPressureSystolic) {
-        this.bloodPressureSystolic = bloodPressureSystolic;
-    }
-
-    public void setBloodPressureDiastolic(Integer bloodPressureDiastolic) {
-        this.bloodPressureDiastolic = bloodPressureDiastolic;
-    }
-
-    public void setHeartRate(Integer heartRate) {
-        this.heartRate = heartRate;
-    }
-
-    public void setBloodSugarLevel(Integer bloodSugarLevel) {
-        this.bloodSugarLevel = bloodSugarLevel;
-    }
-
-    public void setTemperature(Double temperature) {
-        this.temperature = temperature;
-    }
-
 }

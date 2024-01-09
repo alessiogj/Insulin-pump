@@ -39,7 +39,6 @@ public class ScheduledIntegrationTest {
     @InjectMocks
     private VitalParametersMonitoringTask vitalParametersMonitoringTask;
 
-
     @Autowired
     private InsulinMachineRepository insulinMachineRepository;
 

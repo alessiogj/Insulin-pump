@@ -200,4 +200,36 @@ public class VitalParametersTest {
         .then()
                 .statusCode(400);
     }
+
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    public void testGetLastVitalParameters() {
+
+        VitalParameters firstVitalParameters = new VitalParameters(
+                LocalDateTime.now(),
+                80,
+                80,
+                80,
+                80,
+                36.6
+        );
+
+        VitalParameters secondVitalParameters = new VitalParameters(
+                LocalDateTime.now(),
+                90,
+                90,
+                90,
+                90,
+                37.0
+        );
+
+        vitalParametersRepository.save(firstVitalParameters);
+        vitalParametersRepository.save(secondVitalParameters);
+
+        given()
+                .when()
+                .get("/vitalparameters/last")
+                .then()
+                .statusCode(200);
+    }
 }

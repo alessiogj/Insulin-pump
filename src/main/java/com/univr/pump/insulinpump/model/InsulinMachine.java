@@ -1,11 +1,17 @@
 package com.univr.pump.insulinpump.model;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@Getter
+@Setter
 public class InsulinMachine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,51 +33,15 @@ public class InsulinMachine {
         this.currentTankLevel = MAX_TANK_CAPACITY;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public int getMaxCapacity() {
-        return maxCapacity;
-    }
-
-    public void setMaxCapacity(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-
-    public int getCurrentCapacity() {
-        return currentCapacity;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCurrentCapacity(int currentCapacity) {
-        this.currentCapacity = currentCapacity;
-    }
-
     public void charge() {
         if (this.currentCapacity < MAX_TANK_CAPACITY)
             this.currentCapacity = this.maxCapacity;
     }
 
-    public int getTankCapacity() {
-        return this.tankCapacity;
-    }
-
-    public int getCurrentTankLevel() {
-        return this.currentTankLevel;
-    }
-
-    public void setCurrentTankLevel(int currentTankLevel) {
-        this.currentTankLevel = currentTankLevel;
-    }
-
-    public void setTankCapacity(int tankCapacity) {
-        this.tankCapacity = tankCapacity;
-    }
-
+    /**
+     * Simulates the refill of the insulin pump.
+     * The current tank level is set to the maximum.
+     */
     public void refill() {
         if (this.currentTankLevel < MAX_TANK_CAPACITY)
             this.currentTankLevel = this.tankCapacity;

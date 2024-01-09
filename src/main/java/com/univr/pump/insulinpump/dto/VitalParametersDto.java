@@ -1,9 +1,14 @@
 package com.univr.pump.insulinpump.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * This class includes the data transfer object for the vital parameters
  * and the patient id associated with them.
  */
+@Setter
+@Getter
 public class VitalParametersDto {
     private String id;
     private String timestamp;
@@ -31,61 +36,4 @@ public class VitalParametersDto {
         this.temperature = temperature;
         this.id = id;
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public String getBloodPressureSystolic() {
-        return bloodPressureSystolic;
-    }
-
-    public String getBloodPressureDiastolic() {
-        return bloodPressureDiastolic;
-    }
-
-    public String getHeartRate() {
-        return heartRate;
-    }
-
-    public String getBloodSugarLevel() {
-        return bloodSugarLevel;
-    }
-
-    public String getTemperature() {
-        return temperature;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public void setBloodPressureSystolic(String bloodPressureSystolic) {
-        this.bloodPressureSystolic = bloodPressureSystolic;
-    }
-
-    public void setBloodPressureDiastolic(String bloodPressureDiastolic) {
-        this.bloodPressureDiastolic = bloodPressureDiastolic;
-    }
-
-    public void setHeartRate(String heartRate) {
-        this.heartRate = heartRate;
-    }
-
-    public void setBloodSugarLevel(String bloodSugarLevel) {
-        this.bloodSugarLevel = bloodSugarLevel;
-    }
-
-    public void setTemperature(String temperature) {
-        this.temperature = temperature;
-    }
-
 }

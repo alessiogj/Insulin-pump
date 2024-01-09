@@ -1,7 +1,13 @@
 package com.univr.pump.insulinpump.mock;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Random;
 
+@Getter
+@Setter
 public class Patient {
     private int pressureSystolic;
     private int pressureDiastolic;
@@ -21,46 +27,6 @@ public class Patient {
         this.heartRate = INITIAL_HEART_RATE;
         this.temperature = INITIAL_TEMPERATURE;
         this.glucoseLevel = INITIAL_GLUCOSE_LEVEL;
-    }
-
-    public int getPressureSystolic() {
-        return pressureSystolic;
-    }
-
-    public int getPressureDiastolic() {
-        return pressureDiastolic;
-    }
-
-    public int getHeartRate() {
-        return heartRate;
-    }
-
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public int getGlucoseLevel() {
-        return glucoseLevel;
-    }
-
-    public void setGlucoseLevel(int glucoseLevel) {
-        this.glucoseLevel = glucoseLevel;
-    }
-
-    public void setPressureSystolic(int pressureSystolic) {
-        this.pressureSystolic = pressureSystolic;
-    }
-
-    public void setPressureDiastolic(int pressureDiastolic) {
-        this.pressureDiastolic = pressureDiastolic;
-    }
-
-    public void setHeartRate(int heartRate) {
-        this.heartRate = heartRate;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
     }
 
     private void reset() {
