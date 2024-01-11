@@ -40,8 +40,8 @@ public class VitalParametersService {
             DateIntervalDto dateIntervalDto) {
         validateDateInterval(dateIntervalDto);
         Iterable<VitalParameters> result = vitalParametersRepository.findAllByTimestampBetween(
-                LocalDateTime.parse(dateIntervalDto.getStartDate())
-                , LocalDateTime.parse(dateIntervalDto.getEndDate()));
+                LocalDateTime.parse(dateIntervalDto.getStartDate()),
+                LocalDateTime.parse(dateIntervalDto.getEndDate()));
         return convertToDtoList(result);
     }
 

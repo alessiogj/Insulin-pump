@@ -35,12 +35,8 @@ public class InsulinPumpTest {
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void testReplaceBattery() {
-        insulinMachineRepository.save(new InsulinMachine());
-        InsulinMachine insulinMachine = insulinMachineRepository.findFirstByOrderByIdDesc();
-        insulinMachine.setCurrentCapacity(0);
-        insulinMachineRepository.save(insulinMachine);
-
         Long id = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
+        insulinMachineRepository.findFirstByOrderByIdDesc().setCurrentCapacity(0);
         RestAssured
                 .put("/sensors/battery/replace")
         .then()

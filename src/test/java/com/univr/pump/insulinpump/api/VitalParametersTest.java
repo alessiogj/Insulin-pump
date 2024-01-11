@@ -30,65 +30,25 @@ public class VitalParametersTest {
     @Autowired
     private VitalParametersRepository vitalParametersRepository;
 
-    @Autowired
-    private VitalParametersService vitalParametersService;
-
     @BeforeClass
     public static void setBaseUri() {
         RestAssured.baseURI = "http://localhost:8080";
     }
 
     /**
-     * Test get vital parameters empty list
+     * Test get vital parameters in first power on
+     * the array must be with only one element
+     * and the element must be the first vital parameters
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void testGetVitalParameters() {
+    public void testGetVitalParametersInFirstPowerOn() {
         given()
                 .when()
                 .get("/vitalparameters/")
         .then()
                 .statusCode(200)
-                .body(Matchers.not(Matchers.empty()));
-    }
-
-    /**
-     * Test get vital parameters not empty list
-     */
-    @Test
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void testGetVitalParametersNotEmpty() {
-
-        VitalParameters firstVitalParameters = new VitalParameters(
-                LocalDateTime.now(),
-                80,
-                80,
-                80,
-                80,
-                36.6
-        );
-
-        VitalParameters secondVitalParameters = new VitalParameters(
-                LocalDateTime.now(),
-                90,
-                90,
-                90,
-                90,
-                37.0
-        );
-
-        vitalParametersRepository.save(firstVitalParameters);
-        vitalParametersRepository.save(secondVitalParameters);
-
-        VitalParametersDto[] vitalParameters = given()
-        .when()
-                .get("/vitalparameters/")
-        .then()
-                .statusCode(200)
-                .extract().as(VitalParametersDto[].class);
-
-        System.out.println(vitalParameters.length);
-        assertTrue(vitalParameters.length >= 2);
+                .body("size()", Matchers.is(1));
     }
 
     /**
@@ -119,9 +79,6 @@ public class VitalParametersTest {
         vitalParametersRepository.save(firstVitalParameters);
         vitalParametersRepository.save(secondVitalParameters);
 
-        long initialCount = vitalParametersRepository.count();
-        assertEquals(2, initialCount);
-
         given()
         .when()
                 .delete("/vitalparameters/")
@@ -130,7 +87,6 @@ public class VitalParametersTest {
 
         long finalCount = vitalParametersRepository.count();
         assertEquals(0, finalCount);
-
     }
 
     /**

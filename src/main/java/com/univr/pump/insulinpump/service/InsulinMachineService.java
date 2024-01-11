@@ -32,11 +32,16 @@ public class InsulinMachineService {
      */
     public void chargeBattery() {
         if (insulinMachineRepository.count() == 0) {
-            insulinMachineRepository.save(new InsulinMachine());
+            InsulinMachine newInsulinMachine = new InsulinMachine();
+            insulinMachineRepository.save(newInsulinMachine);
+        } else {
+            Long latestInsulinMachineId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
+            InsulinMachine insulinMachine = insulinMachineRepository.findById(latestInsulinMachineId).orElse(null);
+            if (insulinMachine != null) {
+                insulinMachine.charge();
+                insulinMachineRepository.save(insulinMachine);
+            }
         }
-        InsulinMachine insulinMachine = insulinMachineRepository.findFirstByOrderByIdDesc();
-        insulinMachine.charge();
-        insulinMachineRepository.save(insulinMachine);
     }
 
     /**
@@ -46,11 +51,16 @@ public class InsulinMachineService {
      */
     public void decrBattery() {
         if (insulinMachineRepository.count() == 0) {
-            insulinMachineRepository.save(new InsulinMachine());
+            InsulinMachine newInsulinMachine = new InsulinMachine();
+            insulinMachineRepository.save(newInsulinMachine);
+        } else {
+            Long latestInsulinMachineId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
+            InsulinMachine insulinMachine = insulinMachineRepository.findById(latestInsulinMachineId).orElse(null);
+            if (insulinMachine != null) {
+                insulinMachine.decrBattery();
+                insulinMachineRepository.save(insulinMachine);
+            }
         }
-        InsulinMachine insulinMachine = insulinMachineRepository.findFirstByOrderByIdDesc();
-        insulinMachine.decrBattery();
-        insulinMachineRepository.save(insulinMachine);
     }
 
     /**
@@ -60,11 +70,16 @@ public class InsulinMachineService {
      */
     public void refillInsulinPump() {
         if (insulinMachineRepository.count() == 0) {
-            insulinMachineRepository.save(new InsulinMachine());
+            InsulinMachine newInsulinMachine = new InsulinMachine();
+            insulinMachineRepository.save(newInsulinMachine);
+        } else {
+            Long latestInsulinMachineId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
+            InsulinMachine insulinMachine = insulinMachineRepository.findById(latestInsulinMachineId).orElse(null);
+            if (insulinMachine != null) {
+                insulinMachine.refill();
+                insulinMachineRepository.save(insulinMachine);
+            }
         }
-        InsulinMachine insulinMachine = insulinMachineRepository.findFirstByOrderByIdDesc();
-        insulinMachine.refill();
-        insulinMachineRepository.save(insulinMachine);
     }
 
     /**
@@ -87,7 +102,9 @@ public class InsulinMachineService {
      */
     public void injectInsulin() {
         InsulinMachine insulinMachine = insulinMachineRepository.findFirstByOrderByIdDesc();
-        insulinMachine.injectInsulin();
-        insulinMachineRepository.save(insulinMachine);
+        if (insulinMachine != null) {
+            insulinMachine.injectInsulin();
+            insulinMachineRepository.save(insulinMachine);
+        }
     }
 }
