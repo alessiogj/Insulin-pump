@@ -10,4 +10,9 @@ public class AppController {
         return "indexcopy";
     }
 
+    @RequestMapping("/charts")
+    public String index2(){
+        return ("/staticcharts");
+    }
+
 }
