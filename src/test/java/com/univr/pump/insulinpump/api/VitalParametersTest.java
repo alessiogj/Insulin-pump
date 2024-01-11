@@ -1,8 +1,11 @@
-package com.univr.pump.insulinpump;
+package com.univr.pump.insulinpump.api;
 
+import com.univr.pump.insulinpump.InsulinPumpApplication;
 import com.univr.pump.insulinpump.dto.DateIntervalDto;
+import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
+import com.univr.pump.insulinpump.service.VitalParametersService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
@@ -17,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InsulinPumpApplication.class,
@@ -25,6 +29,9 @@ public class VitalParametersTest {
 
     @Autowired
     private VitalParametersRepository vitalParametersRepository;
+
+    @Autowired
+    private VitalParametersService vitalParametersService;
 
     @BeforeClass
     public static void setBaseUri() {
@@ -73,12 +80,15 @@ public class VitalParametersTest {
         vitalParametersRepository.save(firstVitalParameters);
         vitalParametersRepository.save(secondVitalParameters);
 
-        given()
-                .when()
+        VitalParametersDto[] vitalParameters = given()
+        .when()
                 .get("/vitalparameters/")
-                .then()
+        .then()
                 .statusCode(200)
-                .body(Matchers.not(Matchers.empty()));
+                .extract().as(VitalParametersDto[].class);
+
+        System.out.println(vitalParameters.length);
+        assertTrue(vitalParameters.length >= 2);
     }
 
     /**
@@ -109,18 +119,18 @@ public class VitalParametersTest {
         vitalParametersRepository.save(firstVitalParameters);
         vitalParametersRepository.save(secondVitalParameters);
 
-        given()
-                .when()
-                .delete("/vitalparameters/")
-                .then()
-                .statusCode(200);
+        long initialCount = vitalParametersRepository.count();
+        assertEquals(2, initialCount);
 
         given()
-                .when()
-                .get("/vitalparameters/")
-                .then()
-                .statusCode(200)
-                .body("isEmpty()", Matchers.is(true));
+        .when()
+                .delete("/vitalparameters/")
+        .then()
+                .statusCode(200);
+
+        long finalCount = vitalParametersRepository.count();
+        assertEquals(0, finalCount);
+
     }
 
     /**
@@ -201,6 +211,9 @@ public class VitalParametersTest {
                 .statusCode(400);
     }
 
+    /**
+     * Test get last vital parameters
+     */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void testGetLastVitalParameters() {
@@ -226,10 +239,23 @@ public class VitalParametersTest {
         vitalParametersRepository.save(firstVitalParameters);
         vitalParametersRepository.save(secondVitalParameters);
 
-        given()
+        VitalParametersDto lastVitalParameters = given()
                 .when()
                 .get("/vitalparameters/last")
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .extract().as(VitalParametersDto.class);
+
+        assertNotNull(lastVitalParameters);
+        // Assuming that the secondVitalParameters is the last one because of the save order
+        assertEquals("90", lastVitalParameters.getBloodPressureSystolic());
+        assertEquals("90", lastVitalParameters.getBloodPressureDiastolic());
+        assertEquals("90", lastVitalParameters.getHeartRate());
+        assertEquals("90", lastVitalParameters.getBloodSugarLevel());
+        assertEquals("37.0", lastVitalParameters.getTemperature());
+        assertNotNull(lastVitalParameters.getTimestamp()); // Ensure timestamp is not null
+        assertNotNull(lastVitalParameters.getId()); // Ensure ID is not null
+
+
     }
 }

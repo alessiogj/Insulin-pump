@@ -14,7 +14,8 @@ public class VitalParametersMonitoringTask {
 
     private final Patient patient;
 
-    public VitalParametersMonitoringTask(VitalParametersService vitalParametersService, InsulinMachineService insulinMachineService,
+    public VitalParametersMonitoringTask(VitalParametersService vitalParametersService,
+                                         InsulinMachineService insulinMachineService,
                                          Patient patient) {
         this.vitalParametersService = vitalParametersService;
         this.insulinMachineService = insulinMachineService;

@@ -1,6 +1,5 @@
 package com.univr.pump.insulinpump.model;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +32,10 @@ public class InsulinMachine {
         this.currentTankLevel = MAX_TANK_CAPACITY;
     }
 
+    /**
+     * Simulates the charge of the battery.
+     * The current capacity is set to the maximum.
+     */
     public void charge() {
         if (this.currentCapacity < MAX_TANK_CAPACITY)
             this.currentCapacity = this.maxCapacity;

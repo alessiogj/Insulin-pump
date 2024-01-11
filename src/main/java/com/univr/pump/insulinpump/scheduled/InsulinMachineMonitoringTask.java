@@ -10,7 +10,8 @@ public class InsulinMachineMonitoringTask {
     private final Patient patient;
     private final InsulinMachineService insulinMachineService;
 
-    public InsulinMachineMonitoringTask(Patient patient, InsulinMachineService insulinMachineService) {
+    public InsulinMachineMonitoringTask(Patient patient,
+                                        InsulinMachineService insulinMachineService) {
         this.patient = patient;
         this.insulinMachineService = insulinMachineService;
     }

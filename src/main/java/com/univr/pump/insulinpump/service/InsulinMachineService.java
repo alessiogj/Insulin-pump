@@ -90,12 +90,4 @@ public class InsulinMachineService {
         insulinMachine.injectInsulin();
         insulinMachineRepository.save(insulinMachine);
     }
-
-    /**
-     * Replace insulin pump
-     * if repository is empty, create a new machine
-     */
-    public void replaceInsulinPump() {
-        insulinMachineRepository.save(new InsulinMachine());
-    }
 }

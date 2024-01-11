@@ -1,6 +1,5 @@
 package com.univr.pump.insulinpump.mock;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +17,7 @@ public class Patient {
     private final static int INITIAL_PRESSURE_SYSTOLIC = 120;
     private final static int INITIAL_PRESSURE_DIASTOLIC = 80;
     private final static int INITIAL_HEART_RATE = 80;
-    private final static double INITIAL_TEMPERATURE = 37.0;
+    private final static double INITIAL_TEMPERATURE = 36.5;
     private final static int INITIAL_GLUCOSE_LEVEL = 90;
 
     public Patient() {
@@ -38,29 +37,29 @@ public class Patient {
     }
 
     /**
-     * Simulates the pressure variation of the BloodPressure sensor.
+     * Simulates the pressure variation of the patient's blood.
      * The pressure is randomly increased or decreased by a value between 0 and 3.
      * The heart rate is randomly increased or decreased by a value between 0 and 2.
-     * If the systolic pressure is lower than 90 or higher than 140, the sensor is reset.
-     * If the diastolic pressure is lower than 60 or higher than 90, the sensor is reset.
-     * If the heart rate is lower than 60 or higher than 100, the sensor is reset.
+     * If the systolic pressure is lower than 90 or higher than 140, the pressure is set to 120.
+     * If the diastolic pressure is lower than 60 or higher than 90, the pressure is set to 80.
+     * If the heart rate is lower than 60 or higher than 100, the heart rate is set to 80.
      */
     public void modifyPressure() {
         java.util.Random random = new java.util.Random();
-        int variation = random.nextInt(3);
+        int variation = random.nextInt(5);
         if (random.nextBoolean()) {
             this.pressureSystolic += variation;
         } else {
             this.pressureSystolic -= variation;
         }
-        variation = random.nextInt(3);
+        variation = random.nextInt(5);
         if (random.nextBoolean()) {
             this.pressureDiastolic += variation;
         } else {
             this.pressureDiastolic -= variation;
         }
 
-        variation = random.nextInt(2);
+        variation = random.nextInt(5);
         if (random.nextBoolean()) {
             this.heartRate += variation;
         } else {
@@ -79,12 +78,10 @@ public class Patient {
     }
 
     /**
-     * Simulates the temperature variation of the NTC sensor.
+     * Simulates the temperature variation of the patient's temperature.
      * The temperature is randomly increased or decreased by a value between 0 and 0.01.
-     * If the temperature is lower than 35 or higher than 39, the sensor is broken.
-     * and the temperature is reset to 37.
-     * We can modify the temperature only if the sensor is not broken.
-     * Randomly, the sensor can break with a probability of 1%.
+     * If the temperature is lower than 35 or higher than 39, the temperature is set to 36.5.
+     * The temperature is set to 36.5 with a probability of 1%.
      */
     public void modifyTemperature() {
         Random random = new Random();
@@ -103,10 +100,9 @@ public class Patient {
     }
 
     /**
-     * La simulazione della variazione di glucosio nel sangue del paziente
-     * comporta un aumento o una diminuzione del livello di glucosio nel sangue.
-     * Il livello di glucosio nel sangue può variare di 10 unità in più o in meno.
-     * Il livello di glucosio nel sangue non può scendere sotto 50 unità.
+     * Simulates the glucose variation in the patient's blood.
+     * The glucose level is randomly increased or decreased by a value between 0 and 10.
+     * If the glucose level is lower than 80, the glucose level is set to 100.
      */
     public void modifyBloodGlucose() {
         int random = (int) (Math.random() * 11);

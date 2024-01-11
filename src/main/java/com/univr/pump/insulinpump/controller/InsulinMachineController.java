@@ -34,15 +34,6 @@ public class InsulinMachineController {
     }
 
     /**
-     * The system uses this API to refill the insulin pump
-     */
-    @PostMapping("/replace")
-    @ResponseStatus(org.springframework.http.HttpStatus.OK)
-    public void replaceInsulinPump() {
-        insulinMachineService.replaceInsulinPump();
-    }
-
-    /**
      * The system uses this API to get the status of the sensors
      * @return status of the sensors
      */
