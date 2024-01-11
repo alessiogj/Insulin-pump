@@ -30,6 +30,7 @@
   --tag-color-text-three: #e77f89;
   --tag-color-four: #f7f8fc;
   --tag-color-text-four: #fcfcfc;
+  --tag-color-buttonrow: #4682B4;
   --checkbox-color: #009e90;
   --button-color: #49beb7;
   --box-color: #fff1d6;
@@ -406,6 +407,28 @@ button {
   
   .category { padding: 20px; }
 }
+
+.buttons-row {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 50px;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: var(--tag-color-buttonrow);
+  color: var(--tag-color-text-four);
+}
+
+.button:hover {
+  background-color: var(--button-color); /* Cambia il colore al passaggio del mouse */
+}
+
 </style>
 </head>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -444,6 +467,11 @@ button {
                 <div class="p-2" id="refilllabel">Refill</div>
                 <span id="insulinspan" class="tagregular">Regular level</span>
             </div>
+            <div class="buttons-row">
+                <button class="button">Mostra Storico</button>
+                <button class="button">Ricarica Dosi</button>
+                <button class="button">Bottone 3</button>
+            </div>
         </div>
     </div>
     <div class="right-bar">
@@ -465,7 +493,7 @@ button {
     </div>
 </div>
 <script>
-	var heartrate_timeseries = [];
+    var heartrate_timeseries = [];
 	var sistpressure_timeseries = [];
 	var diastpressure_timeseries = [];
 	var bloodsugar_timeseries = [];
@@ -478,7 +506,7 @@ button {
 				enabled: true,
 				easing: 'linear',
 				dynamicAnimation: {
-					speed: 1000
+					speed: 600
 				}
 			},
 			zoom: {
@@ -508,7 +536,7 @@ button {
 		},
 		stroke: {
 			curve: 'smooth'
-		},
+		}
 	}
 	var options2 = {
 		chart: {
@@ -517,7 +545,7 @@ button {
 				enabled: true,
 				easing: 'linear',
 				dynamicAnimation: {
-					speed: 1000
+					speed: 600
 				}
 			},
 			zoom: {
@@ -550,16 +578,9 @@ button {
 			text: 'Pressure Timeseries',
 			align: 'center'
 		},
-		animations: {
-			enabled: true,
-			easing: 'linear',
-			dynamicAnimation: {
-				speed: 1000
-			}
-		},
 		stroke: {
 			curve: 'smooth'
-		},
+		}
 	}
 	var options3 = {
 		chart: {
@@ -568,7 +589,7 @@ button {
 				enabled: true,
 				easing: 'linear',
 				dynamicAnimation: {
-					speed: 1000
+					speed: 600
 				}
 			},
 			zoom: {
@@ -596,13 +617,6 @@ button {
 			text: 'Blood Sugar Timeseries',
 			align: 'center'
 		},
-		animations: {
-			enabled: true,
-			easing: 'linear',
-			dynamicAnimation: {
-				speed: 1000
-			}
-		},
 		stroke: {
 			curve: 'smooth'
 		},
@@ -614,7 +628,7 @@ button {
 				enabled: true,
 				easing: 'linear',
 				dynamicAnimation: {
-					speed: 1000
+					speed: 600
 				}
 			},
 			zoom: {
@@ -642,13 +656,6 @@ button {
 			text: 'Temperature Timeseries',
 			align: 'center'
 		},
-		animations: {
-			enabled: true,
-			easing: 'linear',
-			dynamicAnimation: {
-				speed: 1000
-			}
-		},
 		stroke: {
 			curve: 'smooth'
 		},
@@ -663,8 +670,9 @@ button {
 	chart2.render();
 	chart3.render();
 	chart4.render();
-
-	const buffer = 10;
+</script>
+<script>
+	const buffer = 15;
 	var tempcount = 0;
     var criticalsugar = 0;
     var mediumtemperature = 0;
@@ -675,6 +683,12 @@ button {
     var heartrate = document.getElementById("heartratespan");
     var pressure = document.getElementById("pressurespan");
     var temperature = document.getElementById("temperaturespan");
+
+    var timelabel = document.getElementById("timelabel");
+    var pressurelabel = document.getElementById("pressurelabel");
+    var heartlabel = document.getElementById("heartlabel");
+    var temperaturelabel = document.getElementById("temperaturelabel");
+    var bloodlabel = document.getElementById("bloodlabel");
 
 
 	setInterval(() => {
@@ -687,11 +701,11 @@ button {
 				const obj = JSON.parse(Http.responseText)
 				var trunc_temp = obj.temperature.substring(0, 4);
 				var trunc_time = obj.timestamp.slice(11, 19);
-				document.getElementById("timelabel").innerHTML = "Time: " + trunc_time;
-				document.getElementById("pressurelabel").innerHTML = "Pressure: " + obj.bloodPressureSystolic + "/" + obj.bloodPressureDiastolic + " mmHg";
-				document.getElementById("heartlabel").innerHTML = "HeartRate: " + obj.heartRate + " bpm";
-				document.getElementById("temperaturelabel").innerHTML = "Temperature: " + trunc_temp + " C°";
-				document.getElementById("bloodlabel").innerHTML = "Blood Sugar: " + obj.bloodSugarLevel + " mg/dL";
+				timelabel.innerHTML = "Time: " + trunc_time;
+				pressurelabel.innerHTML = "Pressure: " + obj.bloodPressureSystolic + "/" + obj.bloodPressureDiastolic + " mmHg";
+				heartlabel.innerHTML = "HeartRate: " + obj.heartRate + " bpm";
+				temperaturelabel.innerHTML = "Temperature: " + trunc_temp + " C°";
+				bloodlabel.innerHTML = "Blood Sugar: " + obj.bloodSugarLevel + " mg/dL";
 
 				if (heartrate_timeseries.length > buffer) {
 					heartrate_timeseries.shift();
@@ -743,8 +757,7 @@ button {
 				chart4.updateSeries([{
 					data: temperature_timeseries
 				}]);
-
-				 //dynamic color changes of blood sugar label
+				//dynamic color changes of blood sugar label
 				if(obj.bloodSugarLevel > 130){
                     sugar.classList.replace("tagregular", "tagcritical");
                     sugar.innerHTML = "Critical level";
@@ -776,7 +789,7 @@ button {
                     else{
                         temperature.classList.replace("tagcritical", "tagregular");
                     }
-                    sugar.innerHTML = "Regular level";
+                    temperature.innerHTML = "Regular level";
                     mediumtemperature = 0;
                     criticaltemperature = 0;
                 }
