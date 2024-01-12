@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AppController {
     @RequestMapping("/")
     public String index(){
-        return "indexcopy";
+        return "index";
     }
 
     @RequestMapping("/charts")
     public String index2(){
-        return ("/staticcharts");
+        return ("/statisticscharts");
     }
 
 }
