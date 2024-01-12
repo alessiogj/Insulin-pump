@@ -25,7 +25,6 @@ public class InsulinMachineMonitoringTask {
         if (insulinMachineService.getBatteryLevel() > 0) {
             insulinMachineService.decrBattery();
         }
-        System.out.println("Battery: " + insulinMachineService.getBatteryLevel());
     }
 
     /**

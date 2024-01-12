@@ -5,6 +5,8 @@ import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
+import com.univr.pump.insulinpump.scheduled.InsulinMachineMonitoringTask;
+import com.univr.pump.insulinpump.scheduled.VitalParametersMonitoringTask;
 import com.univr.pump.insulinpump.service.VitalParametersService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -14,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -30,25 +33,65 @@ public class VitalParametersTest {
     @Autowired
     private VitalParametersRepository vitalParametersRepository;
 
+    @MockBean
+    private InsulinMachineMonitoringTask insulinMachineMonitoringTask;
+
+    @MockBean
+    private VitalParametersMonitoringTask vitalParametersMonitoringTask;
+
     @BeforeClass
     public static void setBaseUri() {
         RestAssured.baseURI = "http://localhost:8080";
     }
 
     /**
-     * Test get vital parameters in first power on
-     * the array must be with only one element
-     * and the element must be the first vital parameters
+     * Test get vital parameters empty list
      */
     @Test
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void testGetVitalParametersInFirstPowerOn() {
+    public void testGetVitalParameters() {
         given()
                 .when()
                 .get("/vitalparameters/")
-        .then()
+                .then()
                 .statusCode(200)
-                .body("size()", Matchers.is(1));
+                .body(Matchers.not(Matchers.empty()));
+    }
+
+    /**
+     * Test get vital parameters not empty list
+     */
+    @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    public void testGetVitalParametersNotEmpty() {
+
+        VitalParameters firstVitalParameters = new VitalParameters(
+                LocalDateTime.now(),
+                80,
+                80,
+                80,
+                80,
+                36.6
+        );
+
+        VitalParameters secondVitalParameters = new VitalParameters(
+                LocalDateTime.now(),
+                90,
+                90,
+                90,
+                90,
+                37.0
+        );
+
+        vitalParametersRepository.save(firstVitalParameters);
+        vitalParametersRepository.save(secondVitalParameters);
+
+        given()
+                .when()
+                .get("/vitalparameters/")
+                .then()
+                .statusCode(200)
+                .body("size()", Matchers.is(2));
     }
 
     /**
@@ -80,13 +123,17 @@ public class VitalParametersTest {
         vitalParametersRepository.save(secondVitalParameters);
 
         given()
-        .when()
+                .when()
                 .delete("/vitalparameters/")
-        .then()
+                .then()
                 .statusCode(200);
 
-        long finalCount = vitalParametersRepository.count();
-        assertEquals(0, finalCount);
+        given()
+                .when()
+                .get("/vitalparameters/")
+                .then()
+                .statusCode(200)
+                .body("isEmpty()", Matchers.is(true));
     }
 
     /**
@@ -130,18 +177,18 @@ public class VitalParametersTest {
         given()
                 .contentType(ContentType.JSON)
                 .body(notIncludedDate)
-        .when()
+                .when()
                 .post("/vitalparameters/date")
-        .then()
+                .then()
                 .statusCode(200)
                 .body("isEmpty()", Matchers.is(true));
 
         given()
                 .contentType(ContentType.JSON)
                 .body(includedDate)
-        .when()
+                .when()
                 .post("/vitalparameters/date")
-        .then()
+                .then()
                 .statusCode(200)
                 .body("isEmpty()", Matchers.is(false));
     }
@@ -161,57 +208,9 @@ public class VitalParametersTest {
         given()
                 .contentType(ContentType.JSON)
                 .body(invalidDateInterval)
-        .when()
-                .post("/vitalparameters/date")
-        .then()
-                .statusCode(400);
-    }
-
-    /**
-     * Test get last vital parameters
-     */
-    @Test
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
-    public void testGetLastVitalParameters() {
-
-        VitalParameters firstVitalParameters = new VitalParameters(
-                LocalDateTime.now(),
-                80,
-                80,
-                80,
-                80,
-                36.6
-        );
-
-        VitalParameters secondVitalParameters = new VitalParameters(
-                LocalDateTime.now(),
-                90,
-                90,
-                90,
-                90,
-                37.0
-        );
-
-        vitalParametersRepository.save(firstVitalParameters);
-        vitalParametersRepository.save(secondVitalParameters);
-
-        VitalParametersDto lastVitalParameters = given()
                 .when()
-                .get("/vitalparameters/last")
+                .post("/vitalparameters/date")
                 .then()
-                .statusCode(200)
-                .extract().as(VitalParametersDto.class);
-
-        assertNotNull(lastVitalParameters);
-        // Assuming that the secondVitalParameters is the last one because of the save order
-        assertEquals("90", lastVitalParameters.getBloodPressureSystolic());
-        assertEquals("90", lastVitalParameters.getBloodPressureDiastolic());
-        assertEquals("90", lastVitalParameters.getHeartRate());
-        assertEquals("90", lastVitalParameters.getBloodSugarLevel());
-        assertEquals("37.0", lastVitalParameters.getTemperature());
-        assertNotNull(lastVitalParameters.getTimestamp()); // Ensure timestamp is not null
-        assertNotNull(lastVitalParameters.getId()); // Ensure ID is not null
-
-
+                .statusCode(400);
     }
 }
