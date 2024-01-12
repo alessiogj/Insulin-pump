@@ -355,7 +355,11 @@ body {
         Http.onreadystatechange = (e) => {
             if (Http.readyState === 4 && Http.status === 200) {
                 const obj = JSON.parse(Http.responseText).slice(0,100);
-                console.log(obj);
+                heartrate_timeseries = [];
+                sistpressure_timeseries = [];
+                diastpressure_timeseries = [];
+                bloodsugar_timeseries = [];
+                temperature_timeseries = [];
                 obj.forEach(item => {
                     heartrate_timeseries.push(item.heartRate);
                     sistpressure_timeseries.push(item.bloodPressureSystolic);
