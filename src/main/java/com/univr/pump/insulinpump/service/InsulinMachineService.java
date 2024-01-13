@@ -38,8 +38,11 @@ public class InsulinMachineService {
             Long latestInsulinMachineId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
             InsulinMachine insulinMachine = insulinMachineRepository.findById(latestInsulinMachineId).orElse(null);
             if (insulinMachine != null) {
-                insulinMachine.charge();
-                insulinMachineRepository.save(insulinMachine);
+                if(insulinMachine.getCurrentCapacity() < 100)
+                {
+                    insulinMachine.charge();
+                    insulinMachineRepository.save(insulinMachine);
+                }
             }
         }
     }
@@ -57,8 +60,11 @@ public class InsulinMachineService {
             Long latestInsulinMachineId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
             InsulinMachine insulinMachine = insulinMachineRepository.findById(latestInsulinMachineId).orElse(null);
             if (insulinMachine != null) {
-                insulinMachine.decrBattery();
-                insulinMachineRepository.save(insulinMachine);
+                if(insulinMachine.getCurrentCapacity() > 0)
+                {
+                    insulinMachine.decrBattery();
+                    insulinMachineRepository.save(insulinMachine);
+                }
             }
         }
     }
@@ -76,8 +82,11 @@ public class InsulinMachineService {
             Long latestInsulinMachineId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
             InsulinMachine insulinMachine = insulinMachineRepository.findById(latestInsulinMachineId).orElse(null);
             if (insulinMachine != null) {
-                insulinMachine.refill();
-                insulinMachineRepository.save(insulinMachine);
+                if(insulinMachine.getCurrentTankLevel() < 100)
+                {
+                    insulinMachine.refill();
+                    insulinMachineRepository.save(insulinMachine);
+                }
             }
         }
     }
@@ -101,10 +110,17 @@ public class InsulinMachineService {
      * if insulin pump is empty, do nothing
      */
     public void injectInsulin() {
+        if (insulinMachineRepository.count() == 0) {
+            InsulinMachine newInsulinMachine = new InsulinMachine();
+            insulinMachineRepository.save(newInsulinMachine);
+        }
         InsulinMachine insulinMachine = insulinMachineRepository.findFirstByOrderByIdDesc();
         if (insulinMachine != null) {
-            insulinMachine.injectInsulin();
-            insulinMachineRepository.save(insulinMachine);
+            if(insulinMachine.getCurrentTankLevel() > 0)
+            {
+                insulinMachine.injectInsulin();
+                insulinMachineRepository.save(insulinMachine);
+            }
         }
     }
 }
