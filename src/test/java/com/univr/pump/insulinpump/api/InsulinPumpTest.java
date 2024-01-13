@@ -47,16 +47,19 @@ public class InsulinPumpTest {
     public void testReplaceBattery() {
         // Create a new machine
         InsulinMachine insulinMachine = new InsulinMachine();
-        // Set the battery level to 0
         insulinMachine.setCurrentCapacity(0);
-        insulinMachineRepository.save(insulinMachine);
-        assert insulinMachineRepository.findFirstByOrderByIdDesc().getCurrentCapacity() == 0;
+        insulinMachine = insulinMachineRepository.save(insulinMachine);
+
+        assert ((insulinMachineRepository.findById(insulinMachine.getId()).get().getCurrentCapacity()) == 0);
+
         RestAssured
                 .put("/sensors/battery/replace")
-        .then()
+                .then()
                 .statusCode(200);
-        assert insulinMachineRepository.findFirstByOrderByIdDesc().getId().equals(insulinMachine.getId());
-        assert insulinMachineRepository.findFirstByOrderByIdDesc().getCurrentCapacity() == 100;
+
+        InsulinMachine updatedMachine = insulinMachineRepository.findById(insulinMachine.getId()).get();
+        assert (updatedMachine.getId()).equals(insulinMachine.getId());
+        assert (updatedMachine.getCurrentCapacity()) == 100;
     }
 
     /**
@@ -71,17 +74,19 @@ public class InsulinPumpTest {
     public void testRefillInsulinPump() {
         // Create a new machine
         InsulinMachine insulinMachine = new InsulinMachine();
-        // Set the tank level to 0
         insulinMachine.setCurrentTankLevel(0);
-        insulinMachineRepository.save(insulinMachine);
-        assert insulinMachineRepository.findFirstByOrderByIdDesc().getCurrentTankLevel() == 0;
+        insulinMachine = insulinMachineRepository.save(insulinMachine);
+
+        assert ((insulinMachineRepository.findById(insulinMachine.getId()).get().getCurrentTankLevel()) == 0);
+
         RestAssured
                 .put("/sensors/tank/refill")
-        .then()
+                .then()
                 .statusCode(200);
-        Long newId = insulinMachineRepository.findFirstByOrderByIdDesc().getId();
-        assert insulinMachineRepository.findFirstByOrderByIdDesc().getId().equals(insulinMachine.getId());
-        assert insulinMachineRepository.findFirstByOrderByIdDesc().getCurrentTankLevel() == 100;
+
+        InsulinMachine updatedMachine = insulinMachineRepository.findById(insulinMachine.getId()).get();
+        assert (updatedMachine.getId()).equals(insulinMachine.getId());
+        assert (updatedMachine.getCurrentTankLevel()) == 100;
     }
 
     /**
