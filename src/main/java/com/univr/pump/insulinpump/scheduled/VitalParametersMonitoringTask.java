@@ -17,12 +17,15 @@ public class VitalParametersMonitoringTask {
 
     /**
      * Simulate the modification of vital parameters
-     * (blood pressure, heart rate, blood glucose, temperature)
+     * (blood sugar level, diastolic blood pressure,
+     * systolic blood pressure, heart rate, temperature).
      */
     @Scheduled(fixedRate = 5000)
     public void modifyVitalParameters() {
-        patient.modifyPressure();
-        patient.modifyBloodGlucose();
+        patient.modifyBloodSugarLevel();
+        patient.modifyDiastolicBloodPressure();
+        patient.modifySystolicBloodPressure();
+        patient.modifyHeartRate();
         patient.modifyTemperature();
     }
 }
