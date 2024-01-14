@@ -140,7 +140,7 @@ button {
   border-left: 1px solid #e3e7f7;
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 65%;
   
   .header { 
     font-size: 20px; 
@@ -235,7 +235,7 @@ button {
   flex-direction: column;
   flex: 1;
   padding: 40px 10px 0 20px;
-  width: 40%;
+  width: 35%;
   
   .header { 
     font-size: 26px; 
@@ -414,17 +414,6 @@ button {
   margin-top: 50px;
 }
 
-.button {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  background-color: var(--tag-color-buttonrow);
-  color: var(--tag-color-text-four);
-}
-
 .button:hover {
   background-color: var(--button-color); /* Cambia il colore al passaggio del mouse */
 }
@@ -433,15 +422,15 @@ button {
   background-color: #4CAF50; /* Green */
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 8px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 12px;
   border-radius: 100px;
   margin-top: 25px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .wrapper {
@@ -628,6 +617,25 @@ button {
 
 
 <script>
+   function pad(num) {
+      return num < 10 ? '0' + num : num;
+    }
+
+    // Array per memorizzare gli orari del giorno
+    const allDayTimes = [];
+
+    // Genera gli orari del giorno
+    for (let hour = 0; hour < 24; hour++) {
+      for (let min = 0; min < 60; min++) {
+        for (let sec = 0; sec < 60 ; sec++){
+            const hourString = pad(hour);
+            const minString = pad(min);
+            const secString = pad(sec);
+            allDayTimes.push(`${hourString}:${minString}:${secString}`);
+        }
+      }
+    }
+
     var heartrate_timeseries = [];
 	var sistpressure_timeseries = [];
 	var diastpressure_timeseries = [];
@@ -657,8 +665,9 @@ button {
 		}],
 		xaxis: {
 			labels: {
-				show: false,
-			}
+				show: true,
+			},
+			categories: allDayTimes
 		},
 		yaxis:{
 			title: {
@@ -701,8 +710,9 @@ button {
 		],
 		xaxis: {
 			labels: {
-				show: false,
-			}
+				show: true,
+			},
+			categories: allDayTimes
 		},
 		yaxis:{
 			title: {
@@ -740,8 +750,9 @@ button {
 		}],
 		xaxis: {
 			labels: {
-				show: false,
-			}
+				show: true,
+			},
+			categories: allDayTimes
 		},
 		yaxis:{
 			title: {
@@ -779,8 +790,9 @@ button {
 		}],
 		xaxis: {
 			labels: {
-				show: false,
+				show: true,
 			},
+			categories: allDayTimes
 		},
 		yaxis:{
 			title: {
@@ -808,11 +820,11 @@ button {
 </script>
 <script>
 	const buffer = 15;
-	var tempcount = 0;
     var criticalsugar = 0;
     var mediumtemperature = 0;
     var criticaltemperature = 0;
     var criticalheart = 0;
+    var criticalpressure = 0;
 
     var sugar = document.getElementById("sugarspan");
     var heartrate = document.getElementById("heartratespan");
@@ -842,6 +854,7 @@ button {
 				temperaturelabel.innerHTML = "Temperature: " + trunc_temp + " C°";
 				bloodlabel.innerHTML = "Blood Sugar: " + obj.bloodSugarLevel + " mg/dL";
 
+
 				if (heartrate_timeseries.length > buffer) {
 					heartrate_timeseries.shift();
 					sistpressure_timeseries.shift();
@@ -852,27 +865,25 @@ button {
 
 				//Aggiunge i nuovi dati in arrivo ai grafici e alle serie temporali
 				heartrate_timeseries.push({
-					x: tempcount,
+					x: trunc_time,
 					y: obj.heartRate
 				});
 				sistpressure_timeseries.push({
-					x: tempcount,
+					x: trunc_time,
 					y: obj.bloodPressureSystolic
 				});
 				diastpressure_timeseries.push({
-					x: tempcount,
+					x: trunc_time,
 					y: obj.bloodPressureDiastolic
 				});
 				bloodsugar_timeseries.push({
-					x: tempcount,
+					x: trunc_time,
 					y: obj.bloodSugarLevel
 				});
 				temperature_timeseries.push({
-					x: tempcount,
+					x: trunc_time,
 					y: trunc_temp
 				});
-
-				tempcount++;
 
 				// Aggiorna il grafico con i nuovi dati
 				chart1.updateSeries([{
@@ -892,6 +903,7 @@ button {
 				chart4.updateSeries([{
 					data: temperature_timeseries
 				}]);
+
 				//dynamic color changes of blood sugar label
 				if(obj.bloodSugarLevel > 130){
                     sugar.classList.replace("tagregular", "tagcritical");
@@ -929,6 +941,7 @@ button {
                     criticaltemperature = 0;
                 }
 
+                //dynamic color changes of heartRate label
                 if(obj.heartRate >= 150 || obj.heartRate <= 40){
                     heartrate.classList.replace("tagregular", "tagcritical");
                     heartrate.innerHTML = "Critical level";
@@ -941,6 +954,20 @@ button {
                         criticalheart = 0;
                     }
                 }
+
+                if((obj.bloodPressureSystolic >= 90 && obj.bloodPressureSystolic <= 130) && (obj.bloodPressureDiastolic >= 60 && obj.bloodPressureDiastolic <= 85)){
+                     if(criticalpressure == 1){
+                        pressure.classList.replace("tagcritical", "tagregular");
+                        pressure.innerHTML = "Regular level";
+                        criticalheart = 0;
+                    }
+                }
+                else{
+                    pressure.classList.replace("tagregular", "tagcritical");
+                    pressure.innerHTML = "Critical level";
+                    criticalpressure = 1;
+                }
+
 
 			}
 		}
