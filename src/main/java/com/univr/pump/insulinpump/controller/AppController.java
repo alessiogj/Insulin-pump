@@ -11,7 +11,7 @@ public class AppController {
     }
 
     @RequestMapping("/charts")
-    public String index2(){
+    public String statistics(){
         return ("/statisticscharts");
     }
 
