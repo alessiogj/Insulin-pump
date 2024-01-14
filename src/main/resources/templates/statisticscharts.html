@@ -366,7 +366,7 @@ body {
                     sistpressure_timeseries.push(item.bloodPressureSystolic);
                     diastpressure_timeseries.push(item.bloodPressureDiastolic);
                     bloodsugar_timeseries.push(item.bloodSugarLevel);
-                    temperature_timeseries.push(item.temperature.substring(0, 4));
+                    temperature_timeseries.push(item.temperature.toFixed(1));
                 });
 
                 // Aggiorna il grafico con i nuovi dati

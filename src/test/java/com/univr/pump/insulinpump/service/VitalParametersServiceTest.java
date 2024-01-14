@@ -34,7 +34,6 @@ public class VitalParametersServiceTest {
     private VitalParametersService vitalParametersService;
 
     private VitalParameters vitalParameters;
-
     private List<VitalParameters> vitalParametersList;
     private DateIntervalDto dateIntervalDto;
 
@@ -46,6 +45,7 @@ public class VitalParametersServiceTest {
         vitalParameters.setHeartRate(80);
         vitalParameters.setBloodPressureSystolic(120);
         vitalParameters.setBloodPressureDiastolic(80);
+        vitalParameters.setBloodSugarLevel(90);
         vitalParameters.setTemperature(36.6);
 
         vitalParametersList = new ArrayList<>();

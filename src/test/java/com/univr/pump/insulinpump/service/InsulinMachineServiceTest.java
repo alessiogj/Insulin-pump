@@ -176,7 +176,6 @@ public class InsulinMachineServiceTest {
         newMachine.setCurrentTankLevel(50);
         when(insulinMachineRepository.save(any(InsulinMachine.class))).thenReturn(newMachine);
         when(insulinMachineRepository.findFirstByOrderByIdDesc()).thenReturn(newMachine);
-
         int insulinLevel = insulinMachineService.getInsulinLevel();
         assertEquals(50, insulinLevel);
         verify(insulinMachineRepository, times(1)).save(any(InsulinMachine.class));
@@ -195,29 +194,19 @@ public class InsulinMachineServiceTest {
 
     @Test
     public void injectInsulinWhenInsulinPumpIsNotEmpty() {
-        // Arrange
-        insulinMachine.setCurrentTankLevel(50); // Example initial insulin level
+        insulinMachine.setCurrentTankLevel(50);
         when(insulinMachineRepository.findFirstByOrderByIdDesc()).thenReturn(insulinMachine);
-
-        // Act
         insulinMachineService.injectInsulin();
-
-        // Assert
-        assertTrue(insulinMachine.getCurrentTankLevel() < 50); // Assuming insulin is decreased
+        assertTrue(insulinMachine.getCurrentTankLevel() < 50);
         verify(insulinMachineRepository, times(1)).save(insulinMachine);
     }
 
     @Test
     public void injectInsulinWhenInsulinPumpIsEmpty() {
-        // Arrange
-        insulinMachine.setCurrentTankLevel(0); // Insulin tank empty
+        insulinMachine.setCurrentTankLevel(0);
         when(insulinMachineRepository.findFirstByOrderByIdDesc()).thenReturn(insulinMachine);
-
-        // Act
         insulinMachineService.injectInsulin();
-
-        // Assert
-        assertEquals(0, insulinMachine.getCurrentTankLevel()); // Insulin level should remain unchanged
+        assertEquals(0, insulinMachine.getCurrentTankLevel());
         verify(insulinMachineRepository, times(0)).save(insulinMachine);
     }
 

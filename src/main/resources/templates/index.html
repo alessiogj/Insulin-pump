@@ -846,7 +846,7 @@ button {
 		Http.onreadystatechange = (e) => {
 			if (Http.readyState === 4 && Http.status === 200) {
 				const obj = JSON.parse(Http.responseText)
-				var trunc_temp = obj.temperature.substring(0, 4);
+                const trunc_temp = obj.temperature.toFixed(1);
 				var trunc_time = obj.timestamp.slice(11, 19);
 				timelabel.innerHTML = "Time: " + trunc_time;
 				pressurelabel.innerHTML = "Pressure: " + obj.bloodPressureSystolic + "/" + obj.bloodPressureDiastolic + " mmHg";

@@ -42,6 +42,7 @@ public class InsulinPumpTest {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void chargeBatteryTest() {
         given()
                 .when()
@@ -51,18 +52,18 @@ public class InsulinPumpTest {
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void refillInsulinTankTest() {
         given()
                 .when()
                 .put("/sensors/tank/refill")
                 .then()
-                .statusCode(200); // Checking for 404 status
+                .statusCode(200);
     }
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     public void getStatusTest() {
-        //TODO: Mock the service
-        /*
         Mockito.when(insulinMachineService.getBatteryLevel()).thenReturn(100);
         Mockito.when(insulinMachineService.getInsulinLevel()).thenReturn(50);
         given()
@@ -70,7 +71,7 @@ public class InsulinPumpTest {
                 .get("sensors/status")
                 .then()
                 .statusCode(200)
-                .body("batteryLevel", org.hamcrest.Matchers.equalTo(100))
-                .body("insulinLevel", org.hamcrest.Matchers.equalTo(50));*/
+                .body("battery", org.hamcrest.Matchers.equalTo(100))
+                .body("tank", org.hamcrest.Matchers.equalTo(50));
     }
 }

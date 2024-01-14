@@ -1,16 +1,30 @@
 package com.univr.pump.insulinpump.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class VitalParametersDto {
-    private String id;
     private String timestamp;
-    private String bloodPressureSystolic;
-    private String bloodPressureDiastolic;
-    private String heartRate;
-    private String bloodSugarLevel;
-    private String temperature;
+    private int bloodPressureSystolic;
+    private int bloodPressureDiastolic;
+    private int heartRate;
+    private int bloodSugarLevel;
+    private double temperature;
+
+    public VitalParametersDto() {
+    }
+
+    public VitalParametersDto(String timestamp,
+                              int bloodPressureSystolic,
+                              int bloodPressureDiastolic,
+                              int heartRate,
+                              int bloodSugarLevel,
+                              double temperature) {
+        this.timestamp = timestamp;
+        this.bloodPressureSystolic = bloodPressureSystolic;
+        this.bloodPressureDiastolic = bloodPressureDiastolic;
+        this.heartRate = heartRate;
+        this.bloodSugarLevel = bloodSugarLevel;
+        this.temperature = temperature;
+    }
 }

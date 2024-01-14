@@ -73,13 +73,12 @@ public class VitalParametersService {
     private VitalParametersDto convertToDto(VitalParameters vitalParameter) {
         VitalParametersDto dto = new VitalParametersDto();
 
-        dto.setId(String.valueOf(vitalParameter.getId()));
         dto.setTimestamp(String.valueOf(vitalParameter.getTimestamp()));
-        dto.setBloodPressureSystolic(String.valueOf(vitalParameter.getBloodPressureSystolic()));
-        dto.setBloodPressureDiastolic(String.valueOf(vitalParameter.getBloodPressureDiastolic()));
-        dto.setHeartRate(String.valueOf(vitalParameter.getHeartRate()));
-        dto.setBloodSugarLevel(String.valueOf(vitalParameter.getBloodSugarLevel()));
-        dto.setTemperature(String.valueOf(vitalParameter.getTemperature()));
+        dto.setBloodPressureSystolic(vitalParameter.getBloodPressureSystolic());
+        dto.setBloodPressureDiastolic(vitalParameter.getBloodPressureDiastolic());
+        dto.setHeartRate(vitalParameter.getHeartRate());
+        dto.setBloodSugarLevel(vitalParameter.getBloodSugarLevel());
+        dto.setTemperature(vitalParameter.getTemperature());
 
         return dto;
     }
@@ -97,10 +96,6 @@ public class VitalParametersService {
         }
         return dtos;
     }
-
-    /************************************************************************
-     *************************** VALIDATION *********************************
-     ************************************************************************/
 
     /**
      * Validate the date interval dto

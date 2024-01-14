@@ -3,7 +3,9 @@ package com.univr.pump.insulinpump.controller;
 import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.service.VitalParametersService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/vitalparameters")
@@ -23,7 +25,11 @@ public class VitalParametersController {
      */
     @PostMapping("/date")
     public Iterable<VitalParametersDto> searchByTimeInterval(@RequestBody DateIntervalDto dateInterval) {
-        return vitalParametersService.getVitalParametersByTimeInterval(dateInterval);
+        try {
+            return vitalParametersService.getVitalParametersByTimeInterval(dateInterval);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid date format");
+        }
     }
 
     /**
@@ -44,12 +50,12 @@ public class VitalParametersController {
         return vitalParametersService.getLastVitalParameters();
     }
 
-
     /**
      * The system uses this API to remove all vital parameters
      * @return void
      */
     @DeleteMapping("/")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteAllVitalParameters() {
         vitalParametersService.deleteAllVitalParameters();
     }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class VitalParametersMonitoringTask {
 
-
     private final Patient patient;
 
     public VitalParametersMonitoringTask(Patient patient) {
