@@ -1,10 +1,8 @@
 package com.univr.pump.insulinpump.scheduled;
 
 import com.univr.pump.insulinpump.mock.Patient;
-import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
 import com.univr.pump.insulinpump.service.InsulinMachineService;
 import com.univr.pump.insulinpump.service.VitalParametersService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +33,10 @@ public class InsulinMachineMonitoringTask {
 
     /**
      * Simulates the insulin pump monitoring.
-     * Checks if the sugar level is increasing and the rate of increase is stable or increasing.
-     * If the conditions are met, injects insulin based on the given formula.
+     * Checks if the sugar level is increasing
+     * if so, it calculates the compensation dose
+     * and injects it.
+     * If the battery is low, the injection is not performed.
      */
     @Scheduled(fixedRate = 10000)
     public void insulinPump() {
@@ -49,20 +49,38 @@ public class InsulinMachineMonitoringTask {
         }
 
         int rateIncrease = r2 - r1;
-        int CompDose = 0;
+        int compDose = calculateCompDose(r2, r1, r0, rateIncrease);
 
-        if (rateIncrease >= (r1 - r0)) {
-            CompDose = (int) (Math.round((r2 - r1) / 4.0));
-
-            if (CompDose == 0) {
-                CompDose = 1;
+        if (compDose > 0 && rateIncrease > 0) {
+            if(patient.getGlucoseLevel() >= 130) {
+                compDose = compDose * 4;
+                rateIncrease = rateIncrease * 4;
+            }
+            boolean injected = insulinMachineService.injectInsulin(compDose);
+            if (injected) {
+                patient.setGlucoseLevel(patient.getGlucoseLevel() - rateIncrease);
             }
         }
+    }
 
-        if (CompDose > 0 && rateIncrease > 0) {
-            insulinMachineService.injectInsulin(CompDose, rateIncrease);
+    /**
+     * Calculates the compensation dose.
+     * If the rate of increase is greater than the previous one,
+     * the compensation dose is calculated.
+     * Otherwise, the compensation dose is set to 0.
+     *
+     * @param r2           current glucose level
+     * @param r1           previous glucose level
+     * @param r0           previous previous glucose level
+     * @param rateIncrease rate of increase
+     * @return compensation dose
+     */
+    private int calculateCompDose(int r2, int r1, int r0, int rateIncrease) {
+        if (rateIncrease >= (r1 - r0)) {
+            int compDose = (int) Math.round((r2 - r1) / 4.0);
+            return Math.max(compDose, 1);
         }
-
+        return 0;
     }
 
     /**
@@ -70,7 +88,7 @@ public class InsulinMachineMonitoringTask {
      * Se la batteria è scarica la misurazione
      * non viene effettuata.
      */
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     public void newVitalSigns() {
         if(insulinMachineService.getBatteryLevel() == 0) {
             return;

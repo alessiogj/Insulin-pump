@@ -87,6 +87,19 @@ public class InsulinMachineTest {
 
     @Test
     public void testInjectInsulin() {
-        // TODO: implement this test
+        InsulinMachine insulinMachine = new InsulinMachine();
+        insulinMachine.setCurrentTankLevel(10);
+
+        int dose = 3;
+        insulinMachine.injectInsulin(dose);
+        assertEquals(7, insulinMachine.getCurrentTankLevel());
+
+        insulinMachine.setCurrentTankLevel(2);
+        insulinMachine.injectInsulin(dose);
+        assertEquals(2, insulinMachine.getCurrentTankLevel());
+
+        insulinMachine.setCurrentTankLevel(5);
+        insulinMachine.injectInsulin(0);
+        assertEquals(5, insulinMachine.getCurrentTankLevel());
     }
 }

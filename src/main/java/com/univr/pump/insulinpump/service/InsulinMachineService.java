@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 public class InsulinMachineService {
 
     private final InsulinMachineRepository insulinMachineRepository;
-    private final Patient patient;
 
-    public InsulinMachineService(InsulinMachineRepository insulinMachineRepository, Patient patient) {
+    public InsulinMachineService(InsulinMachineRepository insulinMachineRepository) {
         this.insulinMachineRepository = insulinMachineRepository;
-        this.patient = patient;
     }
 
     /**
@@ -112,23 +110,19 @@ public class InsulinMachineService {
      * if insulin pump is not empty, inject insulin
      * if insulin pump is empty, do nothing
      */
-    public void injectInsulin(int compDose, int rateIncrease) {
+    public boolean injectInsulin(int compDose) {
         if (insulinMachineRepository.count() == 0) {
             InsulinMachine newInsulinMachine = new InsulinMachine();
             insulinMachineRepository.save(newInsulinMachine);
         }
         InsulinMachine insulinMachine = insulinMachineRepository.findFirstByOrderByIdDesc();
-        if ((patient.getGlucoseLevel() >= 130) && insulinMachine != null && insulinMachine.getCurrentTankLevel() >= (compDose * 3))
-        {
-            insulinMachine.injectInsulin(compDose * 3);
-            patient.setGlucoseLevel(patient.getGlucoseLevel() - (rateIncrease * 3));
-            insulinMachineRepository.save(insulinMachine);
-        }
-        if ((patient.getGlucoseLevel() < 130) && insulinMachine != null && insulinMachine.getCurrentTankLevel() >= compDose)
+
+        if (insulinMachine != null && insulinMachine.getCurrentTankLevel() >= compDose)
         {
             insulinMachine.injectInsulin(compDose);
-            patient.setGlucoseLevel(patient.getGlucoseLevel() - rateIncrease);
             insulinMachineRepository.save(insulinMachine);
+            return true;
         }
+        return false;
     }
 }

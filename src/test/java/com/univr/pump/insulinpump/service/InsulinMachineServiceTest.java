@@ -1,5 +1,6 @@
 package com.univr.pump.insulinpump.service;
 
+import com.univr.pump.insulinpump.mock.Patient;
 import com.univr.pump.insulinpump.model.InsulinMachine;
 import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
 import com.univr.pump.insulinpump.scheduled.InsulinMachineMonitoringTask;
@@ -9,19 +10,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class InsulinMachineServiceTest {
 
     @Mock
@@ -193,17 +194,44 @@ public class InsulinMachineServiceTest {
     }
 
     @Test
-    public void injectInsulinWhenInsulinPumpIsNotEmpty() {
-        //TODO: fix this test
+    public void testInjectInsulinWithSufficientInsulin() {
+        InsulinMachine existingMachine = new InsulinMachine();
+        existingMachine.setCurrentTankLevel(50);
+        when(insulinMachineRepository.count()).thenReturn(1L);
+        when(insulinMachineRepository.findFirstByOrderByIdDesc()).thenReturn(existingMachine);
+
+        boolean result = insulinMachineService.injectInsulin(10);
+
+        assertTrue(result);
+        verify(insulinMachineRepository, times(1)).save(existingMachine);
     }
 
     @Test
-    public void injectInsulinWhenInsulinPumpIsEmpty() {
-        //TODO: fix this test
+    public void testInjectInsulinWhenRepositoryIsEmpty() {
+        when(insulinMachineRepository.count()).thenReturn(0L);
+        InsulinMachine newInsulinMachine = new InsulinMachine();
+        newInsulinMachine.setCurrentTankLevel(100);
+
+        when(insulinMachineRepository.save(any(InsulinMachine.class))).thenReturn(newInsulinMachine);
+        when(insulinMachineRepository.findFirstByOrderByIdDesc()).thenReturn(newInsulinMachine);
+
+        boolean result = insulinMachineService.injectInsulin(10);
+
+        assertTrue(result);
+        verify(insulinMachineRepository, times(2)).save(any(InsulinMachine.class));
+        verify(insulinMachineRepository, times(1)).findFirstByOrderByIdDesc();
     }
 
     @Test
-    public void injectInsulinWhenRepositoryIsEmpty() {
-        //TODO: fix this test
+    public void testInjectInsulinWithInsufficientInsulin() {
+        InsulinMachine existingMachine = new InsulinMachine();
+        existingMachine.setCurrentTankLevel(5);
+        when(insulinMachineRepository.count()).thenReturn(1L);
+        when(insulinMachineRepository.findFirstByOrderByIdDesc()).thenReturn(existingMachine);
+
+        boolean result = insulinMachineService.injectInsulin(10);
+
+        assertFalse(result);
+        verify(insulinMachineRepository, times(0)).save(existingMachine);
     }
 }
