@@ -20,7 +20,7 @@ public class VitalParametersMonitoringTask {
      * (blood sugar level, diastolic blood pressure,
      * systolic blood pressure, heart rate, temperature).
      */
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 200)
     public void modifyVitalParameters() {
         patient.modifyBloodSugarLevel();
         patient.modifyDiastolicBloodPressure();

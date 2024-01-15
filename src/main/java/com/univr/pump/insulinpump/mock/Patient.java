@@ -13,9 +13,11 @@ public class Patient {
     private int heartRate;
     private double temperature;
     private int glucoseLevel;
+    private int previousGlucoseLevel;
+    private int previousPreviousGlucoseLevel;
 
-    private final static int INITIAL_PRESSURE_SYSTOLIC = 120;
-    private final static int INITIAL_PRESSURE_DIASTOLIC = 80;
+    private final static int INITIAL_PRESSURE_SYSTOLIC = 100;
+    private final static int INITIAL_PRESSURE_DIASTOLIC = 70;
     private final static int INITIAL_HEART_RATE = 80;
     private final static double INITIAL_TEMPERATURE = 36.5;
     private final static int INITIAL_GLUCOSE_LEVEL = 90;
@@ -26,6 +28,8 @@ public class Patient {
         this.heartRate = INITIAL_HEART_RATE;
         this.temperature = INITIAL_TEMPERATURE;
         this.glucoseLevel = INITIAL_GLUCOSE_LEVEL;
+        this.previousGlucoseLevel = INITIAL_GLUCOSE_LEVEL;
+        this.previousPreviousGlucoseLevel = INITIAL_GLUCOSE_LEVEL;
     }
 
     /**
@@ -109,29 +113,24 @@ public class Patient {
         }
     }
 
+
     /**
      * Simulates the variation of the patient's blood sugar level.
-     * The blood sugar level is randomly increased or decreased by a value between 0 and 10.
+     * The blood sugar level is randomly increased by a value between 0 and 10.
      * If the blood sugar level is lower than 80, it is set to 100.
+     * After modifying the glucose level, store the previous glucose levels.
      */
     public void modifyBloodSugarLevel() {
         int random = (int) (Math.random() * 11);
-        if (random < 3) {
-            this.glucoseLevel += 10;
-        } else if (random < 6) {
-            this.glucoseLevel -= 3;
-        }
+
+        previousPreviousGlucoseLevel = previousGlucoseLevel;
+        previousGlucoseLevel = glucoseLevel;
+
+        if(Math.random() < 0.5)
+            this.glucoseLevel += random;
 
         if (this.glucoseLevel < 80) {
             this.glucoseLevel = 100;
         }
-    }
-
-
-    /**
-     * Glucose level is set to 90.
-     */
-    public void setGlucoseToNormal() {
-        this.glucoseLevel = INITIAL_GLUCOSE_LEVEL;
     }
 }

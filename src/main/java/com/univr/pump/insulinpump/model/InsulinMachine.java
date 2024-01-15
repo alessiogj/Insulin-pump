@@ -62,9 +62,9 @@ public class InsulinMachine {
     /**
      * Injects insulin.
      */
-    public void injectInsulin() {
-        if (this.currentTankLevel > 0)
-            this.currentTankLevel--;
+    public void injectInsulin(int compDose) {
+        if (this.currentTankLevel >= compDose)
+            this.currentTankLevel= this.currentTankLevel - compDose;
     }
 
 }

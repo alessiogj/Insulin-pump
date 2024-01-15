@@ -1,8 +1,10 @@
 package com.univr.pump.insulinpump.scheduled;
 
 import com.univr.pump.insulinpump.mock.Patient;
+import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
 import com.univr.pump.insulinpump.service.InsulinMachineService;
 import com.univr.pump.insulinpump.service.VitalParametersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +26,7 @@ public class InsulinMachineMonitoringTask {
      * Simulates the battery discharge.
      * The battery is discharged by 1% every 10 minutes.
      */
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 600000)
     public void decrBattery() {
         if (insulinMachineService.getBatteryLevel() > 0) {
             insulinMachineService.decrBattery();
@@ -33,18 +35,34 @@ public class InsulinMachineMonitoringTask {
 
     /**
      * Simulates the insulin pump monitoring.
-     * If the current glucose level is higher than 130 and the insulin pump has enough insulin
-     * the insulin pump injects insulin.
+     * Checks if the sugar level is increasing and the rate of increase is stable or increasing.
+     * If the conditions are met, injects insulin based on the given formula.
      */
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 10000)
     public void insulinPump() {
-        if(insulinMachineService.getBatteryLevel() == 0) {
+        int r2 = patient.getGlucoseLevel();
+        int r1 = patient.getPreviousGlucoseLevel();
+        int r0 = patient.getPreviousPreviousGlucoseLevel();
+
+        if (insulinMachineService.getBatteryLevel() == 0) {
             return;
         }
-        if((patient.getGlucoseLevel() > 130) && (insulinMachineService.getInsulinLevel() > 0)) {
-            insulinMachineService.injectInsulin();
-            patient.setGlucoseToNormal();
+
+        int rateIncrease = r2 - r1;
+        int CompDose = 0;
+
+        if (rateIncrease >= (r1 - r0)) {
+            CompDose = (int) (Math.round((r2 - r1) / 4.0));
+
+            if (CompDose == 0) {
+                CompDose = 1;
+            }
         }
+
+        if (CompDose > 0 && rateIncrease > 0) {
+            insulinMachineService.injectInsulin(CompDose, rateIncrease);
+        }
+
     }
 
     /**
@@ -52,7 +70,7 @@ public class InsulinMachineMonitoringTask {
      * Se la batteria è scarica la misurazione
      * non viene effettuata.
      */
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     public void newVitalSigns() {
         if(insulinMachineService.getBatteryLevel() == 0) {
             return;
