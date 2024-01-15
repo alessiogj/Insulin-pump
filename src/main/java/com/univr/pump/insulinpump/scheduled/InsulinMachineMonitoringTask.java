@@ -70,7 +70,7 @@ public class InsulinMachineMonitoringTask {
      * Se la batteria è scarica la misurazione
      * non viene effettuata.
      */
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 10000)
     public void newVitalSigns() {
         if(insulinMachineService.getBatteryLevel() == 0) {
             return;
