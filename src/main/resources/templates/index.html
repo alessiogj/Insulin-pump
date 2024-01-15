@@ -841,6 +841,7 @@ button {
     var heartlabel = document.getElementById("heartlabel");
     var temperaturelabel = document.getElementById("temperaturelabel");
     var bloodlabel = document.getElementById("bloodlabel");
+    var lastobj = null;
 
 
 	setInterval(() => {
@@ -859,55 +860,56 @@ button {
 				temperaturelabel.innerHTML = "Temperature: " + trunc_temp + " C°";
 				bloodlabel.innerHTML = "Blood Sugar: " + obj.bloodSugarLevel + " mg/dL";
 
+                if(lastobj !== obj){
+                    if (heartrate_timeseries.length > buffer) {
+                        heartrate_timeseries.shift();
+                        sistpressure_timeseries.shift();
+                        diastpressure_timeseries.shift();
+                        bloodsugar_timeseries.shift();
+                        temperature_timeseries.shift();
+                    }
 
-				if (heartrate_timeseries.length > buffer) {
-					heartrate_timeseries.shift();
-					sistpressure_timeseries.shift();
-					diastpressure_timeseries.shift();
-					bloodsugar_timeseries.shift();
-					temperature_timeseries.shift();
+                    //Aggiunge i nuovi dati in arrivo ai grafici e alle serie temporali
+                    heartrate_timeseries.push({
+                        x: trunc_time,
+                        y: obj.heartRate
+                    });
+                    sistpressure_timeseries.push({
+                        x: trunc_time,
+                        y: obj.bloodPressureSystolic
+                    });
+                    diastpressure_timeseries.push({
+                        x: trunc_time,
+                        y: obj.bloodPressureDiastolic
+                    });
+                    bloodsugar_timeseries.push({
+                        x: trunc_time,
+                        y: obj.bloodSugarLevel
+                    });
+                    temperature_timeseries.push({
+                        x: trunc_time,
+                        y: trunc_temp
+                    });
+
+                    // Aggiorna il grafico con i nuovi dati
+                    chart1.updateSeries([{
+                        data: heartrate_timeseries
+                    }]);
+                    // Aggiorna il grafico con i nuovi dati
+                    chart2.updateSeries([{
+                        data: sistpressure_timeseries
+                    }, {
+                        data: diastpressure_timeseries
+                    }]);
+                    // Aggiorna il grafico con i nuovi dati
+                    chart3.updateSeries([{
+                        data: bloodsugar_timeseries
+                    }]);
+                    // Aggiorna il grafico con i nuovi dati
+                    chart4.updateSeries([{
+                        data: temperature_timeseries
+                    }]);
 				}
-
-				//Aggiunge i nuovi dati in arrivo ai grafici e alle serie temporali
-				heartrate_timeseries.push({
-					x: trunc_time,
-					y: obj.heartRate
-				});
-				sistpressure_timeseries.push({
-					x: trunc_time,
-					y: obj.bloodPressureSystolic
-				});
-				diastpressure_timeseries.push({
-					x: trunc_time,
-					y: obj.bloodPressureDiastolic
-				});
-				bloodsugar_timeseries.push({
-					x: trunc_time,
-					y: obj.bloodSugarLevel
-				});
-				temperature_timeseries.push({
-					x: trunc_time,
-					y: trunc_temp
-				});
-
-				// Aggiorna il grafico con i nuovi dati
-				chart1.updateSeries([{
-					data: heartrate_timeseries
-				}]);
-				// Aggiorna il grafico con i nuovi dati
-				chart2.updateSeries([{
-					data: sistpressure_timeseries
-				}, {
-					data: diastpressure_timeseries
-				}]);
-				// Aggiorna il grafico con i nuovi dati
-				chart3.updateSeries([{
-					data: bloodsugar_timeseries
-				}]);
-				// Aggiorna il grafico con i nuovi dati
-				chart4.updateSeries([{
-					data: temperature_timeseries
-				}]);
 
 				//dynamic color changes of blood sugar label
 				if(obj.bloodSugarLevel > 130){
@@ -973,6 +975,7 @@ button {
                     criticalpressure = 1;
                 }
 
+                lastobj = obj;
 
 			}
 		}
