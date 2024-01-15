@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Website</title>
+    <title>Insulin Pump Dashboard</title>
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <style>
 	* {
@@ -83,7 +83,6 @@ body {
     font-size: 15px;
     color: var(--main-text-color);
     margin-left: 30px;
-    margin-top: 20px;
     margin-bottom: 10px;
     align-self: start;
     align-items: center;
@@ -97,6 +96,14 @@ body {
     color: var(--main-text-color);
     margin-left: 30px;
     margin-top: 20px;
+    align-self: start;
+    flex-direction: row;
+}
+
+.subtitle{
+    display: flex;
+    font-size: 16px;
+    margin-left: 30px;
     align-self: start;
     flex-direction: row;
 }
@@ -153,14 +160,15 @@ body {
 <div class="task-manager">
     <div class="right-bar">
         <div class="title">Charts by Date Intervals</div>
+        <p class="subtitle">Leave the dates empty if you want all the measurements</p>
         <div class="header">
             <div class="task-box-date">
                 <label for="start">Start date:</label>
-                <input type="date" id="start" name="trip-start" placeholder="2018-07-22"/>
+                <input type="date" id="start" name="trip-start"/>
             </div>
             <div class="task-box-date">
                 <label for="end">End date:</label>
-                <input type="date" id="end" name="trip-end" placeholder="2018-07-22"/>
+                <input type="date" id="end" name="trip-end"/>
             </div>
             <div>
                 <button class="button" onclick="myFunction()">Show Charts</button>
@@ -342,20 +350,28 @@ body {
 
         var start_date = document.getElementById("start").value + "T00:00:00.000000";
         var end_date = document.getElementById("end").value + "T23:59:59.999999";
-
+        var url = "";
         const Http = new XMLHttpRequest();
-        const url = 'http://localhost:8080/vitalparameters/date';
         const jsonData = {
             "startDate": start_date,
             "endDate": end_date
         };
-        Http.open("POST", url);
-        Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        Http.send(JSON.stringify(jsonData));
-        console.log(JSON.stringify(jsonData));
+
+        if(start_date === "T00:00:00.000000"){
+            url = 'http://localhost:8080/vitalparameters/';
+            Http.open("GET", url);
+            Http.send();
+        }
+        else{
+            url = 'http://localhost:8080/vitalparameters/date';
+            Http.open("POST", url);
+            Http.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            Http.send(JSON.stringify(jsonData));
+        }
+
         Http.onreadystatechange = (e) => {
             if (Http.readyState === 4 && Http.status === 200) {
-                const obj = JSON.parse(Http.responseText).slice(0,100);
+                const obj = JSON.parse(Http.responseText);
                 heartrate_timeseries = [];
                 sistpressure_timeseries = [];
                 diastpressure_timeseries = [];
@@ -368,6 +384,11 @@ body {
                     bloodsugar_timeseries.push(item.bloodSugarLevel);
                     temperature_timeseries.push(item.temperature.toFixed(1));
                 });
+
+                if(start_date === "T00:00:00.000000"){
+                    document.getElementById("start").value = obj[0].timestamp.split("T")[0].replace(/-(\d)\b/g, '-0$1');
+                    document.getElementById("end").value = obj[obj.length - 1].timestamp.split("T")[0].replace(/-(\d)\b/g, '-0$1');
+                }
 
                 // Aggiorna il grafico con i nuovi dati
 				chart1.updateSeries([{
