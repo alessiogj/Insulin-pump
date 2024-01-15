@@ -860,20 +860,19 @@ button {
 				temperaturelabel.innerHTML = "Temperature: " + trunc_temp + " C°";
 				bloodlabel.innerHTML = "Blood Sugar: " + obj.bloodSugarLevel + " mg/dL";
 
-                if(lastobj !== obj){
-                    if (heartrate_timeseries.length > buffer) {
+                if (heartrate_timeseries.length > buffer) {
                         heartrate_timeseries.shift();
                         sistpressure_timeseries.shift();
                         diastpressure_timeseries.shift();
                         bloodsugar_timeseries.shift();
                         temperature_timeseries.shift();
-                    }
+                }
 
-                    //Aggiunge i nuovi dati in arrivo ai grafici e alle serie temporali
-                    heartrate_timeseries.push({
-                        x: trunc_time,
-                        y: obj.heartRate
-                    });
+                //Aggiunge i nuovi dati in arrivo ai grafici e alle serie temporali
+                heartrate_timeseries.push({
+                    x: trunc_time,
+                    y: obj.heartRate
+                });
                     sistpressure_timeseries.push({
                         x: trunc_time,
                         y: obj.bloodPressureSystolic
@@ -909,7 +908,6 @@ button {
                     chart4.updateSeries([{
                         data: temperature_timeseries
                     }]);
-				}
 
 				//dynamic color changes of blood sugar label
 				if(obj.bloodSugarLevel > 130){
