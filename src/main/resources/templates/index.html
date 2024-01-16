@@ -512,9 +512,6 @@ button {
             if (Http.readyState === 4 && Http.status !== 200) {
                 alert("Error during battery replacement confirm");
             }
-            else{
-                alert("Battery replacement confirmed successfully");
-            }
         }
     }
 
@@ -526,9 +523,6 @@ button {
         Http.onreadystatechange = (e) => {
             if (Http.readyState === 4 && Http.status !== 200) {
                 alert("Error during insulin tank replacement confirm");
-            }
-            else{
-                alert("Insulin tank replacement confirmed successfully");
             }
         }
     }
@@ -560,11 +554,11 @@ button {
 
             <div class="header upcoming">Sensor Status and Alarms</div>
             <div class="task">
-                <div class="p-2" id="batterylabel">Battery</div>
+                <div class="p-2" id="batterylabel">Battery level:</div>
                 <span id="batteryspan" class="tagregular">Regular level</span>
             </div>
             <div class="task">
-                <div class="p-2" id="refilllabel">Refill</div>
+                <div class="p-2" id="refilllabel">Insulin dose available:</div>
                 <span id="insulinspan" class="tagregular">Regular level</span>
             </div>
             <div class="buttons-row">
@@ -576,13 +570,12 @@ button {
                             Confirm that you have replaced the battery correctly?
                         </p>
                         <div class="modal__footer">
-                            <a class="button" onclick="replaceBattery()" href="#">Confirm</a>
-                            <a class="button" href="#">Cancel</a>
+                            <a class="button" onclick="replaceBattery()" href="#" id="buttonConfirmBattery">Confirm</a>
+                            <a class="button" href="#" id="buttonCancelBattery">Cancel</a>
                         </div>
-                        <a href="#" class="modal__close">&times;</a>
                     </div>
                 </div>
-                <a class="button" href="#modalbattery" >Replace Battery</a>
+                <a class="button" href="#modalbattery" id="buttonModalBattery" >Replace Battery</a>
 
                 <div id="modalinsulin" class="modal">
                     <div class="modal__content">
@@ -591,13 +584,12 @@ button {
                             Confirm that you have replaced the tank correctly?
                         </p>
                         <div class="modal__footer">
-                            <a class="button" onclick="replaceInsulin()" href="#">Confirm</a>
-                            <a class="button" href="#">Cancel</a>
+                            <a class="button" onclick="replaceInsulin()" href="#" id="buttonConfirmInsulin">Confirm</a>
+                            <a class="button" href="#" id="buttonCancelInsulin">Cancel</a>
                         </div>
-                        <a href="#" class="modal__close">&times;</a>
                     </div>
                 </div>
-                <a href="#modalinsulin" class="button">Recharge Insulin</a>
+                <a href="#modalinsulin" id="buttonModalInsulin" class="button">Recharge Insulin</a>
             </div>
         </div>
     </div>
