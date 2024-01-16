@@ -1,8 +1,10 @@
 package com.univr.pump.insulinpump.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class SensorStatusDto {
     private int battery;
     private int tank;
