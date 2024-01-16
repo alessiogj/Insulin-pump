@@ -51,14 +51,17 @@ public class InsulinMachineMonitoringTask {
         int rateIncrease = r2 - r1;
         int compDose = calculateCompDose(r2, r1, r0, rateIncrease);
 
+
         if (compDose > 0 && rateIncrease > 0) {
-            if(patient.getGlucoseLevel() >= 130) {
-                compDose = compDose * 4;
-                rateIncrease = rateIncrease * 4;
-            }
             boolean injected = insulinMachineService.injectInsulin(compDose);
             if (injected) {
                 patient.setGlucoseLevel(patient.getGlucoseLevel() - rateIncrease);
+            }
+        }
+        if (patient.getGlucoseLevel() >= 130) {
+            boolean injected = insulinMachineService.injectInsulin(5);
+            if (injected) {
+                patient.setGlucoseLevel(90);
             }
         }
     }
