@@ -121,6 +121,8 @@ public class Patient {
      * After modifying the glucose level, store the previous glucose levels.
      */
     public void modifyBloodSugarLevel() {
+        if(this.glucoseLevel > 140)
+            return;
         int random = (int) (Math.random() * 11);
 
         previousPreviousGlucoseLevel = previousGlucoseLevel;
