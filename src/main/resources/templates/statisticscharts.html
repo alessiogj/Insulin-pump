@@ -160,7 +160,7 @@ body {
 <div class="task-manager">
     <div class="right-bar">
         <div class="title">Charts by Date Intervals</div>
-        <p class="subtitle">Leave the dates empty if you want all the measurements</p>
+        <p class="subtitle">Leave the dates empty if you want all the registered measurements</p>
         <div class="header">
             <div class="task-box-date">
                 <label for="start">Start date:</label>
@@ -171,7 +171,10 @@ body {
                 <input type="date" id="end" name="trip-end"/>
             </div>
             <div>
-                <button class="button" onclick="myFunction()">Show Charts</button>
+                <button class="button" onclick="showCharts()">Show Charts</button>
+            </div>
+            <div>
+                <button class="button" onclick="clearCharts()">Clear Charts</button>
             </div>
             <div>
                 <a class="button" href="/">Back home</a>
@@ -346,7 +349,7 @@ body {
     chart3.render();
     chart4.render();
 
-    function myFunction(){
+    function showCharts(){
 
         var start_date = document.getElementById("start").value + "T00:00:00.000000";
         var end_date = document.getElementById("end").value + "T23:59:59.999999";
@@ -411,6 +414,27 @@ body {
 
             }
         }
+	}
+
+	function clearCharts(){
+	    // Aggiorna il grafico con i nuovi dati
+        chart1.updateSeries([{
+            data: []
+        }]);
+        // Aggiorna il grafico con i nuovi dati
+        chart2.updateSeries([{
+            data: []
+        }, {
+            data: []
+        }]);
+        // Aggiorna il grafico con i nuovi dati
+        chart3.updateSeries([{
+            data: []
+        }]);
+        // Aggiorna il grafico con i nuovi dati
+        chart4.updateSeries([{
+            data: []
+        }]);
 	}
 </script>
 </body>
