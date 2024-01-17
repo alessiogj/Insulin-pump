@@ -21,15 +21,14 @@ public abstract class BaseTest {
 
     @Before
     public void setUp() {
-        org.openqa.selenium.firefox.FirefoxOptions firefox_options = new FirefoxOptions();
 
         if(SystemUtils.IS_OS_WINDOWS){
             System.setProperty("webdriver.gecko.driver",
                     Paths.get("src/test/resources/geckodriver-win64/geckodriver.exe").toString());
         }
         else if (SystemUtils.IS_OS_MAC){
-            System.setProperty("webdriver.chrome.driver",
-                    Paths.get("src/test/resources/chromedriver_mac64_96/chromedriver").toString());
+            System.setProperty("webdriver.gecko.driver",
+                    Paths.get("src/test/resources/geckodriver-mac-arm/geckodriver").toString());
         }
         else if (SystemUtils.IS_OS_LINUX){
             System.setProperty("webdriver.chrome.driver",
