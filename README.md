@@ -3,11 +3,24 @@
 > dell'Università degli Studi di Verona.
 
 Il sistema software è stato sviluppato per la gestione di
-una pompa di insulina. Le API seguenti consentono di gestire
-e monitorare vari aspetti della pompa di insulina e dei parametri
-vitali del paziente.
+una pompa di insulina. Il sistema è in grado di monitorare
+i parametri vitali del paziente e di erogare insulina in caso
+di necessità, fornendo inoltre un'interfaccia grafica per
+l'analisi dei dati.
 
-## Scaricare il progetto
+## Indice
+1. [🗳️ Scaricare il progetto](#scaricare-il-progetto)
+2. [📝 Casi d'uso](#casi-duso)
+3. [📈 Scenari](#scenari)
+4. [📚 Documentazione API relative ai sensori](#documentazione-api-relative-ai-sensori)
+5. [📚 Documentazione API Parametri Vitali](#documentazione-api-parametri-vitali)
+6. [🧪 Test](#test)
+7. [👨‍💻 Autori](#autori)
+
+---
+
+
+## <a id="scaricare-il-progetto"></a> Scaricare il progetto
 Per scaricare il progetto è necessario clonare la repository
 tramite il comando `git clone https://github.com/alessiogj/Insulin-pump.git`.
 Dopodiché è necessario eseguire il comando `gradle build` per
@@ -15,17 +28,14 @@ scaricare le dipendenze e compilare il progetto. Per eseguire
 il progetto è necessario eseguire il comando `gradle bootRun`, 
 che avvierà il server sulla porta `8080`.
 
-
-## Presentazione generale
-`TODO`
-## Casi d'uso
+---
+## <a id="casi-duso"></a> Casi d'uso
 
 
-## Scenari
+---
+## <a id="scenari"></a> Scenari
 
-### Scenario 1:
-
-Livello di glucosio in diminuzione `(r2 < r1)`, il livello di glucosio è minore di `130` e maggiore di `90`
+### 📉 Livello di glucosio in diminuzione `(r2 < r1)`
 
 - **Assunzione iniziale**: Un utente porta con se un dispositivo che misura i parametri
 vitali del paziente. Il dispositivo è in grado di misurare la pressione sanguigna,
@@ -43,9 +53,7 @@ i parametri vitali del paziente non vengono più monitorati e non è possibile e
 In questo caso si assume che nel tempo continuino a variare, portando quindi il livello di insulina 
 fuori dai limiti accettabili. In questo caso il sistema non è in grado di erogare insulina.
 
-### Scenario 2:
-
-Livello di glucosio stabile `(r2 = r1)`,il livello di glucosio è minore di `130` e maggiore di `90`
+### 🧘 Livello di glucosio stabile `(r2 = r1)`
 
 - **Assunzione iniziale**: Un utente porta con se un dispositivo che misura i parametri
   vitali del paziente. Il dispositivo è in grado di misurare la pressione sanguigna,
@@ -63,10 +71,7 @@ Livello di glucosio stabile `(r2 = r1)`,il livello di glucosio è minore di `130
   In questo caso si assume che nel tempo continuino a variare, portando quindi il livello di insulina
   fuori dai limiti accettabili. In questo caso il sistema non è in grado di erogare insulina.
 
-### Scenario 3:
-
-Livello di glucosio in aumento `((r2 – r1) ≥ (r1 – r0))`, il risultato è diverso da `0`, il livello
-di glucosio è minore di `130` e maggiore di `90`
+### 📈 Livello di glucosio in aumento `((r2 – r1) ≥ (r1 – r0))` e il risultato è diverso da `0`
 - **Assunzione iniziale**: Un utente porta con se un dispositivo che misura i parametri
   vitali del paziente. Il dispositivo è in grado di misurare la pressione sanguigna,
   la frequenza cardiaca, la temperatura corporea e il livello di zucchero nel sangue.
@@ -86,10 +91,8 @@ di glucosio è minore di `130` e maggiore di `90`
   - `Se la dose di compensazione è un valore maggiore di 1, la dose di compensazione è il valore arrotondato
     all'intero più vicino`
 
-### Scenario 4:
+### 📈 Livello di glucosio in aumento `((r2 – r1) ≥ (r1 – r0))` e il risultato è uguale da `0`
 
-Livello di glucosio in aumento `((r2 – r1) ≥ (r1 – r0))`, il risultato è uguale da `0` e il livello
-di glucosio è minore di `130` e maggiore di `90`
 - **Assunzione iniziale**: Un utente porta con se un dispositivo che misura i parametri
   vitali del paziente. Il dispositivo è in grado di misurare la pressione sanguigna,
   la frequenza cardiaca, la temperatura corporea e il livello di zucchero nel sangue.
@@ -107,9 +110,7 @@ di glucosio è minore di `130` e maggiore di `90`
   - `La dose di compnsazione è calcolata come la differenza tra la prima e la seconda misurazione diviso 4`
   - `Se la dose di compensazione è 0, la dose di compensazione sarà la dose minima, ovvero 1`
 
-### Scenario 5:
-
-Livello di glucosio fuori dai limiti accettabili `livello glucosio ≥ 130`:
+### 🚨 Livello di glucosio fuori dai limiti accettabili `livello glucosio ≥ 130`
 
 - **Assunzione iniziale**: Un utente porta con se un dispositivo che misura i parametri
   vitali del paziente. Il dispositivo è in grado di misurare la pressione sanguigna,
@@ -128,25 +129,124 @@ Livello di glucosio fuori dai limiti accettabili `livello glucosio ≥ 130`:
     In questo caso si assume che nel tempo continuino a variare, portando quindi il livello di insulina
     fuori dai limiti accettabili. In questo caso il sistema non è in grado di erogare insulina.
 
-### Scenario 7:
+<div align="center">
+  <img alt="L'insulina alta viene segnalata anche llo stato della label rossa" height="300" src="./img/insulina_alta.png" width="500" title="Insulina alta"/>
+</div>
 
-- niente batteria
+### 🔋 Malfunzionamento della Pompa di Insulina per Batteria Scarica
 
-### Scenario 8:
+- **Assunzione Iniziale:**
+Il sistema, che normalmente esegue misurazioni periodiche dei parametri vitali
+del paziente, è inattivo a causa della batteria scarica della pompa di insulina.
 
-- niente insulina
+- **Funzionamento Anomalo:**
+A causa della batteria scarica, il sistema non può effettuare le misurazioni periodiche
+dei parametri vitali e, di conseguenza, non può erogare insulina.
 
-### Scenario 9:
+- **Soluzione:**
+Per simulare la sostituzione della batteria della pompa di insulina, cliccare sul pulsante
+`Replace Battery` nella pagina principale.
 
-- visualizzazione grafici real time
+- **Feedback Utente:**
+  Il sistema mostra la label relativa al livello della batteria in rosso, per indicare  
+  che la batteria della pompa di insulina è scarica.
 
-### Scenario 10:
+<div align="center">
+  <img alt="Recharge battery" height="300" src="./img/battery_refill.png" width="500"/>
+</div>
 
--visualizzazione storico dei dati (grafici)
- con scelta delle date
+### 🔄 Serbatoio della Pompa di Insulina Vuoto
+
+- **Assunzione Iniziale:**
+Se il serbatoio della pompa di insulina è vuoto, il sistema non può erogare insulina.
+
+- **Funzionamento Anomalo:**
+Il sistema non riesce a erogare insulina anche quando il livello di glucosio è fuori
+dai limiti accettabili o in aumento, peggiorando così le condizioni del paziente.
+I parametri vitali mostrano valori fuori norma.
+
+- **Feedback Utente:**
+Il sistema mostra la label relativa al livello di insulina in rosso, per indicare
+che la pompa di insulina non è in grado di erogare insulina.
+
+- **Soluzione:**
+Per simulare il rifornimento del serbatoio della pompa di insulina, cliccare sul
+pulsante `Recharge Insulin` nella pagina principale.
+
+<div align="center">
+  <img alt="Recharge Insulin" height="300" src="./img/ricarica_pompa.png" width="500"/>
+</div>
+
+### 🌡️ Monitoraggio dello stato di salute del paziente mediante i parametri vitali dell'ultima misurazione
+
+- **Assunzione Iniziale:** Il sistema è in grado di monitorare i parametri vitali del paziente
+    e di erogare insulina in caso di necessità. Il sistema è in grado di memorizzare i dati
+    relativi ai parametri vitali del paziente in un database persistente, rendendoli accessibili
+    anche dopo la chiusura dell'applicativo.
+- **Funzionamento:** Il sistema mostra lo stato di salute del paziente mediante label interative 
+    che cambiano colore in base ai parametri vitali dell'ultima misurazione. In particolare:
+    - La label relativa alla pressione sanguigna cambia colore in base ai valori di pressione
+    sanguigna sistolica e diastolica. Se i valori sono entrambi fuori dai limiti accettabili,
+    la label diventa rossa. Se i valori sono entrambi entro i limiti accettabili, la label
+    diventa verde.
+    - La label relativa alla frequenza cardiaca cambia colore in base al valore della frequenza
+    cardiaca. Se il valore è fuori dai limiti accettabili, la label diventa rossa. Se il valore
+    è entro i limiti accettabili, la label diventa verde.
+    - La label relativa alla temperatura corporea cambia colore in base al valore della temperatura
+    corporea. Se il valore è fuori dai limiti accettabili, la label diventa rossa. Se il valore
+    è entro i limiti accettabili, la label diventa verde.
+    - La label relativa al livello di glucosio nel sangue cambia colore in base al valore del livello
+    di glucosio nel sangue. Se il valore è fuori dai limiti accettabili, la label diventa rossa.
+    Se il valore è entro i limiti accettabili, la label diventa verde.
+
+<div align="center">
+  <img alt="Label color" width="250" src="./img/label_color.png"/>
+</div>
 
 
-## Documentazione API relative ai sensori
+### 💾 Memorizzazione e Visualizzazione dei Dati
+
+- **Funzionalità:**
+Il sistema memorizza i dati relativi ai parametri vitali del paziente in un
+database persistente, rendendoli accessibili anche dopo la chiusura dell'applicativo.
+I dati possono essere visualizzati in diversi formati grafici, sia in tempo reale che
+con selezione di un intervallo temporale.
+
+### 📊 Analisi dei Dati in Tempo Reale
+
+- **Funzionalità:**
+Il sistema analizza i dati vitali, mostrando grafici in tempo reale per la pressione sanguigna,
+la frequenza cardiaca, la temperatura corporea e il livello di glucosio nel sangue. Questi grafici
+si aggiornano ogni 10 secondi, a condizione che la batteria sia carica. Ricaricando la pagina, i
+grafici riprenderanno a mostrare i dati in tempo reale dal momento del refresh.
+
+<div align="center">
+  <img alt="Real time charts" height="300" src="./img/real_time_charts.png" width="500"/>
+</div>
+
+### 📆 Analisi dei Dati con Selezione dell'Intervallo Temporale
+
+- **Funzionalità:**
+Il sistema offre la possibilità di visualizzare grafici dei parametri vitali
+(_pressione sanguigna, frequenza cardiaca, temperatura corporea, livello di glucosio nel sangue_)
+basati su un intervallo temporale selezionato. Questa funzionalità è disponibile indipendentemente
+dallo stato della batteria della pompa di insulina.
+
+<div align="center">
+  <img alt="Analisi temporale" height="300" src="./img/analisi_temporale.png" width="500"/>
+</div>
+
+---
+
+> ⚠️ **Nota**: Per simulare tale funzionamento i dati sono stati generati casualmente
+> e non sono reali. I dati sono stati generati in modo tale da simulare un costante aumento 
+> della glicemia, potendo quindi simulare eventuali erogazioni di insulina.
+
+> ⚠️ **Nota**: Si assume che il cambio della batteria e la ricarica della pompa avvengano e 
+> non vi siano problematiche legate a quelle operazioni.
+
+---
+## <a id="documentazione-api-relative-ai-sensori"></a> Documentazione API relative ai sensori
 
 ### 1. Cambio della batteria del pompa di insulina
 - **Descrizione**: Sostituisce la batteria della pompa di insulina.
@@ -176,7 +276,8 @@ Schema JSON dell'oggetto `SensorStatusDto`:
   "tank"    : 100
 }
 ``` 
-## Documentazione API Parametri Vitali
+---
+## <a id="documentazione-api-parametri-vitali"></a> Documentazione API Parametri Vitali
 
 ### 1. Ricerca Parametri Vitali per Intervallo Temporale
 - **Descrizione**: Restituisce i parametri vitali del paziente per un determinato intervallo temporale.
@@ -270,10 +371,12 @@ Schema `JSON` per la risposta di ricerca per intervallo temporale
 - **Metodo**: `DELETE`
 - **Corpo della Richiesta**: Vuoto
 - **Risposta**: `204 No Content` se l'eliminazione è avvenuta con successo.
+---
+## <a id="test"></a> Test
 
-## Test
 `TODO`
 
-## Autori
+---
+## <a id="autori"></a> Autori
 - [Alessio Gjergji](https://github.com/alessiogj)
 - [Nicolò Piccoli](https://github.com/nickkpiccoli)
