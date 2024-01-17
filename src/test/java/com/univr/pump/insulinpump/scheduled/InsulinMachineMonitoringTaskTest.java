@@ -80,9 +80,9 @@ public class InsulinMachineMonitoringTaskTest {
 
     @Test
     public void insulinPumpWithBatteryAndNeedsInjection() {
-        when(patient.getGlucoseLevel()).thenReturn(140);
-        when(patient.getPreviousGlucoseLevel()).thenReturn(130);
-        when(patient.getPreviousPreviousGlucoseLevel()).thenReturn(120);
+        when(patient.getGlucoseLevel()).thenReturn(120);
+        when(patient.getPreviousGlucoseLevel()).thenReturn(110);
+        when(patient.getPreviousPreviousGlucoseLevel()).thenReturn(100);
         when(insulinMachineService.getBatteryLevel()).thenReturn(10);
         when(insulinMachineService.injectInsulin(anyInt())).thenReturn(true);
 
@@ -117,9 +117,9 @@ public class InsulinMachineMonitoringTaskTest {
 
     @Test
     public void insulinPumpInjectionFails() {
-        when(patient.getGlucoseLevel()).thenReturn(150);
-        when(patient.getPreviousGlucoseLevel()).thenReturn(130);
-        when(patient.getPreviousPreviousGlucoseLevel()).thenReturn(120);
+        when(patient.getGlucoseLevel()).thenReturn(120);
+        when(patient.getPreviousGlucoseLevel()).thenReturn(110);
+        when(patient.getPreviousPreviousGlucoseLevel()).thenReturn(100);
         when(insulinMachineService.getBatteryLevel()).thenReturn(10);
         when(insulinMachineService.injectInsulin(anyInt())).thenReturn(false);
 
@@ -132,6 +132,20 @@ public class InsulinMachineMonitoringTaskTest {
     @Test
     public void insulinPumpGlucoseLevelBelowThreshold() {
         when(patient.getGlucoseLevel()).thenReturn(125);
+        when(patient.getPreviousGlucoseLevel()).thenReturn(120);
+        when(patient.getPreviousPreviousGlucoseLevel()).thenReturn(115);
+        when(insulinMachineService.getBatteryLevel()).thenReturn(10);
+        when(insulinMachineService.injectInsulin(anyInt())).thenReturn(true);
+
+        task.insulinPump();
+
+        verify(insulinMachineService, times(1)).injectInsulin(anyInt());
+        verify(patient, times(1)).setGlucoseLevel(anyInt());
+    }
+
+    @Test
+    public void insulinPumpGlucoseLevelAboveThreshold() {
+        when(patient.getGlucoseLevel()).thenReturn(130);
         when(patient.getPreviousGlucoseLevel()).thenReturn(120);
         when(patient.getPreviousPreviousGlucoseLevel()).thenReturn(115);
         when(insulinMachineService.getBatteryLevel()).thenReturn(10);
