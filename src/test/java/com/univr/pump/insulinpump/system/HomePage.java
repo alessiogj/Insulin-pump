@@ -37,8 +37,15 @@ public class HomePage extends PageObject {
     @FindBy(xpath = "//*[@id=\"refilllabel\"]")
     private WebElement insulinLevelLabel;
 
+    @FindBy(xpath = "/html/body/div/div[1]/div[1]")
+    private WebElement homeTitle;
+
     public HomePage(WebDriver driver) {
         super(driver);
+    }
+
+    public String getTitle(){
+        return this.homeTitle.getText();
     }
 
     public StatisticsPage showStatistics() {
