@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
@@ -35,8 +36,10 @@ public abstract class BaseTest {
             System.setProperty("webdriver.chrome.driver",
                     Paths.get("src/test/resources/chromedriver_linux64_96/chromedriver").toString());
         }
-        if (driver == null)
+        if (driver == null) {
             driver = new FirefoxDriver();
+            driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        }
     }
 
     @After
