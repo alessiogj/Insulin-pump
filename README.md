@@ -10,12 +10,11 @@ l'analisi dei dati.
 
 ## Indice
 1. [🗳️ Scaricare il progetto](#scaricare-il-progetto)
-2. [📝 Casi d'uso](#casi-duso)
-3. [📈 Scenari](#scenari)
-4. [📚 Documentazione API relative ai sensori](#documentazione-api-relative-ai-sensori)
-5. [📚 Documentazione API Parametri Vitali](#documentazione-api-parametri-vitali)
-6. [🧪 Test](#test)
-7. [👨‍💻 Autori](#autori)
+2. [📈 Scenari](#scenari)
+3. [📚 Documentazione API relative ai sensori](#documentazione-api-relative-ai-sensori)
+4. [📚 Documentazione API Parametri Vitali](#documentazione-api-parametri-vitali)
+5. [🧪 Test](#test)
+6. [👨‍💻 Autori](#autori)
 
 ---
 
@@ -27,10 +26,6 @@ Dopodiché è necessario eseguire il comando `gradle build` per
 scaricare le dipendenze e compilare il progetto. Per eseguire
 il progetto è necessario eseguire il comando `gradle bootRun`, 
 che avvierà il server sulla porta `8080`.
-
----
-## <a id="casi-duso"></a> Casi d'uso
-
 
 ---
 ## <a id="scenari"></a> Scenari
@@ -203,15 +198,6 @@ pulsante `Recharge Insulin` nella pagina principale.
   <img alt="Label color" width="250" src="./img/label_color.png"/>
 </div>
 
-
-### 💾 Memorizzazione e Visualizzazione dei Dati
-
-- **Funzionalità:**
-Il sistema memorizza i dati relativi ai parametri vitali del paziente in un
-database persistente, rendendoli accessibili anche dopo la chiusura dell'applicativo.
-I dati possono essere visualizzati in diversi formati grafici, sia in tempo reale che
-con selezione di un intervallo temporale.
-
 ### 📊 Analisi dei Dati in Tempo Reale
 
 - **Funzionalità:**
@@ -244,6 +230,11 @@ dallo stato della batteria della pompa di insulina.
 
 > ⚠️ **Nota**: Si assume che il cambio della batteria e la ricarica della pompa avvengano e 
 > non vi siano problematiche legate a quelle operazioni.
+
+> 💾 **Funzionalità**: Il sistema memorizza i dati relativi ai parametri vitali del paziente in un
+> database persistente, rendendoli accessibili anche dopo la chiusura dell'applicativo.
+> I dati possono essere visualizzati in diversi formati grafici, sia in tempo reale che
+> con selezione di un intervallo temporale.
 
 ---
 ## <a id="documentazione-api-relative-ai-sensori"></a> Documentazione API relative ai sensori
