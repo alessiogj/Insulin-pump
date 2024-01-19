@@ -512,9 +512,6 @@ button {
             if (Http.readyState === 4 && Http.status !== 200) {
                 alert("Error during battery replacement confirm");
             }
-            else{
-                alert("Battery replacement confirmed successfully");
-            }
         }
     }
 
@@ -526,9 +523,6 @@ button {
         Http.onreadystatechange = (e) => {
             if (Http.readyState === 4 && Http.status !== 200) {
                 alert("Error during insulin tank replacement confirm");
-            }
-            else{
-                alert("Insulin tank replacement confirmed successfully");
             }
         }
     }
@@ -560,11 +554,11 @@ button {
 
             <div class="header upcoming">Sensor Status and Alarms</div>
             <div class="task">
-                <div class="p-2" id="batterylabel">Battery</div>
+                <div class="p-2" id="batterylabel">Battery level:</div>
                 <span id="batteryspan" class="tagregular">Regular level</span>
             </div>
             <div class="task">
-                <div class="p-2" id="refilllabel">Refill</div>
+                <div class="p-2" id="refilllabel">Insulin dose available:</div>
                 <span id="insulinspan" class="tagregular">Regular level</span>
             </div>
             <div class="buttons-row">
@@ -576,13 +570,12 @@ button {
                             Confirm that you have replaced the battery correctly?
                         </p>
                         <div class="modal__footer">
-                            <a class="button" onclick="replaceBattery()" href="#">Confirm</a>
-                            <a class="button" href="#">Cancel</a>
+                            <a class="button" onclick="replaceBattery()" href="#" id="buttonConfirmBattery">Confirm</a>
+                            <a class="button" href="#" id="buttonCancelBattery">Cancel</a>
                         </div>
-                        <a href="#" class="modal__close">&times;</a>
                     </div>
                 </div>
-                <a class="button" href="#modalbattery" >Replace Battery</a>
+                <a class="button" href="#modalbattery" id="buttonModalBattery" >Replace Battery</a>
 
                 <div id="modalinsulin" class="modal">
                     <div class="modal__content">
@@ -591,13 +584,12 @@ button {
                             Confirm that you have replaced the tank correctly?
                         </p>
                         <div class="modal__footer">
-                            <a class="button" onclick="replaceInsulin()" href="#">Confirm</a>
-                            <a class="button" href="#">Cancel</a>
+                            <a class="button" onclick="replaceInsulin()" href="#" id="buttonConfirmInsulin">Confirm</a>
+                            <a class="button" href="#" id="buttonCancelInsulin">Cancel</a>
                         </div>
-                        <a href="#" class="modal__close">&times;</a>
                     </div>
                 </div>
-                <a href="#modalinsulin" class="button">Recharge Insulin</a>
+                <a href="#modalinsulin" id="buttonModalInsulin" class="button">Recharge Insulin</a>
             </div>
         </div>
     </div>
@@ -998,18 +990,18 @@ button {
 </script>
 <!-- Sensor status script -->
 <script>
+        var battery = document.getElementById("batteryspan");
+        var insulin = document.getElementById("insulinspan");
+        var mediumbattery = 0;
+        var criticalbattery = 0;
+        var mediuminsulin = 0;
+        var criticalinsulin = 0;
+
         setInterval(function () {
             const Http = new XMLHttpRequest();
             const url='http://localhost:8080/sensors/status';
             Http.open("GET", url);
             Http.send();
-
-            var battery = document.getElementById("batteryspan");
-            var insulin = document.getElementById("insulinspan");
-            var mediumbattery = 0;
-            var criticalbattery = 0;
-            var mediuminsulin = 0;
-            var criticalinsulin = 0;
 
             Http.onreadystatechange = (e) => {
                 const obj = JSON.parse(Http.responseText)
@@ -1022,46 +1014,49 @@ button {
                     battery.innerHTML = "Medium level";
                     mediumbattery = 1;
                 }
-                else if(obj.battery <= 10){
-                    battery.classList.replace("tagregular", "tagcritical");
-                    battery.innerHTML = "Critical level";
-                    criticalbattery = 1;
-                }
-                else{
-                    if(mediumbattery == 1){
-                        battery.classList.replace("tagmedium", "tagregular");
+                else {
+                    if(obj.battery <= 10){
+                        battery.classList.replace("tagmedium", "tagcritical");
+                        battery.innerHTML = "Critical level";
+                        criticalbattery = 1;
                     }
                     else{
-                        battery.classList.replace("tagcritical", "tagregular");
+                        if(mediumbattery == 1){
+                            battery.classList.replace("tagmedium", "tagregular");
+                            mediumbattery = 0;
+                        }
+                        else if(criticalbattery == 1){
+                            battery.classList.replace("tagcritical", "tagregular");
+                             criticalbattery = 0;
+                        }
+                        battery.innerHTML = "Regular level";
                     }
-                    battery.innerHTML = "Regular level";
-                    mediumbattery = 0;
-                    criticalbattery = 0;
                 }
 
-                //dynamic color changes of battery label
+                //dynamic color changes of insulin tank label
                 if(obj.tank > 10  && obj.tank < 50){
                     insulin.classList.replace("tagregular", "tagmedium");
                     insulin.innerHTML = "Medium level";
                     mediuminsulin = 1;
                 }
-                else if(obj.tank <= 10){
-                    insulin.classList.replace("tagregular", "tagcritical");
-                    insulin.innerHTML = "Critical level";
-                    criticalinsulin = 1;
-                }
-                else{
-                    if(mediuminsulin == 1){
-                        insulin.classList.replace("tagmedium", "tagregular");
+                else {
+                    if(obj.tank <= 10){
+                        insulin.classList.replace("tagmedium", "tagcritical");
+                        insulin.innerHTML = "Critical level";
+                        criticalinsulin = 1;
                     }
                     else{
-                        insulin.classList.replace("tagcritical", "tagregular");
+                        if(mediuminsulin === 1){
+                            insulin.classList.replace("tagmedium", "tagregular");
+                            mediuminsulin = 0;
+                        }
+                        else if(criticalinsulin === 1){
+                            insulin.classList.replace("tagcritical", "tagregular");
+                            criticalinsulin = 0;
+                        }
+                        insulin.innerHTML = "Regular level";
                     }
-                    insulin.innerHTML = "Regular level";
-                    mediuminsulin = 0;
-                    criticalinsulin = 0;
                 }
-
             }
         }, 1000);
     </script>

@@ -1,18 +1,13 @@
 package com.univr.pump.insulinpump.service;
 
-import com.univr.pump.insulinpump.mock.Patient;
 import com.univr.pump.insulinpump.model.InsulinMachine;
 import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
-import com.univr.pump.insulinpump.scheduled.InsulinMachineMonitoringTask;
-import com.univr.pump.insulinpump.scheduled.VitalParametersMonitoringTask;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-
 
 import java.util.Optional;
 

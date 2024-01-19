@@ -1,44 +1,34 @@
 package com.univr.pump.insulinpump.api;
 
 import com.univr.pump.insulinpump.InsulinPumpApplication;
-import com.univr.pump.insulinpump.controller.InsulinMachineController;
-import com.univr.pump.insulinpump.model.InsulinMachine;
-import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
-import com.univr.pump.insulinpump.scheduled.InsulinMachineMonitoringTask;
-import com.univr.pump.insulinpump.scheduled.VitalParametersMonitoringTask;
 import com.univr.pump.insulinpump.service.InsulinMachineService;
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static org.junit.Assert.assertEquals;
-
-import static org.mockito.Mockito.when;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = InsulinPumpApplication.class,
-        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class InsulinPumpTest {
+
+    @LocalServerPort
+    private int port;
 
     @MockBean
     private InsulinMachineService insulinMachineService;
 
-    @BeforeClass
-    public static void setBaseUri() {
-        RestAssured.baseURI = "http://localhost:8080";
+    @Before
+    public void setUp() {
+        RestAssured.port = this.port;
     }
 
     @Test

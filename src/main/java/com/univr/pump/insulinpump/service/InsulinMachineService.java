@@ -1,6 +1,5 @@
 package com.univr.pump.insulinpump.service;
 
-import com.univr.pump.insulinpump.mock.Patient;
 import com.univr.pump.insulinpump.model.InsulinMachine;
 import com.univr.pump.insulinpump.repository.InsulinMachineRepository;
 import org.springframework.stereotype.Service;
