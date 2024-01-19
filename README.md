@@ -489,8 +489,20 @@ componenti basati su JavaScript, che sono comunemente impiegati nelle moderne ap
 ---
 ### 🧪 Test di Unità
 
+`TODO`
+
 ---
 ### 🔍 Coverage 
+`TODO`
+<div align="center">
+  <img alt="Analisi temporale" height="200" src="./img/coverage.png" width="450"/>
+</div>
+
+### 🔰 JaCoCo
+`TODO`
+<div align="center">
+  <img alt="Analisi temporale" height="" src="./img/JaCoCo.png" width="700"/>
+</div>
 
 ---
 ### Modifica del Driver Geckodriver per Diversi Sistemi Operativi e Versioni di Mozilla Firefox
