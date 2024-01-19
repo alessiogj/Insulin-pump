@@ -6,9 +6,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.concurrent.TimeUnit;
-
 public class HomePage extends PageObject {
+
+    private WebDriverWait wait;
 
     @FindBy(xpath = "/html/body/div/div[1]/div[2]/div[9]/a[1]")
     private WebElement buttonStatistics;
@@ -20,7 +20,7 @@ public class HomePage extends PageObject {
     private WebElement buttonConfirmBattery;
 
     @FindBy(xpath = "//*[@id=\"buttonCancelBattery\"]")
-    private WebElement buttoncancelBattery;
+    private WebElement buttonCancelBattery;
 
     @FindBy(xpath = "//*[@id=\"buttonModalInsulin\"]")
     private WebElement buttonInsulin;
@@ -42,6 +42,7 @@ public class HomePage extends PageObject {
 
     public HomePage(WebDriver driver) {
         super(driver);
+        this.wait = new WebDriverWait(driver, 10);
     }
 
     public String getTitle(){
@@ -55,12 +56,9 @@ public class HomePage extends PageObject {
 
     public String replaceBattery() {
         this.buttonBattery.click();
+        wait.until(ExpectedConditions.elementToBeClickable(this.buttonConfirmBattery));
         this.buttonConfirmBattery.click();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        wait.until(ExpectedConditions.textToBePresentInElement(this.batteryLevelLabel, "100"));
         return this.batteryLevelLabel.getText();
     }
 
@@ -70,12 +68,9 @@ public class HomePage extends PageObject {
 
     public String replaceInsulin(){
         this.buttonInsulin.click();
+        wait.until(ExpectedConditions.elementToBeClickable(this.buttonConfirmInsulin));
         this.buttonConfirmInsulin.click();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        wait.until(ExpectedConditions.textToBePresentInElement(this.insulinLevelLabel, "100"));
         return this.insulinLevelLabel.getText();
     }
 

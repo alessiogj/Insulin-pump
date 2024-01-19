@@ -11,7 +11,6 @@ public class ViewStatisticsTest extends BaseTest{
 
     @Test
     public void testChartUpdatesWithDateInput() {
-        // Accedi alla pagina e naviga alla sezione di statistiche
         driver.get("http://localhost:8080/");
         HomePage page = new HomePage(driver);
         page.waitForCharts();
@@ -24,20 +23,18 @@ public class ViewStatisticsTest extends BaseTest{
         System.out.println(currentDate);
         int[] updatedDataCount = stats.InsertDate(currentDate, currentDate);
 
-        // Confronta i due stati per verificare che il grafico sia stato aggiornato
         assertNotEquals("data points should be different", Arrays.toString(initialDataCount), Arrays.toString(updatedDataCount));
 
         int[] clearedChart = stats.clearCharts();
 
         assertArrayEquals("data points should be zero", new int[]{0, 0, 0, 0}, clearedChart);
 
-        // Verifica il titolo della homepage dopo il ritorno
         page = stats.backHome();
         assertEquals("Should be in home page", "Last measurements", page.getTitle());
     }
+
     @Test
     public void testChartUpdatesAll(){
-        // Accedi alla pagina e naviga alla sezione di statistiche
         driver.get("http://localhost:8080/");
         HomePage page = new HomePage(driver);
         page.waitForCharts();
@@ -48,20 +45,17 @@ public class ViewStatisticsTest extends BaseTest{
 
         int[] updatedDataCount = stats.getChartsAll();
 
-        // Confronta i due stati per verificare che il grafico sia stato aggiornato
         assertNotEquals("data points should be different", Arrays.toString(initialDataCount), Arrays.toString(updatedDataCount));
 
         int[] clearedChart = stats.clearCharts();
 
         assertArrayEquals("data points should be zero", new int[]{0,0,0,0}, clearedChart);
 
-        // Verifica il titolo della homepage dopo il ritorno
         page = stats.backHome();
         assertEquals("Should be in home page", "Last measurements", page.getTitle());
     }
     @Test
     public void testChartUpdatesWithWrongDateInput() {
-        // Accedi alla pagina e naviga alla sezione di statistiche
         driver.get("http://localhost:8080/");
         HomePage page = new HomePage(driver);
         page.waitForCharts();
@@ -72,14 +66,12 @@ public class ViewStatisticsTest extends BaseTest{
 
         int[] updatedDataCount = stats.InsertDateWithAlert("18-23-2023", "");
 
-        // Confronta i due stati per verificare che il grafico sia stato aggiornato
         assertEquals("data points should be the same", Arrays.toString(initialDataCount), Arrays.toString(updatedDataCount));
 
         int[] clearedChart = stats.clearCharts();
 
         assertArrayEquals("data points should be zero", new int[]{0, 0, 0, 0}, clearedChart);
 
-        // Verifica il titolo della homepage dopo il ritorno
         page = stats.backHome();
         assertEquals("Should be in home page", "Last measurements", page.getTitle());
     }

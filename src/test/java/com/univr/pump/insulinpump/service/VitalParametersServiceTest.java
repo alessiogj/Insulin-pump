@@ -4,17 +4,13 @@ import com.univr.pump.insulinpump.dto.DateIntervalDto;
 import com.univr.pump.insulinpump.dto.VitalParametersDto;
 import com.univr.pump.insulinpump.model.VitalParameters;
 import com.univr.pump.insulinpump.repository.VitalParametersRepository;
-import com.univr.pump.insulinpump.scheduled.InsulinMachineMonitoringTask;
-import com.univr.pump.insulinpump.scheduled.VitalParametersMonitoringTask;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
