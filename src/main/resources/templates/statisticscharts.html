@@ -364,8 +364,6 @@ body {
             if(isValidDate(document.getElementById("start").value) && isValidDate(document.getElementById("end").value)){
                 document.getElementById("start").value = document.getElementById("start").value.replace(/-(\d)\b/g, '-0$1');
                 document.getElementById("end").value = document.getElementById("end").value.replace(/-(\d)\b/g, '-0$1');
-                document.getElementById("start").value = document.getElementById("start").value.replace(/-(\d)\b/g, '-0$1');
-                document.getElementById("end").value = document.getElementById("end").value.replace(/-(\d)\b/g, '-0$1');
                 showCharts();
             }
             else{

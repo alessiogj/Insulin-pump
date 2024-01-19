@@ -70,7 +70,7 @@ public class ViewStatisticsTest extends BaseTest{
 
         int[] initialDataCount = stats.getDataPoints();
 
-        int[] updatedDataCount = stats.InsertDate("18-23-2023", "");
+        int[] updatedDataCount = stats.InsertDateWithAlert("18-23-2023", "");
 
         // Confronta i due stati per verificare che il grafico sia stato aggiornato
         assertEquals("data points should be the same", Arrays.toString(initialDataCount), Arrays.toString(updatedDataCount));

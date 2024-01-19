@@ -75,6 +75,15 @@ public class StatisticsPage extends PageObject{
         this.startDate.sendKeys(start);
         this.endDate.sendKeys(end);
         this.showCharts.click();
+        this.statisticsTitle.click();
+        return getDataPoints();
+    }
+
+    public int[] InsertDateWithAlert(String start, String end){
+        System.out.println(start);
+        this.startDate.sendKeys(start);
+        this.endDate.sendKeys(end);
+        this.showCharts.click();
         clickAlert();
         this.statisticsTitle.click();
         return getDataPoints();
