@@ -64,6 +64,10 @@ public class HomePage extends PageObject {
         return this.batteryLevelLabel.getText();
     }
 
+    public void waitForCharts(){
+        this.homeTitle.click();
+    }
+
     public String replaceInsulin(){
         this.buttonInsulin.click();
         this.buttonConfirmInsulin.click();
