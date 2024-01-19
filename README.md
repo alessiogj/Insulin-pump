@@ -486,7 +486,9 @@ tecnologie web. Selenium permette di simulare l'interazione dell'utente con l'in
 verificando così che l'interazione tra l'utente e il sistema avvenga come previsto.
 È particolarmente utile per testare la corretta integrazione e il funzionamento di
 componenti basati su JavaScript, che sono comunemente impiegati nelle moderne applicazioni web.
+
 ---
+
 ### 🧪 Test di Unità
 
 `TODO`
