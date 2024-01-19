@@ -164,14 +164,14 @@ body {
         <div class="header">
             <div class="task-box-date">
                 <label for="start">Start date:</label>
-                <input type="date" id="start" name="trip-start"/>
+                <input id="start" placeholder="yyyy-mm-dd" name="trip-start"/>
             </div>
             <div class="task-box-date">
                 <label for="end">End date:</label>
-                <input type="date" id="end" name="trip-end"/>
+                <input id="end" placeholder="yyyy-mm-dd" name="trip-end"/>
             </div>
             <div>
-                <button class="button" onclick="showCharts()">Show Charts</button>
+                <button class="button" onclick="checkDate()">Show Charts</button>
             </div>
             <div>
                 <button class="button" onclick="clearCharts()">Clear Charts</button>
@@ -349,8 +349,30 @@ body {
     chart3.render();
     chart4.render();
 
-    function showCharts(){
 
+    function isValidDate(dateString) {
+        return !isNaN(Date.parse(dateString));
+    }
+
+    function checkDate(){
+        var start_date_check = document.getElementById("start").value + "T00:00:00.000000";
+        var end_date_check = document.getElementById("end").value + "T23:59:59.999999";
+        if(start_date_check === "T00:00:00.000000" && end_date_check === "T23:59:59.999999"){
+            showCharts();
+        }
+        else{
+            if(isValidDate(document.getElementById("start").value) && isValidDate(document.getElementById("end").value)){
+                showCharts();
+            }
+            else{
+                document.getElementById("start").value = '';
+                document.getElementById("end").value = '';
+                alert("invalid date format!");
+            }
+        }
+    }
+
+    function showCharts(){
         var start_date = document.getElementById("start").value + "T00:00:00.000000";
         var end_date = document.getElementById("end").value + "T23:59:59.999999";
         var url = "";
@@ -360,7 +382,7 @@ body {
             "endDate": end_date
         };
 
-        if(start_date === "T00:00:00.000000"){
+        if(start_date === "T00:00:00.000000" && end_date === "T23:59:59.999999"){
             url = 'http://localhost:8080/vitalparameters/';
             Http.open("GET", url);
             Http.send();

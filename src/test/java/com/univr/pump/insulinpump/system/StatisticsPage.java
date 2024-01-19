@@ -66,19 +66,16 @@ public class StatisticsPage extends PageObject{
     }
 
     public int[] getDataPoints(){
-        System.out.println(initialDataPointsFirst.size());
-        System.out.println(initialDataPointsSecond.size());
-        System.out.println(initialDataPointsThird.size());
-        System.out.println(initialDataPointsFourth.size());
-
         int[] points = {initialDataPointsFirst.size(), initialDataPointsSecond.size(), initialDataPointsThird.size(), initialDataPointsFourth.size()};
         return points;
     }
 
     public int[] InsertDate(String start, String end){
+        System.out.println(start);
         this.startDate.sendKeys(start);
         this.endDate.sendKeys(end);
         this.showCharts.click();
+        clickAlert();
         this.statisticsTitle.click();
         return getDataPoints();
     }
@@ -92,5 +89,9 @@ public class StatisticsPage extends PageObject{
     public int[] clearCharts() {
         this.clearCharts.click();
         return getDataPoints();
+    }
+
+    public void clickAlert(){
+        driver.switchTo().alert().accept();
     }
 }
