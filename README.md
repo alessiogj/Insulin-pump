@@ -22,9 +22,9 @@ l'analisi dei dati.
 ## <a id="scaricare-il-progetto"></a> Scaricare il progetto
 Per scaricare il progetto è necessario clonare la repository
 tramite il comando `git clone https://github.com/alessiogj/Insulin-pump.git`.
-Dopodiché è necessario eseguire il comando `gradle build` per
+Dopodiché è necessario eseguire il comando `./gradlew build` per
 scaricare le dipendenze e compilare il progetto. Per eseguire
-il progetto è necessario eseguire il comando `gradle bootRun`, 
+il progetto è necessario eseguire il comando `./gradlew bootRun`, 
 che avvierà il server sulla porta `8080`.
 
 ---
@@ -189,7 +189,9 @@ pulsante `Recharge Insulin` nella pagina principale.
 ### 🌡️ Monitoraggio dello Stato di Salute del Paziente mediante i Parametri Vitali dell'Ultima Misurazione
 
 - **Assunzione Iniziale:**
-  Il sistema è in grado di monitorare i parametri vitali del paziente e di erogare insulina in caso di necessità. Il sistema è in grado di memorizzare i dati relativi ai parametri vitali del paziente in un database persistente, rendendoli accessibili anche dopo la chiusura dell'applicativo.
+  Il sistema è in grado di monitorare i parametri vitali del paziente e di erogare insulina in caso di necessità.
+Il sistema è in grado di memorizzare i dati relativi ai parametri vitali del paziente in un database persistente,
+rendendoli accessibili anche dopo la chiusura dell'applicativo.
 
 - **Funzionamento:**
   Il sistema mostra lo stato di salute del paziente mediante label interative che cambiano
@@ -197,7 +199,7 @@ pulsante `Recharge Insulin` nella pagina principale.
   - **Pressione Sanguigna**:
     - La label relativa alla pressione sanguigna cambia colore in base ai valori di
     pressione sanguigna sistolica e diastolica.
-    - Se i valori sono entrambi fuori dai limiti accettabili, la label diventa rossa.
+    - Se uno dei valori è fuori dai limiti accettabili, la label diventa rossa.
     - Se i valori sono entrambi entro i limiti accettabili, la label diventa verde.
   - **Frequenza Cardiaca**:
     - La label relativa alla frequenza cardiaca cambia colore in base al valore della
@@ -208,6 +210,7 @@ pulsante `Recharge Insulin` nella pagina principale.
     - La label relativa alla temperatura corporea cambia colore in base al valore
     della temperatura corporea.
     - Se il valore è fuori dai limiti accettabili, la label diventa rossa.
+    - Se il valore è in un intervallo di temperatura intermedio, la label diventa arancione.
     - Se il valore è entro i limiti accettabili, la label diventa verde.
   - **Livello di Glucosio nel Sangue**:
     - La label relativa al livello di glucosio nel sangue cambia colore in base al
@@ -219,6 +222,27 @@ pulsante `Recharge Insulin` nella pagina principale.
   <img alt="Label color" width="250" src="./img/label_color.png"/>
 </div>
 
+---
+
+### 🩺 Monitoraggio dei sensori della pompa di insulina
+
+- **Assunzione Iniziale:**
+  Il sistema è in grado di monitorare i lo stato dei sensori e di erogare insulina in caso di necessità.
+  Il sistema è in grado di memorizzare i dati relativi ai sensori in un database persistente,
+  rendendoli accessibili anche dopo la chiusura dell'applicativo.
+- **Funzionamento**: Il sistema mostra lo stato dei sensori della pompa di insulina
+mediante label interattive che cambiano colore in base allo stato dei sensori.
+- **Stato dei sensori**:
+  - **Batteria**:
+    - La label relativa alla batteria cambia colore in base al livello di carica della batteria.
+    - Se il livello di carica è inferiore al 10%, la label diventa rossa.
+    - Se il livello di carica è compreso tra il 10% e il 50%, la label diventa arancione.
+    - Se il livello di carica è compreso tra il 50% e il 100%, la label diventa verde.
+  - **Serbatoio**:
+    - La label relativa al serbatoio cambia colore in base al livello di insulina nel serbatoio.
+    - Se il livello di insulina è inferiore al 10%, la label diventa rossa.
+    - Se il livello di insulina è compreso tra il 10% e il 50%, la label diventa arancione.
+    - Se il livello di insulina è compreso tra il 50% e il 100%, la label diventa verde.
 ---
 
 ### 📊 Analisi dei Dati in Tempo Reale
@@ -264,6 +288,24 @@ grafici dei parametri vitali.
 
 ---
 
+### 📆✅ Analisi dei Dati senza Selezione dell'Intervallo Temporale
+
+- **Scenario**: L'utente non seleziona nessuna data per l'analisi.
+- **Condizioni di Partenza**: L'utente accede alla funzionalità di visualizzazione
+  grafici dei parametri vitali.
+- **Passi da Eseguire**:
+  1. L'utente non inserisce nessuna data di inizio o di fine.
+  2. L'utente clicca sul pulsante di conferma della visualizzazione dei dati.
+- **Risultato Atteso**:
+  - Il sistema non esegue alcuna validazione delle date.
+  - Viene generato un grafico che mostra i parametri vitali (pressione sanguigna,
+    frequenza cardiaca, temperatura corporea, livello di glucosio nel sangue) nell'intervallo
+    temporale completo disponibile.
+- **Post-condizione**: L'utente è in grado di visualizzare e analizzare i dati per l'intero
+  periodo per cui i dati sono disponibili.
+
+---
+
 ### 📆⛔️ Analisi dei Dati con Selezione dell'Intervallo Temporale in Formato Errato
 
 - **Scenario**: L'utente inserisce le date in un formato non riconosciuto dal sistema.
@@ -272,10 +314,9 @@ grafici dei parametri vitali.
 - **Passi da Eseguire**:
   1. L'utente inserisce una o entrambe le date (data di inizio o di fine)
   in un formato non valido o non riconosciuto dal sistema.
-  2. L'utente tenta di confermare la selezione dell'intervallo temporale.
+  2. L'utente tenta di visualizzare i dati cliccando sul pulsante di conferma.
 - **Risultato Atteso**:
-  - Il sistema rileva il formato data non valido e mostra un alert di errore,
-    indicando il formato corretto da utilizzare.
+  - Il sistema rileva il formato data non valido e mostra un alert di errore.
   - I grafici dei parametri vitali non vengono aggiornati finché non viene inserito
     un intervallo temporale valido.
 - **Post-condizione**: L'utente deve correggere il formato delle date per procedere
@@ -294,28 +335,30 @@ grafici dei parametri vitali.
   data di fine selezionata.
   2. L'utente tenta di confermare la selezione dell'intervallo temporale.
 - **Risultato Atteso**:
-  - Il sistema riconosce l'inconsistenza delle date e visualizza un alert di errore,
-  indicando che l'intervallo di date è invertito.
+  - Il sistema riconosce l'inconsistenza delle date e visualizza un alert di errore.
   - I grafici dei parametri vitali non vengono aggiornati finché non viene selezionato
   un intervallo temporale corretto.
 - **Post-condizione**: L'utente deve invertire le date o selezionare un nuovo intervallo
   per visualizzare i dati.
+
 ---
+
 ### 📆⛔️ Analisi dei Dati con Selezione dell'Intervallo Temporale con Nessuna Data Selezionata
 
-- **Scenario**: L'utente non seleziona nessuna data per l'analisi.
+- **Scenario**: L'utente non seleziona nessuna data per l'analisi, oppure seleziona
+  una data di inizio ma non una data di fine, oppure seleziona una data di fine ma
+  non una data di inizio.
 - **Condizioni di Partenza**: L'utente accede alla funzionalità di visualizzazione
   grafici dei parametri vitali.
 - **Passi da Eseguire**:
   1. L'utente non inserisce nessuna data di inizio o di fine.
   2. L'utente tenta di confermare la visualizzazione dei dati.
 - **Risultato Atteso**:
-  - Il sistema riconosce che nessuna data è stata selezionata e decide di
-  visualizzare i dati per l'intero periodo disponibile.
-  - Viene generato un grafico che mostra i parametri vitali per l'intera durata
-  dei dati disponibili.
-- **Post-condizione**: L'utente visualizza i dati aggregati per l'intero periodo
-  per cui i dati sono disponibili.
+  - Il sistema riconosce l'inconsistenza delle date e visualizza un alert di errore.
+  - I grafici dei parametri vitali non vengono aggiornati finché non viene selezionato
+    un intervallo temporale corretto.
+- **Post-condizione**: L'utente deve selezionare un intervallo temporale corretto
+  per visualizzare i dati.
 
 ---
 
@@ -491,22 +534,83 @@ componenti basati su JavaScript, che sono comunemente impiegati nelle moderne ap
 
 ### 🧪 Test di Unità
 
-`TODO`
+I test di unità sono stati sviluppati utilizzando il framework `JUnit 4`. 
+I componenti testati sono stati isolati utilizzando il framework `Mockito`.
+I seguenti componenti sono stati sottoposti a test di unità:
+
+1. **VitalParametersController**: Controller per gestire le richieste relative ai parametri vitali.
+
+2. **VitalParametersService**: Servizio per la logica di business relativa ai parametri vitali.
+
+3. **VitalParameters**: Entità che rappresenta i parametri vitali.
+
+4. **InsulinMachineController**: Controller per gestire le richieste relative alla pompa di insulina.
+
+5. **InsulinMachineService**: Servizio per la logica di business relativa alla pompa di insulina.
+
+6. **InsulinMachine**: Entità che rappresenta la pompa di insulina.
+
+7. **DateIntervalDto**: Oggetto che rappresenta un intervallo temporale.
+
+8. **SensorStatusDto**: Oggetto che rappresenta lo stato dei sensori.
+
+9. **VitalParametersDto**: Oggetto che rappresenta i parametri vitali.
+
+Per ogni componente, sono stati seguiti i seguenti passaggi per eseguire i test di unità:
+
+1. **Definizione dei Casi di Test**: Identificazione dei casi di test basati sul
+comportamento atteso del componente.
+2. **Preparazione dell'Ambiente di Test**: Utilizzo di `Mockito` per isolare il
+componente e configurare le dipendenze necessarie.
+3. **Esecuzione dei Test**: I test sono stati eseguiti utilizzando `JUnit 4`,
+verificando che ogni componente risponda come atteso.
+4. **Verifica dei Risultati**: Ogni test ha verificato che l'output o lo
+stato del componente fosse quello atteso.
 
 ---
-### 🔍 Coverage 
-`TODO`
+
+### 📋 Test di Accettazione
+
+1. **InsulinMachineMonitoringTask**: Task che monitora lo stato della pompa di insulina.
+  - **Obiettivo del Test**: Verificare che il task rilevi accuratamente lo stato corrente della
+pompa di insulina.
+  - **Criteri di Accettazione**: Il sistema deve identificare correttamente lo stato operativo
+della pompa, includendo livelli di carica di batteria e insulina.
+
+2. **VitalParametersMonitoringTask**: Task che monitora i parametri vitali del paziente.
+  - **Obiettivo del Test**: Assicurare che il task monitori con precisione i parametri vitali del
+paziente e aggiorni lo stato in tempo reale.
+  - **Criteri di Accettazione**: Il sistema deve raccogliere e visualizzare i dati vitali del paziente
+(_ad esempio frequenza cardiaca, livello di glucosio_) in modo affidabile e tempestivo.
+
+3. **HomePage**: Pagina principale dell'applicazione che contiene i dati vitali del paziente, i grafici
+in tempo reale, la possibilità di ricaricare la batteria della pompa di insulina e il serbatoio di insulina.
+  - **Obiettivo del Test**: Garantire che la HomePage fornisca un'interfaccia utente chiara e funzionale,
+mostrando tutte le informazioni necessarie e permettendo interazioni intuitive.
+  - **Criteri di Accettazione**: La pagina deve visualizzare correttamente i dati vitali, i grafici in tempo
+reale, e permettere agli utenti di interagire con la pompa di insulina per operazioni come la ricarica della batteria
+e del serbatoio di insulina.
+
+4. **StatisticsPage**: Pagina che mostra i grafici dello storico dei parametri vitali, con la possibilità
+di selezionare un intervallo temporale.
+  - **Obiettivo del Test**: Confermare che la StatisticsPage presenti efficacemente i dati storici dei
+parametri vitali in vari formati grafici e permetta agli utenti di filtrare i dati per un intervallo temporale specifico
+o di visualizzare i dati completi.
+  - **Criteri di Accettazione**: Gli utenti devono essere in grado di visualizzare grafici storici dei
+parametri vitali e filtrare i dati per periodi di tempo specifici con facilità e precisione.
+
+#### 🔍 Coverage
 <div align="center">
   <img alt="Analisi temporale" height="200" src="./img/coverage.png" width="450"/>
 </div>
 
-### 🔰 JaCoCo
-`TODO`
+#### 🔰 JaCoCo
 <div align="center">
   <img alt="Analisi temporale" height="" src="./img/JaCoCo.png" width="700"/>
 </div>
 
 ---
+
 ### Modifica del Driver Geckodriver per Diversi Sistemi Operativi e Versioni di Mozilla Firefox
 
 Il `geckodriver` è un driver di collegamento per l'automazione web su Mozilla
@@ -538,7 +642,9 @@ Puoi usare strumenti di estrazione incorporati nel tuo sistema operativo per far
 Infine, in relazione al progetto, è necessario aggiungere il driver al percorso
 `src/test/resources` del progetto. In questo modo, il driver sarà disponibile
 per l'esecuzione dei test.
+
 ---
+
 ## <a id="autori"></a> Autori
 - [Alessio Gjergji](https://github.com/alessiogj)
 - [Nicolò Piccoli](https://github.com/nickkpiccoli)
